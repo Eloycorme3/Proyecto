@@ -2,9 +2,9 @@
 Este proyecto es sobre una aplicación móvil llamada Nimesuki que permite a los usuarios agregar, calificar y compartir su opinión sobre sus animes favoritos.
 
 ## Enlaces
-- **App Móvil:** 
-- **App de Escritorio:** 
-- **Servicio REST:** 
+- **App Móvil:** Nimesuki
+- **App de Escritorio:** [Nimesuki Gestor](./Nimesuki_App)
+- **Servicio REST:** [Api Rest](./Nimesuki_Api_Rest)
 
 ## Características
 - **App Móvil:** Permite a los usuarios agregar y calificar sus animes favoritos.
