@@ -142,11 +142,11 @@ public class Login extends javax.swing.JFrame {
         Usuario usuarioLogueado = controladorPrincipal.loginUsuario();
         if (usuarioLogueado != null) {
             if (usuarioLogueado.getTipo().equals("USER")) {
+                this.setVisible(false);
                 controladorPrincipal.iniciarGestorUsuarios();
-                this.setVisible(false);
             } else if (usuarioLogueado.getTipo().equals("ADMIN")) {
-                controladorPrincipal.iniciarConsultas();
                 this.setVisible(false);
+                controladorPrincipal.iniciarConsultas();
             }
         }
     }//GEN-LAST:event_btnLoginActionPerformed

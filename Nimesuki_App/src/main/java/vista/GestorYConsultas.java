@@ -36,51 +36,55 @@ public class GestorYConsultas extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
+        panel = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        txtIdUsuario = new javax.swing.JTextField();
-        btnAltaUsuario = new javax.swing.JButton();
-        btnBajaUsuario = new javax.swing.JButton();
-        btnModUsuario = new javax.swing.JButton();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        btnAltaFavorito = new javax.swing.JButton();
-        btnModFavorito = new javax.swing.JButton();
-        btnBajaFavorito = new javax.swing.JButton();
-        btnCerrarSession = new javax.swing.JButton();
-        txtNombreUsuario = new javax.swing.JTextField();
-        jLabel18 = new javax.swing.JLabel();
-        txtNombreAnime = new javax.swing.JTextField();
-        jLabel19 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel20 = new javax.swing.JLabel();
-        txtIdAnime = new javax.swing.JTextField();
-        btnAltaAnime = new javax.swing.JButton();
-        btnBajaAnime = new javax.swing.JButton();
-        btnModAnime = new javax.swing.JButton();
-        txtCategorias = new javax.swing.JTextField();
-        txtAnhoSalida = new javax.swing.JTextField();
-        txtDescripcion = new javax.swing.JTextField();
-        txtCapTotales = new javax.swing.JTextField();
-        jLabel22 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
-        jLabel24 = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        btnModFavorito = new javax.swing.JButton();
         comboTipoUsuario = new javax.swing.JComboBox<>();
+        btnBajaFavorito = new javax.swing.JButton();
         cbVerPasswordFavoritos = new javax.swing.JCheckBox();
         spValoracion = new javax.swing.JSpinner();
+        txtNombreUsuario = new javax.swing.JTextField();
         comboAnimesFavoritos = new javax.swing.JComboBox<>();
+        jLabel18 = new javax.swing.JLabel();
         comboFavoritosUsuarios = new javax.swing.JComboBox<>();
+        txtNombreAnime = new javax.swing.JTextField();
         spCapActual = new javax.swing.JSpinner();
+        jLabel19 = new javax.swing.JLabel();
         txtImagen = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
         jLabel26 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        txtIdAnime = new javax.swing.JTextField();
         txtPasswordFavoritos = new javax.swing.JPasswordField();
+        btnAltaAnime = new javax.swing.JButton();
+        btnBajaAnime = new javax.swing.JButton();
+        txtIdUsuario = new javax.swing.JTextField();
+        btnModAnime = new javax.swing.JButton();
+        btnAltaUsuario = new javax.swing.JButton();
+        txtCategorias = new javax.swing.JTextField();
+        btnBajaUsuario = new javax.swing.JButton();
+        txtAnhoSalida = new javax.swing.JTextField();
+        btnModUsuario = new javax.swing.JButton();
+        txtDescripcion = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        txtCapTotales = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        btnAltaFavorito = new javax.swing.JButton();
+        menuBar = new javax.swing.JMenuBar();
+        menuOpciones = new javax.swing.JMenu();
+        menuItemSalir = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -92,55 +96,47 @@ public class GestorYConsultas extends javax.swing.JFrame {
             }
         });
 
+        panel.setLayout(new java.awt.GridBagLayout());
+
         jLabel7.setText("Usuarios");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(20, 50, 0, 15);
+        panel.add(jLabel7, gridBagConstraints);
+
+        jLabel25.setText("Capítulos totales");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 15);
+        panel.add(jLabel25, gridBagConstraints);
 
         jLabel8.setText("Id");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 15);
+        panel.add(jLabel8, gridBagConstraints);
+
+        jLabel17.setText("Tipo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 15);
+        panel.add(jLabel17, gridBagConstraints);
 
         jLabel9.setText("Contraseña");
-
-        txtIdUsuario.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtIdUsuarioFocusLost(evt);
-            }
-        });
-
-        btnAltaUsuario.setText("Alta");
-        btnAltaUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAltaUsuarioActionPerformed(evt);
-            }
-        });
-
-        btnBajaUsuario.setText("Baja");
-        btnBajaUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBajaUsuarioActionPerformed(evt);
-            }
-        });
-
-        btnModUsuario.setText("Modificar");
-        btnModUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModUsuarioActionPerformed(evt);
-            }
-        });
-
-        jLabel11.setText("Favoritos");
-
-        jLabel12.setText("Anime");
-
-        jLabel13.setText("Usuario");
-
-        jLabel14.setText("Valoración");
-
-        jLabel15.setText("Capítulo Actual");
-
-        btnAltaFavorito.setText("Alta");
-        btnAltaFavorito.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAltaFavoritoActionPerformed(evt);
-            }
-        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 15);
+        panel.add(jLabel9, gridBagConstraints);
 
         btnModFavorito.setText("Modificar");
         btnModFavorito.addActionListener(new java.awt.event.ActionListener() {
@@ -148,6 +144,21 @@ public class GestorYConsultas extends javax.swing.JFrame {
                 btnModFavoritoActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 0);
+        panel.add(btnModFavorito, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 55;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        panel.add(comboTipoUsuario, gridBagConstraints);
 
         btnBajaFavorito.setText("Baja");
         btnBajaFavorito.addActionListener(new java.awt.event.ActionListener() {
@@ -155,70 +166,13 @@ public class GestorYConsultas extends javax.swing.JFrame {
                 btnBajaFavoritoActionPerformed(evt);
             }
         });
-
-        btnCerrarSession.setText("Cerrar Sesion");
-        btnCerrarSession.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCerrarSessionActionPerformed(evt);
-            }
-        });
-
-        txtNombreUsuario.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtNombreUsuarioFocusLost(evt);
-            }
-        });
-
-        jLabel18.setText("Nombre");
-
-        txtNombreAnime.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtNombreAnimeFocusLost(evt);
-            }
-        });
-
-        jLabel19.setText("Nombre");
-
-        jLabel10.setText("Animes");
-
-        jLabel20.setText("Id");
-
-        txtIdAnime.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtIdAnimeFocusLost(evt);
-            }
-        });
-
-        btnAltaAnime.setText("Alta");
-        btnAltaAnime.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAltaAnimeActionPerformed(evt);
-            }
-        });
-
-        btnBajaAnime.setText("Baja");
-        btnBajaAnime.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBajaAnimeActionPerformed(evt);
-            }
-        });
-
-        btnModAnime.setText("Modificar");
-        btnModAnime.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModAnimeActionPerformed(evt);
-            }
-        });
-
-        jLabel22.setText("Categorias");
-
-        jLabel23.setText("Año Salida");
-
-        jLabel24.setText("Descripción");
-
-        jLabel25.setText("Capítulos totales");
-
-        jLabel17.setText("Tipo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.insets = new java.awt.Insets(10, 15, 50, 0);
+        panel.add(btnBajaFavorito, gridBagConstraints);
 
         cbVerPasswordFavoritos.setText("Ver contraseña");
         cbVerPasswordFavoritos.addActionListener(new java.awt.event.ActionListener() {
@@ -226,8 +180,57 @@ public class GestorYConsultas extends javax.swing.JFrame {
                 cbVerPasswordFavoritosActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 0);
+        panel.add(cbVerPasswordFavoritos, gridBagConstraints);
 
         spValoracion.setModel(new javax.swing.SpinnerNumberModel(0, 0, 5, 1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 55;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        panel.add(spValoracion, gridBagConstraints);
+
+        txtNombreUsuario.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtNombreUsuarioFocusLost(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 55;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        panel.add(txtNombreUsuario, gridBagConstraints);
+
+        comboAnimesFavoritos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboAnimesFavoritosActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 55;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        panel.add(comboAnimesFavoritos, gridBagConstraints);
+
+        jLabel18.setText("Nombre");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 15);
+        panel.add(jLabel18, gridBagConstraints);
 
         comboFavoritosUsuarios.setToolTipText("");
         comboFavoritosUsuarios.addActionListener(new java.awt.event.ActionListener() {
@@ -235,189 +238,315 @@ public class GestorYConsultas extends javax.swing.JFrame {
                 comboFavoritosUsuariosActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 55;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        panel.add(comboFavoritosUsuarios, gridBagConstraints);
+
+        txtNombreAnime.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtNombreAnimeFocusLost(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 150;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        panel.add(txtNombreAnime, gridBagConstraints);
 
         spCapActual.setModel(new javax.swing.SpinnerNumberModel(0, 0, 5, 1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 55;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 50, 0);
+        panel.add(spCapActual, gridBagConstraints);
+
+        jLabel19.setText("Nombre");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 15);
+        panel.add(jLabel19, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 150;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        panel.add(txtImagen, gridBagConstraints);
+
+        jLabel10.setText("Animes");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(20, 50, 0, 15);
+        panel.add(jLabel10, gridBagConstraints);
 
         jLabel26.setText("Imagen");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 15);
+        panel.add(jLabel26, gridBagConstraints);
+
+        jLabel20.setText("Id");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 15);
+        panel.add(jLabel20, gridBagConstraints);
+
+        txtIdAnime.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtIdAnimeFocusLost(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 150;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        panel.add(txtIdAnime, gridBagConstraints);
 
         txtPasswordFavoritos.setText("jPasswordField1");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 55;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        panel.add(txtPasswordFavoritos, gridBagConstraints);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel12)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel13)
-                                    .addComponent(jLabel14)
-                                    .addComponent(jLabel15)
-                                    .addComponent(jLabel11))
-                                .addGap(30, 30, 30)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(spValoracion, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(spCapActual)
-                                    .addComponent(comboAnimesFavoritos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(comboFavoritosUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(15, 15, 15)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnModFavorito, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnAltaFavorito, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnBajaFavorito, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jLabel9)
-                                                    .addComponent(jLabel17))
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addComponent(jLabel7)
-                                                    .addGap(16, 16, 16)))
-                                            .addComponent(jLabel18))
-                                        .addGap(44, 44, 44)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(txtNombreUsuario)
-                                            .addComponent(txtIdUsuario)
-                                            .addComponent(comboTipoUsuario, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(txtPasswordFavoritos, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(15, 15, 15)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(btnAltaUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(btnBajaUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(btnModUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(cbVerPasswordFavoritos))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel10)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel26)
-                                            .addComponent(jLabel25)
-                                            .addComponent(jLabel20)
-                                            .addComponent(jLabel19)
-                                            .addComponent(jLabel22)
-                                            .addComponent(jLabel23)
-                                            .addComponent(jLabel24))
-                                        .addGap(20, 20, 20)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(txtNombreAnime)
-                                                    .addComponent(txtIdAnime)
-                                                    .addComponent(txtCategorias)
-                                                    .addComponent(txtAnhoSalida)
-                                                    .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGap(15, 15, 15)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(btnAltaAnime, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(btnBajaAnime, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(btnModAnime, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                            .addComponent(txtImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtCapTotales, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(324, 324, 324)
-                        .addComponent(btnCerrarSession, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(46, 46, 46)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnAltaUsuario)
-                            .addComponent(txtIdUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8))
-                        .addGap(15, 15, 15)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnModUsuario)
-                            .addComponent(txtNombreUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel18))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtPasswordFavoritos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbVerPasswordFavoritos)
-                            .addComponent(jLabel9))
-                        .addGap(13, 13, 13)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(comboTipoUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnBajaUsuario)
-                            .addComponent(jLabel17)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addGap(7, 7, 7)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel25)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(txtIdAnime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel20))
-                                .addGap(15, 15, 15)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(txtNombreAnime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel19))
-                                .addGap(15, 15, 15)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(txtCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel22))
-                                        .addGap(16, 16, 16)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(txtAnhoSalida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel23))
-                                        .addGap(15, 15, 15)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel24)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btnAltaAnime)
-                                        .addGap(15, 15, 15)
-                                        .addComponent(btnModAnime)
-                                        .addGap(15, 15, 15)
-                                        .addComponent(btnBajaAnime)))
-                                .addGap(15, 15, 15)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(txtImagen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel26))
-                                .addGap(15, 15, 15)
-                                .addComponent(txtCapTotales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(27, 27, 27)
-                .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(comboFavoritosUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel13))
-                .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAltaFavorito)
-                    .addComponent(comboAnimesFavoritos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12))
-                .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnModFavorito)
-                    .addComponent(spValoracion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel14))
-                .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnBajaFavorito, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(spCapActual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel15))
-                .addGap(29, 29, 29)
-                .addComponent(btnCerrarSession)
-                .addContainerGap(41, Short.MAX_VALUE))
-        );
+        btnAltaAnime.setText("Alta");
+        btnAltaAnime.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAltaAnimeActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 50);
+        panel.add(btnAltaAnime, gridBagConstraints);
+
+        btnBajaAnime.setText("Baja");
+        btnBajaAnime.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBajaAnimeActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 50);
+        panel.add(btnBajaAnime, gridBagConstraints);
+
+        txtIdUsuario.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtIdUsuarioFocusLost(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 55;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        panel.add(txtIdUsuario, gridBagConstraints);
+
+        btnModAnime.setText("Modificar");
+        btnModAnime.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModAnimeActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 50);
+        panel.add(btnModAnime, gridBagConstraints);
+
+        btnAltaUsuario.setText("Alta");
+        btnAltaUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAltaUsuarioActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 0);
+        panel.add(btnAltaUsuario, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 150;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        panel.add(txtCategorias, gridBagConstraints);
+
+        btnBajaUsuario.setText("Baja");
+        btnBajaUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBajaUsuarioActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 0);
+        panel.add(btnBajaUsuario, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 150;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        panel.add(txtAnhoSalida, gridBagConstraints);
+
+        btnModUsuario.setText("Modificar");
+        btnModUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModUsuarioActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 0);
+        panel.add(btnModUsuario, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 150;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        panel.add(txtDescripcion, gridBagConstraints);
+
+        jLabel11.setText("Favoritos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(30, 50, 0, 15);
+        panel.add(jLabel11, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 150;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        panel.add(txtCapTotales, gridBagConstraints);
+
+        jLabel12.setText("Anime");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 15);
+        panel.add(jLabel12, gridBagConstraints);
+
+        jLabel22.setText("Categorias");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 15);
+        panel.add(jLabel22, gridBagConstraints);
+
+        jLabel13.setText("Usuario");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 15);
+        panel.add(jLabel13, gridBagConstraints);
+
+        jLabel23.setText("Año Salida");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 15);
+        panel.add(jLabel23, gridBagConstraints);
+
+        jLabel14.setText("Valoración");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 15);
+        panel.add(jLabel14, gridBagConstraints);
+
+        jLabel24.setText("Descripción");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 15);
+        panel.add(jLabel24, gridBagConstraints);
+
+        jLabel15.setText("Capítulo Actual");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 50, 50, 15);
+        panel.add(jLabel15, gridBagConstraints);
+
+        btnAltaFavorito.setText("Alta");
+        btnAltaFavorito.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAltaFavoritoActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 0);
+        panel.add(btnAltaFavorito, gridBagConstraints);
+
+        getContentPane().add(panel, java.awt.BorderLayout.CENTER);
+
+        menuOpciones.setText("Opciones");
+
+        menuItemSalir.setText("Salir");
+        menuItemSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemSalirActionPerformed(evt);
+            }
+        });
+        menuOpciones.add(menuItemSalir);
+
+        menuBar.add(menuOpciones);
+
+        setJMenuBar(menuBar);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -458,13 +587,6 @@ public class GestorYConsultas extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnBajaFavoritoActionPerformed
 
-    private void btnCerrarSessionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSessionActionPerformed
-        // TODO add your handling code here:
-        controladorPrincipal.cerrarSesionUsuario();
-        controladorPrincipal.iniciarLogin();
-        this.setVisible(false);
-    }//GEN-LAST:event_btnCerrarSessionActionPerformed
-
     private void txtNombreUsuarioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNombreUsuarioFocusLost
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreUsuarioFocusLost
@@ -502,6 +624,19 @@ public class GestorYConsultas extends javax.swing.JFrame {
             txtPasswordFavoritos.setEchoChar('*');
         }
     }//GEN-LAST:event_cbVerPasswordFavoritosActionPerformed
+
+    private void menuItemSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSalirActionPerformed
+        // TODO add your handling code here:
+        controladorPrincipal.cerrarSesionUsuario();
+        this.setVisible(false);
+        controladorPrincipal.iniciarLogin();
+    }//GEN-LAST:event_menuItemSalirActionPerformed
+
+    private void comboAnimesFavoritosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboAnimesFavoritosActionPerformed
+        // TODO add your handling code here:
+        controladorPrincipal.fijarCapitulos();
+        controladorPrincipal.fijarValoracion();
+    }//GEN-LAST:event_comboAnimesFavoritosActionPerformed
 
     public JCheckBox getCbVerPasswordFavoritos() {
         return cbVerPasswordFavoritos;
@@ -640,7 +775,6 @@ public class GestorYConsultas extends javax.swing.JFrame {
     private javax.swing.JButton btnBajaAnime;
     private javax.swing.JButton btnBajaFavorito;
     private javax.swing.JButton btnBajaUsuario;
-    private javax.swing.JButton btnCerrarSession;
     private javax.swing.JButton btnModAnime;
     private javax.swing.JButton btnModFavorito;
     private javax.swing.JButton btnModUsuario;
@@ -666,6 +800,10 @@ public class GestorYConsultas extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem menuItemSalir;
+    private javax.swing.JMenu menuOpciones;
+    private javax.swing.JPanel panel;
     private javax.swing.JSpinner spCapActual;
     private javax.swing.JSpinner spValoracion;
     private javax.swing.JTextField txtAnhoSalida;

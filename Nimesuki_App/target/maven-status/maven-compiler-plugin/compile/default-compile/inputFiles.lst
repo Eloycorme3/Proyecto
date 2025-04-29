@@ -1,14 +1,14 @@
-C:\Users\Formacion3\Documents\NetBeansProjects\Nimesuki_App\src\main\java\controlador\controladorPrincipal.java
-C:\Users\Formacion3\Documents\NetBeansProjects\Nimesuki_App\src\main\java\controlador\factory\HibernateUtil.java
-C:\Users\Formacion3\Documents\NetBeansProjects\Nimesuki_App\src\main\java\modelo\dao\AnimeDAO.java
-C:\Users\Formacion3\Documents\NetBeansProjects\Nimesuki_App\src\main\java\modelo\dao\Dao.java
-C:\Users\Formacion3\Documents\NetBeansProjects\Nimesuki_App\src\main\java\modelo\dao\FavoritosDAO.java
-C:\Users\Formacion3\Documents\NetBeansProjects\Nimesuki_App\src\main\java\modelo\dao\UsuarioDAO.java
-C:\Users\Formacion3\Documents\NetBeansProjects\Nimesuki_App\src\main\java\modelo\vo\Anime.java
-C:\Users\Formacion3\Documents\NetBeansProjects\Nimesuki_App\src\main\java\modelo\vo\Favoritos.java
-C:\Users\Formacion3\Documents\NetBeansProjects\Nimesuki_App\src\main\java\modelo\vo\FavoritosPK.java
-C:\Users\Formacion3\Documents\NetBeansProjects\Nimesuki_App\src\main\java\modelo\vo\Usuario.java
-C:\Users\Formacion3\Documents\NetBeansProjects\Nimesuki_App\src\main\java\Nimesuki.java
-C:\Users\Formacion3\Documents\NetBeansProjects\Nimesuki_App\src\main\java\vista\GestorUsuario.java
-C:\Users\Formacion3\Documents\NetBeansProjects\Nimesuki_App\src\main\java\vista\GestorYConsultas.java
-C:\Users\Formacion3\Documents\NetBeansProjects\Nimesuki_App\src\main\java\vista\Login.java
+C:\Users\Formacion3\Documents\Github Proyecto\Nimesuki_App\src\main\java\controlador\controladorPrincipal.java
+C:\Users\Formacion3\Documents\Github Proyecto\Nimesuki_App\src\main\java\controlador\factory\HibernateUtil.java
+C:\Users\Formacion3\Documents\Github Proyecto\Nimesuki_App\src\main\java\modelo\dao\AnimeDAO.java
+C:\Users\Formacion3\Documents\Github Proyecto\Nimesuki_App\src\main\java\modelo\dao\Dao.java
+C:\Users\Formacion3\Documents\Github Proyecto\Nimesuki_App\src\main\java\modelo\dao\FavoritosDAO.java
+C:\Users\Formacion3\Documents\Github Proyecto\Nimesuki_App\src\main\java\modelo\dao\UsuarioDAO.java
+C:\Users\Formacion3\Documents\Github Proyecto\Nimesuki_App\src\main\java\modelo\vo\Anime.java
+C:\Users\Formacion3\Documents\Github Proyecto\Nimesuki_App\src\main\java\modelo\vo\Favoritos.java
+C:\Users\Formacion3\Documents\Github Proyecto\Nimesuki_App\src\main\java\modelo\vo\FavoritosPK.java
+C:\Users\Formacion3\Documents\Github Proyecto\Nimesuki_App\src\main\java\modelo\vo\Usuario.java
+C:\Users\Formacion3\Documents\Github Proyecto\Nimesuki_App\src\main\java\Nimesuki.java
+C:\Users\Formacion3\Documents\Github Proyecto\Nimesuki_App\src\main\java\vista\GestorUsuario.java
+C:\Users\Formacion3\Documents\Github Proyecto\Nimesuki_App\src\main\java\vista\GestorYConsultas.java
+C:\Users\Formacion3\Documents\Github Proyecto\Nimesuki_App\src\main\java\vista\Login.java

@@ -31,17 +31,20 @@ public class GestorUsuario extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
+        panel = new javax.swing.JPanel();
+        btnBajaUsuarios = new javax.swing.JButton();
+        btnModContrasenhaUsuario = new javax.swing.JButton();
+        btnModNombreUsuario = new javax.swing.JButton();
         cbVerPassword = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
         txtNombreUsuario = new javax.swing.JTextField();
         txtPasswordUsuario = new javax.swing.JPasswordField();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        btnBajaUsuarios = new javax.swing.JButton();
-        btnCerrarSesion = new javax.swing.JButton();
-        btnModContrasenhaUsuario = new javax.swing.JButton();
-        btnModNombreUsuario = new javax.swing.JButton();
+        menuBar = new javax.swing.JMenuBar();
+        menuOpciones = new javax.swing.JMenu();
+        menuItemSalir = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -53,24 +56,7 @@ public class GestorUsuario extends javax.swing.JFrame {
             }
         });
 
-        cbVerPassword.setText("Ver contraseña");
-        cbVerPassword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbVerPasswordActionPerformed(evt);
-            }
-        });
-
-        jLabel5.setText("Contraseña");
-
-        txtPasswordUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPasswordUsuarioActionPerformed(evt);
-            }
-        });
-
-        jLabel2.setText("Usuario");
-
-        jLabel3.setText("Nombre");
+        panel.setLayout(new java.awt.GridBagLayout());
 
         btnBajaUsuarios.setText("Eliminar Usuario");
         btnBajaUsuarios.addActionListener(new java.awt.event.ActionListener() {
@@ -78,13 +64,13 @@ public class GestorUsuario extends javax.swing.JFrame {
                 btnBajaUsuariosActionPerformed(evt);
             }
         });
-
-        btnCerrarSesion.setText("Cerrar Sesion");
-        btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCerrarSesionActionPerformed(evt);
-            }
-        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(40, 15, 50, 50);
+        panel.add(btnBajaUsuarios, gridBagConstraints);
 
         btnModContrasenhaUsuario.setText("Cambiar contraseña");
         btnModContrasenhaUsuario.addActionListener(new java.awt.event.ActionListener() {
@@ -92,6 +78,13 @@ public class GestorUsuario extends javax.swing.JFrame {
                 btnModContrasenhaUsuarioActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 50);
+        panel.add(btnModContrasenhaUsuario, gridBagConstraints);
 
         btnModNombreUsuario.setText("Cambiar nombre");
         btnModNombreUsuario.addActionListener(new java.awt.event.ActionListener() {
@@ -99,63 +92,83 @@ public class GestorUsuario extends javax.swing.JFrame {
                 btnModNombreUsuarioActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 15, 0, 50);
+        panel.add(btnModNombreUsuario, gridBagConstraints);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addGap(34, 34, 34))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(38, 38, 38)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txtNombreUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                            .addComponent(txtPasswordUsuario)))
-                    .addComponent(btnCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(13, 13, 13)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(btnModNombreUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                        .addComponent(cbVerPassword, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnBajaUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(btnModContrasenhaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(41, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jLabel2)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtNombreUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnModNombreUsuario)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtPasswordUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbVerPassword))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnModContrasenhaUsuario)
-                .addGap(37, 37, 37)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCerrarSesion)
-                    .addComponent(btnBajaUsuarios))
-                .addContainerGap(48, Short.MAX_VALUE))
-        );
+        cbVerPassword.setText("Ver contraseña");
+        cbVerPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbVerPasswordActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 35;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        panel.add(cbVerPassword, gridBagConstraints);
+
+        jLabel5.setText("Contraseña");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 50, 0, 20);
+        panel.add(jLabel5, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 55;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 0, 0, 0);
+        panel.add(txtNombreUsuario, gridBagConstraints);
+
+        txtPasswordUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPasswordUsuarioActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 55;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 0, 0, 0);
+        panel.add(txtPasswordUsuario, gridBagConstraints);
+
+        jLabel3.setText("Nombre");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(20, 50, 0, 20);
+        panel.add(jLabel3, gridBagConstraints);
+
+        getContentPane().add(panel, java.awt.BorderLayout.CENTER);
+
+        menuOpciones.setText("Opciones");
+
+        menuItemSalir.setText("Salir");
+        menuItemSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemSalirActionPerformed(evt);
+            }
+        });
+        menuOpciones.add(menuItemSalir);
+
+        menuBar.add(menuOpciones);
+
+        setJMenuBar(menuBar);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -186,13 +199,6 @@ public class GestorUsuario extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_formWindowOpened
 
-    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
-        // TODO add your handling code here:
-        controladorPrincipal.cerrarSesionUsuario();
-        controladorPrincipal.iniciarLogin();
-        this.setVisible(false);
-    }//GEN-LAST:event_btnCerrarSesionActionPerformed
-
     private void btnModContrasenhaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModContrasenhaUsuarioActionPerformed
         // TODO add your handling code here:
         controladorPrincipal.modificarContrasenhaUsuario();
@@ -202,6 +208,13 @@ public class GestorUsuario extends javax.swing.JFrame {
         // TODO add your handling code here:
         controladorPrincipal.modificarNombreUsuario();
     }//GEN-LAST:event_btnModNombreUsuarioActionPerformed
+
+    private void menuItemSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSalirActionPerformed
+        // TODO add your handling code here:
+        controladorPrincipal.cerrarSesionUsuario();
+        this.setVisible(false);
+        controladorPrincipal.iniciarLogin();
+    }//GEN-LAST:event_menuItemSalirActionPerformed
 
     public JCheckBox getCbVerPassword() {
         return cbVerPassword;
@@ -229,13 +242,15 @@ public class GestorUsuario extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBajaUsuarios;
-    private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnModContrasenhaUsuario;
     private javax.swing.JButton btnModNombreUsuario;
     private javax.swing.JCheckBox cbVerPassword;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem menuItemSalir;
+    private javax.swing.JMenu menuOpciones;
+    private javax.swing.JPanel panel;
     private javax.swing.JTextField txtNombreUsuario;
     private javax.swing.JPasswordField txtPasswordUsuario;
     // End of variables declaration//GEN-END:variables

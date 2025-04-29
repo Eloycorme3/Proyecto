@@ -5,13 +5,16 @@
 package controlador;
 
 import controlador.factory.HibernateUtil;
+import java.awt.Dimension;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SpinnerNumberModel;
 import modelo.dao.AnimeDAO;
 import modelo.dao.FavoritosDAO;
 import modelo.dao.UsuarioDAO;
+import modelo.vo.Favoritos;
 import modelo.vo.Usuario;
 import org.hibernate.Session;
 import org.mindrot.jbcrypt.BCrypt;
@@ -35,15 +38,23 @@ public class controladorPrincipal {
     public static Login login = new Login();
     static DefaultComboBoxModel modeloComboUsuariosFavoritos = new DefaultComboBoxModel();
     static DefaultComboBoxModel modeloComboAnimesFavoritos = new DefaultComboBoxModel();
+    static SpinnerNumberModel modeloSppinerValoracion = new SpinnerNumberModel();
+    static SpinnerNumberModel modeloSppinerCapActual = new SpinnerNumberModel();
     public static String nombreUsuarioLogeado = "";
 
     public static void iniciar() {
         login.setVisible(true);
         login.setLocationRelativeTo(null);
         consultas.getComboAnimesFavoritos().setModel(modeloComboAnimesFavoritos);
+        consultas.getComboAnimesFavoritos().setPreferredSize(new Dimension(55, consultas.getComboAnimesFavoritos().getPreferredSize().height));
         consultas.getComboFavoritosUsuarios().setModel(modeloComboUsuariosFavoritos);
         consultas.getComboTipoUsuario().addItem("USER");
         consultas.getComboTipoUsuario().addItem("ADMIN");
+        consultas.getSpValoracion().setModel(modeloSppinerValoracion);
+        consultas.getSpCapActual().setModel(modeloSppinerCapActual);
+        modeloSppinerValoracion.setMinimum(0);
+        modeloSppinerValoracion.setMaximum(5);
+        modeloSppinerCapActual.setMinimum(0);
     }
 
     public static void iniciarSession() {
@@ -277,6 +288,29 @@ public class controladorPrincipal {
             HibernateUtil.commitTx(session);
         } catch (Exception e) {
             HibernateUtil.rollbackTx(session);
+            Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, "Error: ", e);
+        }
+    }
+
+    public static void fijarCapitulos() {
+        try {
+            Favoritos f = (Favoritos) consultas.getComboAnimesFavoritos().getSelectedItem();
+            if (f != null) {
+                modeloSppinerCapActual.setMaximum(f.getAnime().getCapTotales());
+                modeloSppinerCapActual.setValue(f.getCapActual());
+            }
+        } catch (Exception e) {
+            Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, "Error: ", e);
+        }
+    }
+
+    public static void fijarValoracion() {
+        try {
+            Favoritos f = (Favoritos) consultas.getComboAnimesFavoritos().getSelectedItem();
+            if (f != null) {
+                modeloSppinerValoracion.setValue(f.getValoracion());
+            }
+        } catch (Exception e) {
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, "Error: ", e);
         }
     }
