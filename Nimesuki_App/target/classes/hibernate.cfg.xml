@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.password">root</property>
+        <!--Debes modificar 2 lineas para la base de datos e ip-->
+        <!-- 1.-Debes indicar la ip y la Bd a la que conectas-->
+        <property name="hibernate.connection.url">jdbc:mysql://127.0.0.1:3306/nimesuki?zeroDateTimeBehavior=CONVERT_TO_NULL</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">root</property>
+        <property name="hibernate.default_schema">nimesuki</property> <!--2.- Pon aqui la BD -->
+        <property name="hibernate.connection.autocommit">false</property>
+        <property name="hibernate.current_session_context_class">thread</property> 
+        <property name="hibernate.show_sql">true</property>
+        <!--<property name="hibernate.format_sql">true</property>-->
+        <property name="hibernate.query.factory_class">org.hibernate.hql.internal.classic.ClassicQueryTranslatorFactory</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <!-- debes incluir todas las clases que mapeas-->
+        <!--         <mapping class="modelo.vo.clase"/>        -->
+        <mapping class="modelo.vo.Anime"/>
+        <mapping class="modelo.vo.Usuario"/>
+        <mapping class="modelo.vo.Favoritos"/>
+    </session-factory>	
+</hibernate-configuration>
+
+
+        
