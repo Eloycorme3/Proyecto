@@ -70,7 +70,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         txtCategorias = new javax.swing.JTextField();
         btnBajaUsuario = new javax.swing.JButton();
         txtAnhoSalida = new javax.swing.JTextField();
-        btnModUsuario = new javax.swing.JButton();
+        btnModUsuarioFavoritos = new javax.swing.JButton();
         txtDescripcion = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         txtCapTotales = new javax.swing.JTextField();
@@ -109,7 +109,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         jLabel25.setText("Capítulos totales");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 15);
         panel.add(jLabel25, gridBagConstraints);
@@ -146,7 +146,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 0);
@@ -168,7 +168,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.insets = new java.awt.Insets(10, 15, 50, 0);
@@ -191,7 +191,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         spValoracion.setModel(new javax.swing.SpinnerNumberModel(0, 0, 5, 1));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 55;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
@@ -217,7 +217,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 55;
@@ -240,7 +240,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 55;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
@@ -255,14 +255,14 @@ public class GestorYConsultas extends javax.swing.JFrame {
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 150;
+        gridBagConstraints.ipadx = 120;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         panel.add(txtNombreAnime, gridBagConstraints);
 
         spCapActual.setModel(new javax.swing.SpinnerNumberModel(0, 0, 5, 1));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 55;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 50, 0);
@@ -277,9 +277,9 @@ public class GestorYConsultas extends javax.swing.JFrame {
         panel.add(jLabel19, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 150;
+        gridBagConstraints.ipadx = 120;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         panel.add(txtImagen, gridBagConstraints);
 
@@ -294,7 +294,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         jLabel26.setText("Imagen");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 15);
         panel.add(jLabel26, gridBagConstraints);
@@ -316,7 +316,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 150;
+        gridBagConstraints.ipadx = 120;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         panel.add(txtIdAnime, gridBagConstraints);
 
@@ -339,7 +339,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.ipadx = 40;
         gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 50);
         panel.add(btnAltaAnime, gridBagConstraints);
 
@@ -353,7 +353,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.ipadx = 40;
         gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 50);
         panel.add(btnBajaAnime, gridBagConstraints);
 
@@ -380,7 +380,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.ipadx = 40;
         gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 50);
         panel.add(btnModAnime, gridBagConstraints);
 
@@ -401,7 +401,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 150;
+        gridBagConstraints.ipadx = 120;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         panel.add(txtCategorias, gridBagConstraints);
 
@@ -422,14 +422,14 @@ public class GestorYConsultas extends javax.swing.JFrame {
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 150;
+        gridBagConstraints.ipadx = 120;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         panel.add(txtAnhoSalida, gridBagConstraints);
 
-        btnModUsuario.setText("Modificar");
-        btnModUsuario.addActionListener(new java.awt.event.ActionListener() {
+        btnModUsuarioFavoritos.setText("Modificar");
+        btnModUsuarioFavoritos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModUsuarioActionPerformed(evt);
+                btnModUsuarioFavoritosActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -438,34 +438,34 @@ public class GestorYConsultas extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 0);
-        panel.add(btnModUsuario, gridBagConstraints);
+        panel.add(btnModUsuarioFavoritos, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 150;
+        gridBagConstraints.ipadx = 120;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         panel.add(txtDescripcion, gridBagConstraints);
 
         jLabel11.setText("Favoritos");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(30, 50, 0, 15);
         panel.add(jLabel11, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 150;
+        gridBagConstraints.ipadx = 120;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         panel.add(txtCapTotales, gridBagConstraints);
 
         jLabel12.setText("Anime");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 15);
         panel.add(jLabel12, gridBagConstraints);
@@ -481,7 +481,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         jLabel13.setText("Usuario");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 15);
         panel.add(jLabel13, gridBagConstraints);
@@ -497,7 +497,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         jLabel14.setText("Valoración");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 15);
         panel.add(jLabel14, gridBagConstraints);
@@ -513,7 +513,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         jLabel15.setText("Capítulo Actual");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 50, 50, 15);
         panel.add(jLabel15, gridBagConstraints);
@@ -526,7 +526,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 0);
@@ -561,15 +561,18 @@ public class GestorYConsultas extends javax.swing.JFrame {
 
     private void txtIdUsuarioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIdUsuarioFocusLost
         // TODO add your handling code here:
+        controladorPrincipal.cargarDatosUsuario();
     }//GEN-LAST:event_txtIdUsuarioFocusLost
 
     private void btnAltaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAltaUsuarioActionPerformed
         // TODO add your handling code here:
+        controladorPrincipal.darAltaUsuario();
     }//GEN-LAST:event_btnAltaUsuarioActionPerformed
 
-    private void btnModUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModUsuarioActionPerformed
+    private void btnModUsuarioFavoritosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModUsuarioFavoritosActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnModUsuarioActionPerformed
+        controladorPrincipal.modificarUsuarioFavoritos();
+    }//GEN-LAST:event_btnModUsuarioFavoritosActionPerformed
 
     private void btnBajaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBajaUsuarioActionPerformed
         // TODO add your handling code here:
@@ -777,7 +780,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
     private javax.swing.JButton btnBajaUsuario;
     private javax.swing.JButton btnModAnime;
     private javax.swing.JButton btnModFavorito;
-    private javax.swing.JButton btnModUsuario;
+    private javax.swing.JButton btnModUsuarioFavoritos;
     private javax.swing.JCheckBox cbVerPasswordFavoritos;
     private javax.swing.JComboBox<Anime> comboAnimesFavoritos;
     private javax.swing.JComboBox<Usuario> comboFavoritosUsuarios;

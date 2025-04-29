@@ -66,4 +66,26 @@ public class UsuarioDAO {
         session.save(u);
     }
 
+    public Usuario buscarUsuarioPorId(Session session, int id) {
+        Usuario u = null;
+        String query = "Usuario.findByIdUsuario";
+        Query q = session.createNamedQuery(query);
+        q.setParameter("idUsuario", id);
+        
+        Iterator it = q.list().iterator();
+        if (it.hasNext()) {
+            u = (Usuario) it.next();
+        }
+        return u;
+    }
+
+    public void darAltaUsuario(Session session, Usuario u) {
+        session.save(u);
+    }
+
+    public void modificarUsuario(Session session, Usuario u) {
+        session.evict(u);
+        session.update(u);
+    }
+
 }

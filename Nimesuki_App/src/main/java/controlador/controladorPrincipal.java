@@ -123,27 +123,32 @@ public class controladorPrincipal {
     public static Usuario loginUsuario() {
         Usuario u = null;
         login.getLblLogin().setText("");
-
-        if (login.getTxtNombreLogin().getText().trim().isEmpty() || login.getTxtPasswordLogin().getPassword().length == 0) {
-            JOptionPane.showMessageDialog(null, "Faltan datos");
+        char[] pw = login.getTxtPasswordLogin().getPassword();
+        String contrasenha = new String(pw);
+        if (contrasenha.contains(" ")) {
+            login.getLblLogin().setText("Login incorrecto");
+        } else if (login.getTxtNombreLogin().getText().contains(" ")) {
+            login.getLblLogin().setText("Login incorrecto");
         } else {
-            try {
-                String nombre = login.getTxtNombreLogin().getText();
-                char[] pw = login.getTxtPasswordLogin().getPassword();
-                String contrasenha = new String(pw);
-                u = usuDAO.buscarUsuarioPorNombre(session, nombre);
-                if (u != null) {
-                    if (BCrypt.checkpw(contrasenha, u.getContrasenha())) {
-                        nombreUsuarioLogeado = nombre;
+            if (login.getTxtNombreLogin().getText().isEmpty() || contrasenha.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Faltan datos");
+            } else {
+                try {
+                    String nombre = login.getTxtNombreLogin().getText();
+                    u = usuDAO.buscarUsuarioPorNombre(session, nombre);
+                    if (u != null) {
+                        if (BCrypt.checkpw(contrasenha, u.getContrasenha())) {
+                            nombreUsuarioLogeado = nombre;
+                        } else {
+                            login.getLblLogin().setText("Login incorrecto");
+                            u = null;
+                        }
                     } else {
                         login.getLblLogin().setText("Login incorrecto");
-                        u = null;
                     }
-                } else {
-                    login.getLblLogin().setText("Login incorrecto");
+                } catch (Exception e) {
+                    Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, "Error: ", e);
                 }
-            } catch (Exception e) {
-                Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, "Error: ", e);
             }
         }
         return u;
@@ -154,13 +159,17 @@ public class controladorPrincipal {
     }
 
     public static void modificarNombreUsuario() {
-        if (gestorUsuario.getTxtNombreUsuario().getText().trim().isEmpty()) {
+        if (gestorUsuario.getTxtNombreUsuario().getText().contains(" ")) {
+            JOptionPane.showMessageDialog(null, "El nombre de usuario no puede contener espacios en blanco.");
+            return;
+        }
+        if (gestorUsuario.getTxtNombreUsuario().getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Faltan Datos");
             return;
         }
         try {
             HibernateUtil.beginTx(session);
-            String nuevoNombre = gestorUsuario.getTxtNombreUsuario().getText().trim();
+            String nuevoNombre = gestorUsuario.getTxtNombreUsuario().getText();
             Usuario uLogueado = usuDAO.buscarUsuarioPorNombre(session, nombreUsuarioLogeado);
             if (uLogueado != null) {
                 usuDAO.modificarNombreUsuario(session, uLogueado, nuevoNombre);
@@ -176,15 +185,19 @@ public class controladorPrincipal {
     }
 
     public static void modificarContrasenhaUsuario() {
-        if (String.valueOf(gestorUsuario.getTxtPasswordUsuario().getPassword()).trim().isEmpty()) {
+        char[] pw = gestorUsuario.getTxtPasswordUsuario().getPassword();
+        String nuevaContrasenha = new String(pw);
+        if (nuevaContrasenha.contains(" ")) {
+            JOptionPane.showMessageDialog(null, "La contraseña no puede contener espacios.");
+            return;
+        }
+        if (nuevaContrasenha.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Faltan Datos");
             return;
         }
         try {
             HibernateUtil.beginTx(session);
-            char[] pw = gestorUsuario.getTxtPasswordUsuario().getPassword();
-            String nuevaContrasenha = new String(pw);
-            String contrasenhaEncriptada = BCrypt.hashpw(nuevaContrasenha.trim(), BCrypt.gensalt());
+            String contrasenhaEncriptada = BCrypt.hashpw(nuevaContrasenha, BCrypt.gensalt());
             Usuario uLogueado = usuDAO.buscarUsuarioPorNombre(session, nombreUsuarioLogeado);
             if (uLogueado != null) {
                 usuDAO.modificarContrasenhaUsuario(session, uLogueado, contrasenhaEncriptada);
@@ -221,8 +234,8 @@ public class controladorPrincipal {
                     JOptionPane.showMessageDialog(null, "Usuario borrado con éxito.");
                     vaciarTxtGestor();
                     cerrarSesionUsuario();
-                    controladorPrincipal.iniciarLogin();
                     gestorUsuario.setVisible(false);
+                    controladorPrincipal.iniciarLogin();
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Datos incorrectos.");
@@ -241,6 +254,7 @@ public class controladorPrincipal {
         gestorUsuario.getTxtNombreUsuario().setText("");
         gestorUsuario.getTxtPasswordUsuario().setText("");
         gestorUsuario.getCbVerPassword().setSelected(false);
+        gestorUsuario.getTxtPasswordUsuario().setEchoChar('*');
     }
 
     public static void cargarComboAnimes() {
@@ -280,10 +294,10 @@ public class controladorPrincipal {
         try {
             HibernateUtil.beginTx(session);
             String contrasenha = "123";
-            String contrasenhaEncriptada = BCrypt.hashpw(contrasenha.trim(), BCrypt.gensalt());
+            String contrasenhaEncriptada = BCrypt.hashpw(contrasenha, BCrypt.gensalt());
             usuDAO.guardarEloy(session, "Eloy", contrasenhaEncriptada, "USER");
             String contrasenha2 = "456";
-            String contrasenhaEncriptada2 = BCrypt.hashpw(contrasenha2.trim(), BCrypt.gensalt());
+            String contrasenhaEncriptada2 = BCrypt.hashpw(contrasenha2, BCrypt.gensalt());
             usuDAO.guardarEloy(session, "EloyAdmin", contrasenhaEncriptada2, "ADMIN");
             HibernateUtil.commitTx(session);
         } catch (Exception e) {
@@ -312,6 +326,149 @@ public class controladorPrincipal {
             }
         } catch (Exception e) {
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, "Error: ", e);
+        }
+    }
+
+    private static void vaciarTxtUsuarioFavoritos() {
+        consultas.getTxtNombreUsuario().setText("");
+        consultas.getTxtPasswordFavoritos().setText("");
+        consultas.getComboTipoUsuario().setSelectedItem("USER");
+    }
+
+    public static void cargarDatosUsuario() {
+        if (consultas.getTxtIdUsuario().getText().trim().isEmpty()) {
+            vaciarTxtUsuarioFavoritos();
+            return;
+        }
+        try {
+            int id = Integer.parseInt(consultas.getTxtIdUsuario().getText().trim());
+            Usuario u = usuDAO.buscarUsuarioPorId(session, id);
+            if (u != null) {
+                consultas.getTxtNombreUsuario().setText(u.getNombre());
+                consultas.getTxtPasswordFavoritos().setText(u.getContrasenha());
+                consultas.getComboTipoUsuario().setSelectedItem(u.getTipo());
+            } else {
+                vaciarTxtUsuarioFavoritos();
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Error numérico");
+            consultas.getTxtIdUsuario().setText("");
+        } catch (Exception e) {
+            Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    public static void darAltaUsuario() {
+        char[] pw = consultas.getTxtPasswordFavoritos().getPassword();
+        String contrasenha = new String(pw);
+        if (contrasenha.contains(" ")) {
+            JOptionPane.showMessageDialog(null, "La contraseña no puede contener espacios.");
+            return;
+        }
+        if (consultas.getTxtNombreUsuario().getText().contains(" ")) {
+            JOptionPane.showMessageDialog(null, "El nombre de usuario no puede contener espacios.");
+            return;
+        }
+        if (consultas.getTxtIdUsuario().getText().trim().isEmpty() || consultas.getTxtNombreUsuario().getText().isEmpty() || contrasenha.isEmpty() || consultas.getComboTipoUsuario().getItemCount() == 0) {
+            JOptionPane.showMessageDialog(null, "Faltan Datos");
+            return;
+        }
+        try {
+            int id = Integer.parseInt(consultas.getTxtIdUsuario().getText().trim());
+            Usuario uId = usuDAO.buscarUsuarioPorId(session, id);
+            if (uId != null) {
+                JOptionPane.showMessageDialog(null, "Usuario ya creado");
+                consultas.getTxtIdUsuario().setText("");
+            } else {
+                HibernateUtil.beginTx(session);
+                String nombre = consultas.getTxtNombreUsuario().getText();
+                String contrasenhaEncriptada = BCrypt.hashpw(contrasenha, BCrypt.gensalt());
+                String tipo = (String) consultas.getComboTipoUsuario().getSelectedItem();
+                Usuario u = new Usuario(id, nombre, contrasenhaEncriptada, tipo);
+                usuDAO.darAltaUsuario(session, u);
+                JOptionPane.showMessageDialog(null, "Usuario creado con éxito.");
+                vaciarTxtUsuarioFavoritos();
+                consultas.getTxtIdUsuario().setText("");
+                HibernateUtil.commitTx(session);
+            }
+        } catch (NumberFormatException e) {
+            HibernateUtil.rollbackTx(session);
+            JOptionPane.showMessageDialog(null, "Error numérico");
+            consultas.getTxtIdUsuario().setText("");
+        } catch (Exception e) {
+            HibernateUtil.rollbackTx(session);
+            Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    public static void modificarUsuarioFavoritos() { //Falta que no modifique si son iguales
+        if (consultas.getTxtIdUsuario().getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Usuario no encontrado.");
+            return;
+        }
+        try {
+            int id = Integer.parseInt(consultas.getTxtIdUsuario().getText());
+            String nuevoNombre = consultas.getTxtNombreUsuario().getText();
+            char[] pw = consultas.getTxtPasswordFavoritos().getPassword();
+            String nuevaContrasenha = new String(pw);
+            Usuario u = usuDAO.buscarUsuarioPorId(session, id);
+            String resultado = "";
+            String contrasenhaEncriptada = "";
+            if (u != null) {
+                HibernateUtil.beginTx(session);
+                if (nuevoNombre.contains(" ")) {
+                    resultado += "El nombre de usuario contiene espacios en blanco. No modificado.";
+                } else {
+                    if (nuevoNombre.isEmpty()) {
+                        resultado += "El nombre de usuario vacío. No modificado.";
+                    } else {
+                        u.setNombre(nuevoNombre);
+                        resultado += "Nombre de usuario modificado.";
+                    }
+                }
+                if (nuevaContrasenha.contains(" ")) {
+                    resultado += "\nLa contraseña no puede contener espacios en blanco.";
+                } else {
+                    if (nuevaContrasenha.isEmpty()) {
+                        resultado += "\nLa contraseña está vacía. No modificada.";
+                    } else {
+                        contrasenhaEncriptada = BCrypt.hashpw(nuevaContrasenha, BCrypt.gensalt());
+                        if (u.getContrasenha().equals(contrasenhaEncriptada)) {
+                            resultado += "\nError con la contraseña. No modificada.";
+                        } else {
+                            if (BCrypt.checkpw(nuevaContrasenha, u.getContrasenha())) {
+                                resultado += "\nLa contraseña no puede ser la misma. No modificada.";
+                            } else {
+                                u.setContrasenha(contrasenhaEncriptada);
+                                resultado += "\nContraseña modificada.";
+                            }
+                        }
+
+                    }
+                }
+                if (consultas.getComboTipoUsuario().getItemCount() > 0) {
+                    String tipo = (String) consultas.getComboTipoUsuario().getSelectedItem();
+                    if (tipo.equals(u.getTipo())) {
+                        resultado += "\nTipo no modificado.";
+                    } else {
+                        u.setTipo(tipo);
+                        resultado += "\nTipo modificado.";
+                    }
+                } else {
+                    resultado += "\nError al encontrar el tipo. No modificado.";
+                }
+                usuDAO.modificarUsuario(session, u);
+                JOptionPane.showMessageDialog(null, resultado);
+                if (!contrasenhaEncriptada.isEmpty()) {
+                    consultas.getTxtPasswordFavoritos().setText(contrasenhaEncriptada);
+                    consultas.getCbVerPasswordFavoritos().setSelected(false);
+                    consultas.getTxtPasswordFavoritos().setEchoChar('*');
+                }
+                HibernateUtil.commitTx(session);
+            }
+        } catch (Exception e) {
+            HibernateUtil.rollbackTx(session);
+            Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
