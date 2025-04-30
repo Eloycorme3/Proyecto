@@ -1,5 +1,5 @@
 # Proyecto
-Este proyecto es sobre una aplicación móvil llamada Nimesuki que permite a los usuarios agregar, calificar y compartir su opinión sobre sus animes favoritos.
+Este proyecto es sobre una aplicación móvil llamada Nimesuki,la cual permite a los usuarios agregar, calificar y compartir su opinión sobre sus animes favoritos.
 
 ## Enlaces
 - **App Móvil:** Nimesuki
