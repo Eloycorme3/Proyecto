@@ -12,4 +12,6 @@ import proyecto.nimesuki.modelo.Usuario;
  * @author eloy.castro
  */
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
+
+    public Usuario findByNombre(String nombre);
 }

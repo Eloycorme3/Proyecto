@@ -11,7 +11,7 @@ import javax.persistence.Embeddable;
 
 /**
  *
- * @author Formacion3
+ * @author eloy.castro
  */
 @Embeddable
 public class FavoritosPK implements Serializable {

@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Formacion3
+ * @author eloy.castro
  */
 @Entity
 @Table(name = "favoritos")
@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Favoritos.findAll", query = "SELECT f FROM Favoritos f"),
     @NamedQuery(name = "Favoritos.findByIdAnimeFK", query = "SELECT f FROM Favoritos f WHERE f.favoritosPK.idanimeFK = :idanimeFK"),
     @NamedQuery(name = "Favoritos.findByIdUsuarioFK", query = "SELECT f FROM Favoritos f WHERE f.favoritosPK.idusuarioFK = :idusuarioFK"),
+    @NamedQuery(name = "Favoritos.findByIdUsuarioFK&IdAnimeFK", query = "SELECT f FROM Favoritos f WHERE f.favoritosPK.idusuarioFK = :idusuarioFK AND f.favoritosPK.idanimeFK = :idanimeFK"),
     @NamedQuery(name = "Favoritos.findByValoracion", query = "SELECT f FROM Favoritos f WHERE f.valoracion = :valoracion"),
     @NamedQuery(name = "Favoritos.findByCapActual", query = "SELECT f FROM Favoritos f WHERE f.capActual = :capActual")})
 public class Favoritos implements Serializable {
@@ -47,8 +48,12 @@ public class Favoritos implements Serializable {
     public Favoritos() {
     }
 
-    public Favoritos(FavoritosPK favoritosPK) {
+    public Favoritos(FavoritosPK favoritosPK, Anime a, Usuario u, int valoracion, int capActual) {
         this.favoritosPK = favoritosPK;
+        this.anime = a;
+        this.usuario = u;
+        this.valoracion = valoracion;
+        this.capActual = capActual;
     }
 
     public Favoritos(int idanimeFK, int idusuarioFK) {

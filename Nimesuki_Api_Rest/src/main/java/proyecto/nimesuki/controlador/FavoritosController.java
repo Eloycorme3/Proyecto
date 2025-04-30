@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import proyecto.nimesuki.modelo.Favoritos;
 import proyecto.nimesuki.modelo.FavoritosId;
 import proyecto.nimesuki.repositorio.FavoritosRepository;
-import proyecto.nimesuki.servicio.FavoritosService;
 
 /**
  *
@@ -32,9 +30,6 @@ import proyecto.nimesuki.servicio.FavoritosService;
 public class FavoritosController {
 
     private final FavoritosRepository favoritosRepository;
-
-    @Autowired
-    private FavoritosService favoritosService;
 
     public FavoritosController(FavoritosRepository favoritosRepository) {
         this.favoritosRepository = favoritosRepository;
@@ -48,15 +43,9 @@ public class FavoritosController {
     @GetMapping("/{idUsuario}/{nombre}")
     public ResponseEntity<List<Favoritos>> getByUserAnime(@PathVariable Integer idUsuario, @PathVariable String nombre) {
         if (nombre != null) {
-            List<Favoritos> favoritosFiltrados = favoritosRepository.findAll().stream()
-                    .filter(favorito -> Objects.equals(favorito.getUsuario().getIdUsuario(), idUsuario)
-                    && favorito.getAnime().getNombre().contains(nombre))
-                    .collect(Collectors.toList());
-
-            return Optional.ofNullable(favoritosFiltrados)
-                    .filter(list -> !list.isEmpty())
-                    .map(ResponseEntity::ok)
-                    .orElse(ResponseEntity.notFound().build());
+            List<Favoritos> favoritosFiltrados = favoritosRepository.findByUsuario_IdUsuarioAndAnime_NombreContaining(idUsuario, nombre);
+            
+            return ResponseEntity.ok(favoritosFiltrados);
         } else {
             return ResponseEntity.badRequest().build();
         }
@@ -65,14 +54,9 @@ public class FavoritosController {
     @GetMapping("/{idUsuario}")
     public ResponseEntity<List<Favoritos>> getByUser(@PathVariable Integer idUsuario) {
         if (idUsuario != null) {
-            List<Favoritos> favoritosFiltrados = favoritosRepository.findAll().stream()
-                    .filter(favorito -> favorito.getUsuario().getIdUsuario().equals(idUsuario))
-                    .collect(Collectors.toList());
-
-            return Optional.ofNullable(favoritosFiltrados)
-                    .filter(list -> !list.isEmpty())
-                    .map(ResponseEntity::ok)
-                    .orElse(ResponseEntity.notFound().build());
+            List<Favoritos> favoritosFiltrados = favoritosRepository.findByUsuario_IdUsuario(idUsuario);
+            
+            return ResponseEntity.ok(favoritosFiltrados);
         } else {
             return ResponseEntity.badRequest().build();
         }

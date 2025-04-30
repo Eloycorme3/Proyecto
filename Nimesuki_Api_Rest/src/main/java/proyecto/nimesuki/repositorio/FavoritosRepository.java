@@ -15,5 +15,7 @@ import proyecto.nimesuki.modelo.FavoritosId;
  */
 public interface FavoritosRepository extends JpaRepository<Favoritos, FavoritosId> {
 
+    public List<Favoritos> findByUsuario_IdUsuario(Integer idUsuario);
 
+    public List<Favoritos> findByUsuario_IdUsuarioAndAnime_NombreContaining(Integer idUsuario, String nombre);
 }

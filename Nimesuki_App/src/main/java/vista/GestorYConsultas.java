@@ -1,27 +1,32 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package vista;
 
 import controlador.controladorPrincipal;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 import modelo.vo.Anime;
 import modelo.vo.Usuario;
 
 /**
  *
- * @author Acceso a datos
+ * @author eloy.castro
  */
 public class GestorYConsultas extends javax.swing.JFrame {
 
+    private static Timer t;
+
     /**
-     * Creates new form ProyectoBase
+     * Creates new form GestorYConsultas
      */
     public GestorYConsultas() {
         initComponents();
@@ -202,6 +207,11 @@ public class GestorYConsultas extends javax.swing.JFrame {
                 txtNombreUsuarioFocusLost(evt);
             }
         });
+        txtNombreUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtNombreUsuarioKeyPressed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -357,9 +367,15 @@ public class GestorYConsultas extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 50);
         panel.add(btnBajaAnime, gridBagConstraints);
 
+        txtIdUsuario.setEditable(false);
         txtIdUsuario.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtIdUsuarioFocusLost(evt);
+            }
+        });
+        txtIdUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtIdUsuarioKeyPressed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -561,7 +577,6 @@ public class GestorYConsultas extends javax.swing.JFrame {
 
     private void txtIdUsuarioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIdUsuarioFocusLost
         // TODO add your handling code here:
-        controladorPrincipal.cargarDatosUsuario();
     }//GEN-LAST:event_txtIdUsuarioFocusLost
 
     private void btnAltaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAltaUsuarioActionPerformed
@@ -571,23 +586,27 @@ public class GestorYConsultas extends javax.swing.JFrame {
 
     private void btnModUsuarioFavoritosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModUsuarioFavoritosActionPerformed
         // TODO add your handling code here:
-        controladorPrincipal.modificarUsuarioFavoritos();
+        controladorPrincipal.iniciarModAdmin(this);
     }//GEN-LAST:event_btnModUsuarioFavoritosActionPerformed
 
     private void btnBajaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBajaUsuarioActionPerformed
         // TODO add your handling code here:
+        controladorPrincipal.darBajaUsuarioFavoritos();
     }//GEN-LAST:event_btnBajaUsuarioActionPerformed
 
     private void btnAltaFavoritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAltaFavoritoActionPerformed
         // TODO add your handling code here:
+        controladorPrincipal.darAltaFavoritos();
     }//GEN-LAST:event_btnAltaFavoritoActionPerformed
 
     private void btnModFavoritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModFavoritoActionPerformed
         // TODO add your handling code here:
+        controladorPrincipal.modificarFavoritos();
     }//GEN-LAST:event_btnModFavoritoActionPerformed
 
     private void btnBajaFavoritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBajaFavoritoActionPerformed
         // TODO add your handling code here:
+        controladorPrincipal.darBajaFavoritos();
     }//GEN-LAST:event_btnBajaFavoritoActionPerformed
 
     private void txtNombreUsuarioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNombreUsuarioFocusLost
@@ -616,7 +635,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
 
     private void comboFavoritosUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboFavoritosUsuariosActionPerformed
         // TODO add your handling code here:
-        controladorPrincipal.cargarComboAnimes();
+        controladorPrincipal.comprobarExistenciaFavoritos();
     }//GEN-LAST:event_comboFavoritosUsuariosActionPerformed
 
     private void cbVerPasswordFavoritosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbVerPasswordFavoritosActionPerformed
@@ -637,9 +656,101 @@ public class GestorYConsultas extends javax.swing.JFrame {
 
     private void comboAnimesFavoritosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboAnimesFavoritosActionPerformed
         // TODO add your handling code here:
-        controladorPrincipal.fijarCapitulos();
-        controladorPrincipal.fijarValoracion();
+        controladorPrincipal.comprobarExistenciaFavoritos();
     }//GEN-LAST:event_comboAnimesFavoritosActionPerformed
+
+    private void txtIdUsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdUsuarioKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdUsuarioKeyPressed
+
+    private void txtNombreUsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreUsuarioKeyPressed
+        // TODO add your handling code here:
+        btnAltaUsuario.setEnabled(false);
+        btnModUsuarioFavoritos.setEnabled(false);
+        btnBajaUsuario.setEnabled(false);
+        if (t != null && t.isRunning()) {
+            t.stop();
+        }
+
+        t = new Timer(500, (ActionEvent evt1) -> {
+            controladorPrincipal.comprobarExistenciaUsuarios();
+        });
+
+        t.setRepeats(false);
+        t.start();
+    }//GEN-LAST:event_txtNombreUsuarioKeyPressed
+
+    public JButton getBtnBajaAnime() {
+        return btnBajaAnime;
+    }
+
+    public void setBtnBajaAnime(JButton btnBajaAnime) {
+        this.btnBajaAnime = btnBajaAnime;
+    }
+
+    public JButton getBtnBajaFavorito() {
+        return btnBajaFavorito;
+    }
+
+    public void setBtnBajaFavorito(JButton btnBajaFavorito) {
+        this.btnBajaFavorito = btnBajaFavorito;
+    }
+
+    public JButton getBtnBajaUsuario() {
+        return btnBajaUsuario;
+    }
+
+    public void setBtnBajaUsuario(JButton btnBajaUsuario) {
+        this.btnBajaUsuario = btnBajaUsuario;
+    }
+
+    public JButton getBtnModAnime() {
+        return btnModAnime;
+    }
+
+    public void setBtnModAnime(JButton btnModAnime) {
+        this.btnModAnime = btnModAnime;
+    }
+
+    public JButton getBtnModFavorito() {
+        return btnModFavorito;
+    }
+
+    public void setBtnModFavorito(JButton btnModFavorito) {
+        this.btnModFavorito = btnModFavorito;
+    }
+
+    public JButton getBtnModUsuarioFavoritos() {
+        return btnModUsuarioFavoritos;
+    }
+
+    public void setBtnModUsuarioFavoritos(JButton btnModUsuarioFavoritos) {
+        this.btnModUsuarioFavoritos = btnModUsuarioFavoritos;
+    }
+
+    public JButton getBtnAltaAnime() {
+        return btnAltaAnime;
+    }
+
+    public void setBtnAltaAnime(JButton btnAltaAnime) {
+        this.btnAltaAnime = btnAltaAnime;
+    }
+
+    public JButton getBtnAltaFavorito() {
+        return btnAltaFavorito;
+    }
+
+    public void setBtnAltaFavorito(JButton btnAltaFavorito) {
+        this.btnAltaFavorito = btnAltaFavorito;
+    }
+
+    public JButton getBtnAltaUsuario() {
+        return btnAltaUsuario;
+    }
+
+    public void setBtnAltaUsuario(JButton btnAltaUsuario) {
+        this.btnAltaUsuario = btnAltaUsuario;
+    }
 
     public JCheckBox getCbVerPasswordFavoritos() {
         return cbVerPasswordFavoritos;
@@ -769,7 +880,6 @@ public class GestorYConsultas extends javax.swing.JFrame {
         this.txtNombreUsuario = txtNombreUsuario;
     }
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAltaAnime;

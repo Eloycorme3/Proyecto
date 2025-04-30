@@ -9,7 +9,6 @@ import javax.swing.DefaultComboBoxModel;
 import modelo.vo.Usuario;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -35,11 +34,11 @@ public class UsuarioDAO {
         session.delete(uCreado);
     }
 
-    public Usuario buscarUsuarioPorNombre(Session session, String nombreUsuarioLogeado) {
+    public Usuario buscarUsuarioPorNombre(Session session, String nombreUsuario) {
         Usuario u = null;
         String query = "Usuario.findByNombre";
         Query q = session.createNamedQuery(query);
-        q.setParameter("nombre", nombreUsuarioLogeado);
+        q.setParameter("nombre", nombreUsuario);
 
         Iterator it = q.list().iterator();
         if (it.hasNext()) {
@@ -86,6 +85,12 @@ public class UsuarioDAO {
     public void modificarUsuario(Session session, Usuario u) {
         session.evict(u);
         session.update(u);
+    }
+
+    public void modificarTipoUsuario(Session session, Usuario uLogAdmin, String tipo) {
+        uLogAdmin.setTipo(tipo);
+        session.evict(uLogAdmin);
+        session.update(uLogAdmin);
     }
 
 }

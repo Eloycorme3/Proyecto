@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import proyecto.nimesuki.modelo.Favoritos;
 import proyecto.nimesuki.repositorio.AnimeRepository;
 
 /**
@@ -36,18 +35,13 @@ public class AnimeController {
     public List<Anime> getAll() {
         return animeRepository.findAll();
     }
-    
+
     @GetMapping("/{nombre}")
     public ResponseEntity<List<Anime>> getByAnime(@PathVariable String nombre) {
         if (nombre != null) {
-            List<Anime> favoritosFiltrados = animeRepository.findAll().stream()
-                    .filter(anime -> anime.getNombre().contains(nombre))
-                    .collect(Collectors.toList());
+            List<Anime> animesFiltrados = animeRepository.findByNombreContaining(nombre);
 
-            return Optional.ofNullable(favoritosFiltrados)
-                    .filter(list -> !list.isEmpty())
-                    .map(ResponseEntity::ok)
-                    .orElse(ResponseEntity.notFound().build());
+            return ResponseEntity.ok(animesFiltrados);
         } else {
             return ResponseEntity.badRequest().build();
         }

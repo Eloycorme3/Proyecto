@@ -1,26 +1,30 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package vista;
 
 import controlador.controladorPrincipal;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 /**
  *
- * @author eloy.castro
+ * @author Formacion3
  */
-public class GestorUsuario extends javax.swing.JFrame {
+public class GestorAdmin extends javax.swing.JDialog {
 
     /**
-     * Creates new form GestorUsuarios
+     * Creates new form GestorAdmin
+     * @param parent
+     * @param modal
      */
-    public GestorUsuario() {
+    public GestorAdmin(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
-        controladorPrincipal.iniciarSession();
     }
 
     /**
@@ -34,7 +38,6 @@ public class GestorUsuario extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         panel = new javax.swing.JPanel();
-        btnBajaUsuarios = new javax.swing.JButton();
         btnModContrasenhaUsuario = new javax.swing.JButton();
         btnModNombreUsuario = new javax.swing.JButton();
         cbVerPassword = new javax.swing.JCheckBox();
@@ -42,34 +45,18 @@ public class GestorUsuario extends javax.swing.JFrame {
         txtNombreUsuario = new javax.swing.JTextField();
         txtPasswordUsuario = new javax.swing.JPasswordField();
         jLabel3 = new javax.swing.JLabel();
-        menuBar = new javax.swing.JMenuBar();
-        menuOpciones = new javax.swing.JMenu();
-        menuItemSalir = new javax.swing.JMenuItem();
+        btnModTipoUsuario = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        comboTipoUsuario = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
             }
-            public void windowOpened(java.awt.event.WindowEvent evt) {
-                formWindowOpened(evt);
-            }
         });
 
         panel.setLayout(new java.awt.GridBagLayout());
-
-        btnBajaUsuarios.setText("Eliminar Usuario");
-        btnBajaUsuarios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBajaUsuariosActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(40, 15, 50, 50);
-        panel.add(btnBajaUsuarios, gridBagConstraints);
 
         btnModContrasenhaUsuario.setText("Cambiar contraseña");
         btnModContrasenhaUsuario.addActionListener(new java.awt.event.ActionListener() {
@@ -147,24 +134,50 @@ public class GestorUsuario extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(20, 50, 0, 20);
         panel.add(jLabel3, gridBagConstraints);
 
-        getContentPane().add(panel, java.awt.BorderLayout.CENTER);
-
-        menuOpciones.setText("Opciones");
-
-        menuItemSalir.setText("Salir");
-        menuItemSalir.addActionListener(new java.awt.event.ActionListener() {
+        btnModTipoUsuario.setText("Cambiar tipo");
+        btnModTipoUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuItemSalirActionPerformed(evt);
+                btnModTipoUsuarioActionPerformed(evt);
             }
         });
-        menuOpciones.add(menuItemSalir);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 15, 20, 50);
+        panel.add(btnModTipoUsuario, gridBagConstraints);
 
-        menuBar.add(menuOpciones);
+        jLabel1.setText("Tipo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 50, 20, 20);
+        panel.add(jLabel1, gridBagConstraints);
 
-        setJMenuBar(menuBar);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 55;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 20, 0);
+        panel.add(comboTipoUsuario, gridBagConstraints);
+
+        getContentPane().add(panel, java.awt.BorderLayout.CENTER);
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnModContrasenhaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModContrasenhaUsuarioActionPerformed
+        // TODO add your handling code here:
+        controladorPrincipal.modificarContrasenhaUsuarioAdmin();
+    }//GEN-LAST:event_btnModContrasenhaUsuarioActionPerformed
+
+    private void btnModNombreUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModNombreUsuarioActionPerformed
+        // TODO add your handling code here:
+        controladorPrincipal.modificarNombreUsuarioAdmin();
+    }//GEN-LAST:event_btnModNombreUsuarioActionPerformed
 
     private void cbVerPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbVerPasswordActionPerformed
         // TODO add your handling code here:
@@ -179,35 +192,39 @@ public class GestorUsuario extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPasswordUsuarioActionPerformed
 
-    private void btnBajaUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBajaUsuariosActionPerformed
+    private void btnModTipoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModTipoUsuarioActionPerformed
         // TODO add your handling code here:
-        controladorPrincipal.darBajaUsuario();
-    }//GEN-LAST:event_btnBajaUsuariosActionPerformed
+        controladorPrincipal.modificarTipoUsuarioAdmin();
+    }//GEN-LAST:event_btnModTipoUsuarioActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         // TODO add your handling code here:
+        controladorPrincipal.comprobarExistenciaUsuarios();
     }//GEN-LAST:event_formWindowClosed
 
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        // TODO add your handling code here:
-    }//GEN-LAST:event_formWindowOpened
+    public JButton getBtnModContrasenhaUsuario() {
+        return btnModContrasenhaUsuario;
+    }
 
-    private void btnModContrasenhaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModContrasenhaUsuarioActionPerformed
-        // TODO add your handling code here:
-        controladorPrincipal.modificarContrasenhaUsuario();
-    }//GEN-LAST:event_btnModContrasenhaUsuarioActionPerformed
+    public void setBtnModContrasenhaUsuario(JButton btnModContrasenhaUsuario) {
+        this.btnModContrasenhaUsuario = btnModContrasenhaUsuario;
+    }
 
-    private void btnModNombreUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModNombreUsuarioActionPerformed
-        // TODO add your handling code here:
-        controladorPrincipal.modificarNombreUsuario();
-    }//GEN-LAST:event_btnModNombreUsuarioActionPerformed
+    public JButton getBtnModNombreUsuario() {
+        return btnModNombreUsuario;
+    }
 
-    private void menuItemSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSalirActionPerformed
-        // TODO add your handling code here:
-        controladorPrincipal.cerrarSesionUsuario();
-        this.setVisible(false);
-        controladorPrincipal.iniciarLogin();
-    }//GEN-LAST:event_menuItemSalirActionPerformed
+    public void setBtnModNombreUsuario(JButton btnModNombreUsuario) {
+        this.btnModNombreUsuario = btnModNombreUsuario;
+    }
+
+    public JButton getBtnModTipoUsuario() {
+        return btnModTipoUsuario;
+    }
+
+    public void setBtnModTipoUsuario(JButton btnModTipoUsuario) {
+        this.btnModTipoUsuario = btnModTipoUsuario;
+    }
 
     public JCheckBox getCbVerPassword() {
         return cbVerPassword;
@@ -215,6 +232,14 @@ public class GestorUsuario extends javax.swing.JFrame {
 
     public void setCbVerPassword(JCheckBox cbVerPassword) {
         this.cbVerPassword = cbVerPassword;
+    }
+
+    public JComboBox<String> getComboTipoUsuario() {
+        return comboTipoUsuario;
+    }
+
+    public void setComboTipoUsuario(JComboBox<String> comboTipoUsuario) {
+        this.comboTipoUsuario = comboTipoUsuario;
     }
 
     public JTextField getTxtNombreUsuario() {
@@ -233,16 +258,17 @@ public class GestorUsuario extends javax.swing.JFrame {
         this.txtPasswordUsuario = txtPasswordUsuario;
     }
 
+    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBajaUsuarios;
     private javax.swing.JButton btnModContrasenhaUsuario;
     private javax.swing.JButton btnModNombreUsuario;
+    private javax.swing.JButton btnModTipoUsuario;
     private javax.swing.JCheckBox cbVerPassword;
+    private javax.swing.JComboBox<String> comboTipoUsuario;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JMenuBar menuBar;
-    private javax.swing.JMenuItem menuItemSalir;
-    private javax.swing.JMenu menuOpciones;
     private javax.swing.JPanel panel;
     private javax.swing.JTextField txtNombreUsuario;
     private javax.swing.JPasswordField txtPasswordUsuario;

@@ -4,13 +4,31 @@
  */
 package modelo.dao;
 
-import modelo.vo.Usuario;
+import java.util.Iterator;
+import javax.swing.DefaultComboBoxModel;
+import modelo.vo.Anime;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+
 
 /**
  *
  * @author eloy.castro
  */
 public class AnimeDAO {
+
+    public void cargarCombo(Session session, DefaultComboBoxModel modeloComboAnimesFavoritos) {
+        modeloComboAnimesFavoritos.removeAllElements();
+        Anime a;
+
+        String namedQuery = "Anime.findAll";
+        Query q = session.createNamedQuery(namedQuery);
+
+        Iterator it = q.list().iterator();
+        while (it.hasNext()) {
+            a = (Anime) it.next();
+            modeloComboAnimesFavoritos.addElement(a);
+        }
+    }
 
 }

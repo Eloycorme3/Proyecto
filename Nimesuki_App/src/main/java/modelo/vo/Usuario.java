@@ -5,9 +5,9 @@
 package modelo.vo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Formacion3
+ * @author eloy.castro
  */
 @Entity
 @Table(name = "usuario")
@@ -51,7 +51,7 @@ public class Usuario implements Serializable {
     @Basic(optional = false)
     @Column(name = "tipo")
     private String tipo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    @OneToMany(mappedBy = "usuario")
     private List<Favoritos> favoritosList;
 
     public Usuario() {
@@ -66,12 +66,14 @@ public class Usuario implements Serializable {
         this.nombre = nombre;
         this.contrasenha = contrasenha;
         this.tipo = tipo;
+        this.favoritosList = new ArrayList<>();
     }
 
     public Usuario(String nombre, String contrasenha, String tipo) {
         this.nombre = nombre;
         this.contrasenha = contrasenha;
         this.tipo = tipo;
+        this.favoritosList = new ArrayList<>();
     }
 
     public Integer getIdUsuario() {

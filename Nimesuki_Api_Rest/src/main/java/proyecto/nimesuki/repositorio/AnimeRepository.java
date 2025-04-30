@@ -4,6 +4,7 @@
  */
 package proyecto.nimesuki.repositorio;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import proyecto.nimesuki.modelo.Anime;
 
@@ -12,4 +13,6 @@ import proyecto.nimesuki.modelo.Anime;
  * @author eloy.castro
  */
 public interface AnimeRepository extends JpaRepository<Anime, Integer> {
+
+    public List<Anime> findByNombreContaining(String nombre);
 }

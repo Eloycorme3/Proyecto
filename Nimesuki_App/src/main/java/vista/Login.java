@@ -13,7 +13,7 @@ import modelo.vo.Usuario;
 
 /**
  *
- * @author eloyc
+ * @author eloy.castro
  */
 public class Login extends javax.swing.JFrame {
 
@@ -90,7 +90,6 @@ public class Login extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 20);
         panel.add(lblPassword, gridBagConstraints);
 
@@ -99,7 +98,6 @@ public class Login extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(50, 50, 0, 20);
         panel.add(lblNombre, gridBagConstraints);
 
@@ -113,7 +111,6 @@ public class Login extends javax.swing.JFrame {
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 50);
         panel.add(cbVerPasswordLogin, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();

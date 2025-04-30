@@ -6,6 +6,8 @@ package controlador;
 
 import controlador.factory.HibernateUtil;
 import java.awt.Dimension;
+import java.awt.Frame;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
@@ -14,10 +16,13 @@ import javax.swing.SpinnerNumberModel;
 import modelo.dao.AnimeDAO;
 import modelo.dao.FavoritosDAO;
 import modelo.dao.UsuarioDAO;
+import modelo.vo.Anime;
 import modelo.vo.Favoritos;
+import modelo.vo.FavoritosPK;
 import modelo.vo.Usuario;
 import org.hibernate.Session;
 import org.mindrot.jbcrypt.BCrypt;
+import vista.GestorAdmin;
 import vista.GestorUsuario;
 import vista.GestorYConsultas;
 import vista.Login;
@@ -41,6 +46,8 @@ public class controladorPrincipal {
     static SpinnerNumberModel modeloSppinerValoracion = new SpinnerNumberModel();
     static SpinnerNumberModel modeloSppinerCapActual = new SpinnerNumberModel();
     public static String nombreUsuarioLogeado = "";
+    public static String nombreUsuarioAdmin = "";
+    public static GestorAdmin ga;
 
     public static void iniciar() {
         login.setVisible(true);
@@ -98,9 +105,10 @@ public class controladorPrincipal {
 
     public static void iniciarConsultas() {
         reiniciarConsultas();
+        comprobarExistenciaUsuarios();
         consultas.setVisible(true);
         consultas.setLocationRelativeTo(null);
-        cargarComboUsuarios();
+        cargarCombos();
     }
 
     private static void reiniciarConsultas() {
@@ -118,6 +126,15 @@ public class controladorPrincipal {
         consultas.getTxtCapTotales().setText("");
         consultas.getSpValoracion().setValue(0);
         consultas.getSpCapActual().setValue(0);
+    }
+
+    public static void iniciarModAdmin(Frame parent) {
+        nombreUsuarioAdmin = consultas.getTxtNombreUsuario().getText();
+        ga = new GestorAdmin(parent, true);
+        ga.getComboTipoUsuario().addItem("USER");
+        ga.getComboTipoUsuario().addItem("ADMIN");
+        ga.setVisible(true);
+        ga.setLocationRelativeTo(null);
     }
 
     public static Usuario loginUsuario() {
@@ -158,6 +175,10 @@ public class controladorPrincipal {
         nombreUsuarioLogeado = "";
     }
 
+    public static void cerrarSesionUsuarioADMIN() {
+        nombreUsuarioAdmin = "";
+    }
+
     public static void modificarNombreUsuario() {
         if (gestorUsuario.getTxtNombreUsuario().getText().contains(" ")) {
             JOptionPane.showMessageDialog(null, "El nombre de usuario no puede contener espacios en blanco.");
@@ -170,12 +191,57 @@ public class controladorPrincipal {
         try {
             HibernateUtil.beginTx(session);
             String nuevoNombre = gestorUsuario.getTxtNombreUsuario().getText();
-            Usuario uLogueado = usuDAO.buscarUsuarioPorNombre(session, nombreUsuarioLogeado);
-            if (uLogueado != null) {
-                usuDAO.modificarNombreUsuario(session, uLogueado, nuevoNombre);
-                JOptionPane.showMessageDialog(null, "Nombre de usuario modificado con éxito.");
-                nombreUsuarioLogeado = nuevoNombre;
-                gestorUsuario.getTxtNombreUsuario().setText("");
+            Usuario uExistente = usuDAO.buscarUsuarioPorNombre(session, nuevoNombre);
+            if (uExistente == null) {
+                Usuario uLogueado = usuDAO.buscarUsuarioPorNombre(session, nombreUsuarioLogeado);
+                if (uLogueado != null) {
+                    usuDAO.modificarNombreUsuario(session, uLogueado, nuevoNombre);
+                    JOptionPane.showMessageDialog(null, "Nombre de usuario modificado con éxito.");
+                    nombreUsuarioLogeado = nuevoNombre;
+                    gestorUsuario.getTxtNombreUsuario().setText("");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Nombre de usuario ya existente.");
+            }
+            HibernateUtil.commitTx(session);
+        } catch (Exception e) {
+            HibernateUtil.rollbackTx(session);
+            Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    public static void modificarNombreUsuarioAdmin() {
+        if (ga.getTxtNombreUsuario().getText().contains(" ")) {
+            JOptionPane.showMessageDialog(null, "El nombre de usuario no puede contener espacios en blanco.");
+            return;
+        }
+        if (ga.getTxtNombreUsuario().getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Faltan Datos");
+            return;
+        }
+        try {
+            HibernateUtil.beginTx(session);
+            String nuevoNombre = ga.getTxtNombreUsuario().getText();
+            Usuario uLogAdmin = usuDAO.buscarUsuarioPorNombre(session, nombreUsuarioAdmin);
+            if (uLogAdmin != null) {
+                if (!uLogAdmin.getNombre().equals(nuevoNombre)) {
+                    Usuario uExistente = usuDAO.buscarUsuarioPorNombre(session, nuevoNombre);
+                    if (uExistente == null) {
+                        usuDAO.modificarNombreUsuario(session, uLogAdmin, nuevoNombre);
+                        JOptionPane.showMessageDialog(null, "Nombre de usuario modificado con éxito.");
+                        nombreUsuarioAdmin = nuevoNombre;
+                        ga.getTxtNombreUsuario().setText("");
+                        cargarComboUsuarios();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Nombre de usuario ya existente.");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "No puede ponerse el mismo nombre de usuario.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Error");
             }
             HibernateUtil.commitTx(session);
         } catch (Exception e) {
@@ -213,11 +279,82 @@ public class controladorPrincipal {
         }
     }
 
+    public static void modificarContrasenhaUsuarioAdmin() {
+        char[] pw = ga.getTxtPasswordUsuario().getPassword();
+        String nuevaContrasenha = new String(pw);
+        if (nuevaContrasenha.contains(" ")) {
+            JOptionPane.showMessageDialog(null, "La contraseña no puede contener espacios.");
+            return;
+        }
+        if (nuevaContrasenha.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Faltan Datos");
+            return;
+        }
+        try {
+            HibernateUtil.beginTx(session);
+            String contrasenhaEncriptada = BCrypt.hashpw(nuevaContrasenha, BCrypt.gensalt());
+            Usuario uLogAdmin = usuDAO.buscarUsuarioPorNombre(session, nombreUsuarioAdmin);
+            if (uLogAdmin != null) {
+                if (BCrypt.checkpw(nuevaContrasenha, uLogAdmin.getContrasenha())) {
+                    JOptionPane.showMessageDialog(null, "No puede poner la misma contraseña que tenía.");
+                } else {
+                    usuDAO.modificarContrasenhaUsuario(session, uLogAdmin, contrasenhaEncriptada);
+                    JOptionPane.showMessageDialog(null, "Cotraseña modificada con éxito.");
+                    ga.getTxtPasswordUsuario().setText("");
+                    ga.getCbVerPassword().setSelected(false);
+                    ga.getTxtPasswordUsuario().setEchoChar('*');
+                }
+            }
+            HibernateUtil.commitTx(session);
+        } catch (Exception e) {
+            HibernateUtil.rollbackTx(session);
+            Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    public static void modificarTipoUsuarioAdmin() {
+        String tipo = (String) ga.getComboTipoUsuario().getSelectedItem();
+        boolean permisosDegradados = false;
+        try {
+            HibernateUtil.beginTx(session);
+            if (ga.getComboTipoUsuario().getItemCount() > 0) {
+                Usuario uLogAdmin = usuDAO.buscarUsuarioPorNombre(session, nombreUsuarioAdmin);
+                if (uLogAdmin != null) {
+                    if (!uLogAdmin.getTipo().equals(tipo)) {
+                        usuDAO.modificarTipoUsuario(session, uLogAdmin, tipo);
+                        JOptionPane.showMessageDialog(null, "Tipo de usuario modificado con éxito.");
+                        ga.getTxtPasswordUsuario().setText("");
+                        ga.getCbVerPassword().setSelected(false);
+                        ga.getTxtPasswordUsuario().setEchoChar('*');
+                        if (nombreUsuarioAdmin.equals(nombreUsuarioLogeado)) {
+                            permisosDegradados = true;
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Tipo de usuario repetido. No modificado.");
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Faltan Datos");
+            }
+            HibernateUtil.commitTx(session);
+            if (permisosDegradados) {
+                cerrarSesionUsuarioADMIN();
+                cerrarSesionUsuario();
+                ga.setVisible(false);
+                consultas.setVisible(false);
+                iniciarLogin();
+            }
+        } catch (Exception e) {
+            HibernateUtil.rollbackTx(session);
+            Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
     public static void darBajaUsuario() {
         try {
             HibernateUtil.beginTx(session);
-            Usuario uCreado = usuDAO.buscarUsuarioPorNombre(session, nombreUsuarioLogeado);
-            if (uCreado != null) {
+            Usuario uLogueado = usuDAO.buscarUsuarioPorNombre(session, nombreUsuarioLogeado);
+            if (uLogueado != null) {
                 int opcion = JOptionPane.showOptionDialog(
                         null,
                         "¿Quieres borrar la cuenta de usuario?",
@@ -230,7 +367,11 @@ public class controladorPrincipal {
                 );
 
                 if (opcion == 0) {
-                    usuDAO.borrarUsuario(session, uCreado);
+                    List<Favoritos> favoritos = favDAO.obtenerFavoritosPorUsuario(session, uLogueado);
+                    for (Favoritos favorito : favoritos) {
+                        favDAO.borrarFavorito(session, favorito);
+                    }
+                    usuDAO.borrarUsuario(session, uLogueado);
                     JOptionPane.showMessageDialog(null, "Usuario borrado con éxito.");
                     vaciarTxtGestor();
                     cerrarSesionUsuario();
@@ -259,8 +400,7 @@ public class controladorPrincipal {
 
     public static void cargarComboAnimes() {
         try {
-            Usuario u = (Usuario) consultas.getComboFavoritosUsuarios().getSelectedItem();
-            favDAO.cargarComboPorUsuario(session, modeloComboAnimesFavoritos, u);
+            aniDAO.cargarCombo(session, modeloComboAnimesFavoritos);
         } catch (Exception e) {
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, "Error: ", e);
         }
@@ -269,6 +409,15 @@ public class controladorPrincipal {
     public static void cargarComboUsuarios() {
         try {
             usuDAO.cargarCombo(session, modeloComboUsuariosFavoritos);
+        } catch (Exception e) {
+            Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    public static void cargarCombos() {
+        try {
+            cargarComboUsuarios();
+            cargarComboAnimes();
         } catch (Exception e) {
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -306,53 +455,45 @@ public class controladorPrincipal {
         }
     }
 
-    public static void fijarCapitulos() {
-        try {
-            Favoritos f = (Favoritos) consultas.getComboAnimesFavoritos().getSelectedItem();
-            if (f != null) {
-                modeloSppinerCapActual.setMaximum(f.getAnime().getCapTotales());
-                modeloSppinerCapActual.setValue(f.getCapActual());
-            }
-        } catch (Exception e) {
-            Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, "Error: ", e);
-        }
-    }
-
-    public static void fijarValoracion() {
-        try {
-            Favoritos f = (Favoritos) consultas.getComboAnimesFavoritos().getSelectedItem();
-            if (f != null) {
-                modeloSppinerValoracion.setValue(f.getValoracion());
-            }
-        } catch (Exception e) {
-            Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, "Error: ", e);
-        }
-    }
-
     private static void vaciarTxtUsuarioFavoritos() {
-        consultas.getTxtNombreUsuario().setText("");
+        consultas.getTxtIdUsuario().setText("");
         consultas.getTxtPasswordFavoritos().setText("");
         consultas.getComboTipoUsuario().setSelectedItem("USER");
     }
 
-    public static void cargarDatosUsuario() {
-        if (consultas.getTxtIdUsuario().getText().trim().isEmpty()) {
+    public static void comprobarExistenciaUsuarios() {
+        if (consultas.getTxtNombreUsuario().getText().isEmpty()) {
+            consultas.getBtnAltaUsuario().setEnabled(false);
+            consultas.getBtnModUsuarioFavoritos().setEnabled(false);
+            consultas.getBtnBajaUsuario().setEnabled(false);
             vaciarTxtUsuarioFavoritos();
             return;
         }
         try {
-            int id = Integer.parseInt(consultas.getTxtIdUsuario().getText().trim());
-            Usuario u = usuDAO.buscarUsuarioPorId(session, id);
+            String nombre = consultas.getTxtNombreUsuario().getText();
+            Usuario u = usuDAO.buscarUsuarioPorNombre(session, nombre);
             if (u != null) {
-                consultas.getTxtNombreUsuario().setText(u.getNombre());
+                consultas.getBtnAltaUsuario().setEnabled(false);
+                consultas.getBtnModUsuarioFavoritos().setEnabled(true);
+                consultas.getBtnBajaUsuario().setEnabled(true);
+                consultas.getTxtPasswordFavoritos().setEnabled(false);
+                consultas.getComboTipoUsuario().setEnabled(false);
+                consultas.getTxtIdUsuario().setText(String.valueOf(u.getIdUsuario()));
                 consultas.getTxtPasswordFavoritos().setText(u.getContrasenha());
                 consultas.getComboTipoUsuario().setSelectedItem(u.getTipo());
             } else {
                 vaciarTxtUsuarioFavoritos();
+                consultas.getBtnAltaUsuario().setEnabled(true);
+                consultas.getBtnModUsuarioFavoritos().setEnabled(false);
+                consultas.getBtnBajaUsuario().setEnabled(false);
+                consultas.getTxtPasswordFavoritos().setEnabled(true);
+                consultas.getComboTipoUsuario().setEnabled(true);
             }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Error numérico");
-            consultas.getTxtIdUsuario().setText("");
+            vaciarTxtUsuarioFavoritos();
+            consultas.getBtnAltaUsuario().setEnabled(false);
+            consultas.getBtnModUsuarioFavoritos().setEnabled(true);
+            consultas.getBtnBajaUsuario().setEnabled(true);
         } catch (Exception e) {
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -369,28 +510,26 @@ public class controladorPrincipal {
             JOptionPane.showMessageDialog(null, "El nombre de usuario no puede contener espacios.");
             return;
         }
-        if (consultas.getTxtIdUsuario().getText().trim().isEmpty() || consultas.getTxtNombreUsuario().getText().isEmpty() || contrasenha.isEmpty() || consultas.getComboTipoUsuario().getItemCount() == 0) {
+        if (consultas.getTxtNombreUsuario().getText().isEmpty() || contrasenha.isEmpty() || consultas.getComboTipoUsuario().getItemCount() == 0) {
             JOptionPane.showMessageDialog(null, "Faltan Datos");
             return;
         }
         try {
-            int id = Integer.parseInt(consultas.getTxtIdUsuario().getText().trim());
-            Usuario uId = usuDAO.buscarUsuarioPorId(session, id);
-            if (uId != null) {
-                JOptionPane.showMessageDialog(null, "Usuario ya creado");
-                consultas.getTxtIdUsuario().setText("");
-            } else {
-                HibernateUtil.beginTx(session);
-                String nombre = consultas.getTxtNombreUsuario().getText();
+            HibernateUtil.beginTx(session);
+            String nombre = consultas.getTxtNombreUsuario().getText();
+            Usuario uExistente = usuDAO.buscarUsuarioPorNombre(session, nombre);
+            if (uExistente == null) {
                 String contrasenhaEncriptada = BCrypt.hashpw(contrasenha, BCrypt.gensalt());
                 String tipo = (String) consultas.getComboTipoUsuario().getSelectedItem();
-                Usuario u = new Usuario(id, nombre, contrasenhaEncriptada, tipo);
+                Usuario u = new Usuario(nombre, contrasenhaEncriptada, tipo);
                 usuDAO.darAltaUsuario(session, u);
                 JOptionPane.showMessageDialog(null, "Usuario creado con éxito.");
-                vaciarTxtUsuarioFavoritos();
-                consultas.getTxtIdUsuario().setText("");
-                HibernateUtil.commitTx(session);
+                cargarComboUsuarios();
+                comprobarExistenciaUsuarios();
+            } else {
+                JOptionPane.showMessageDialog(null, "Nombre de usuario ya existente.");
             }
+            HibernateUtil.commitTx(session);
         } catch (NumberFormatException e) {
             HibernateUtil.rollbackTx(session);
             JOptionPane.showMessageDialog(null, "Error numérico");
@@ -401,7 +540,7 @@ public class controladorPrincipal {
         }
     }
 
-    public static void modificarUsuarioFavoritos() { //Falta que no modifique si son iguales
+    /*public static void modificarUsuarioFavoritos() {
         if (consultas.getTxtIdUsuario().getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Usuario no encontrado.");
             return;
@@ -414,16 +553,28 @@ public class controladorPrincipal {
             Usuario u = usuDAO.buscarUsuarioPorId(session, id);
             String resultado = "";
             String contrasenhaEncriptada = "";
+            boolean cargarCombos = false;
+            boolean permisosDegradados = false;
             if (u != null) {
                 HibernateUtil.beginTx(session);
                 if (nuevoNombre.contains(" ")) {
                     resultado += "El nombre de usuario contiene espacios en blanco. No modificado.";
                 } else {
                     if (nuevoNombre.isEmpty()) {
-                        resultado += "El nombre de usuario vacío. No modificado.";
+                        resultado += "El nombre de usuario está vacío. No modificado.";
                     } else {
-                        u.setNombre(nuevoNombre);
-                        resultado += "Nombre de usuario modificado.";
+                        if (nuevoNombre.equals(u.getNombre())) {
+                            resultado += "Nombre de usuario no modificado.";
+                        } else {
+                            Usuario uNombre = usuDAO.buscarUsuarioPorNombre(session, nuevoNombre);
+                            if (uNombre != null) {
+                                resultado += "Nombre de usuario ya existente. No modificado.";
+                            } else {
+                                u.setNombre(nuevoNombre);
+                                resultado += "Nombre de usuario modificado.";
+                                cargarCombos = true;
+                            }
+                        }
                     }
                 }
                 if (nuevaContrasenha.contains(" ")) {
@@ -432,18 +583,18 @@ public class controladorPrincipal {
                     if (nuevaContrasenha.isEmpty()) {
                         resultado += "\nLa contraseña está vacía. No modificada.";
                     } else {
-                        contrasenhaEncriptada = BCrypt.hashpw(nuevaContrasenha, BCrypt.gensalt());
-                        if (u.getContrasenha().equals(contrasenhaEncriptada)) {
+                        if (u.getContrasenha().equals(nuevaContrasenha)) {
                             resultado += "\nError con la contraseña. No modificada.";
                         } else {
-                            if (BCrypt.checkpw(nuevaContrasenha, u.getContrasenha())) {
+                            if (BCrypt.checkpw(nuevaContrasenha, u.getContrasenha())) {//No se si dejarla porque es incomodo al modificar cotraseña inicialmete
                                 resultado += "\nLa contraseña no puede ser la misma. No modificada.";
                             } else {
+                                contrasenhaEncriptada = BCrypt.hashpw(nuevaContrasenha, BCrypt.gensalt());
                                 u.setContrasenha(contrasenhaEncriptada);
                                 resultado += "\nContraseña modificada.";
+                                cargarCombos = true;
                             }
                         }
-
                     }
                 }
                 if (consultas.getComboTipoUsuario().getItemCount() > 0) {
@@ -453,18 +604,164 @@ public class controladorPrincipal {
                     } else {
                         u.setTipo(tipo);
                         resultado += "\nTipo modificado.";
+                        Usuario uLogueado = usuDAO.buscarUsuarioPorNombre(session, nombreUsuarioLogeado);
+                        if (u.getIdUsuario().equals(uLogueado.getIdUsuario())) {
+                            permisosDegradados = true;
+                        }
+                        cargarCombos = true;
                     }
                 } else {
                     resultado += "\nError al encontrar el tipo. No modificado.";
                 }
                 usuDAO.modificarUsuario(session, u);
                 JOptionPane.showMessageDialog(null, resultado);
-                if (!contrasenhaEncriptada.isEmpty()) {
-                    consultas.getTxtPasswordFavoritos().setText(contrasenhaEncriptada);
-                    consultas.getCbVerPasswordFavoritos().setSelected(false);
-                    consultas.getTxtPasswordFavoritos().setEchoChar('*');
+                if (permisosDegradados) {
+                    cerrarSesionUsuario();
+                    consultas.setVisible(false);
+                    iniciarLogin();
+                } else {
+                    if (cargarCombos) {
+                        cargarComboUsuarios();
+                    }
+                    if (!contrasenhaEncriptada.isEmpty()) {
+                        consultas.getTxtPasswordFavoritos().setText(contrasenhaEncriptada);
+                        consultas.getCbVerPasswordFavoritos().setSelected(false);
+                        consultas.getTxtPasswordFavoritos().setEchoChar('*');
+                    }
                 }
                 HibernateUtil.commitTx(session);
+            }
+        } catch (Exception e) {
+            HibernateUtil.rollbackTx(session);
+            Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }*/
+    public static void darBajaUsuarioFavoritos() {
+        try {
+            HibernateUtil.beginTx(session);
+            int id = Integer.parseInt(consultas.getTxtIdUsuario().getText());
+            Usuario u = usuDAO.buscarUsuarioPorId(session, id);
+            Usuario uLogueado = usuDAO.buscarUsuarioPorNombre(session, nombreUsuarioLogeado);
+            if (u != null) {
+                int opcion = JOptionPane.showOptionDialog(
+                        null,
+                        "¿Quieres borrar la cuenta de usuario?",
+                        "Borrar usuario",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        new Object[]{"Sí", "Cancelar"},
+                        "Cancelar"
+                );
+
+                if (opcion == 0) {
+                    List<Favoritos> favoritos = favDAO.obtenerFavoritosPorUsuario(session, u);
+                    for (Favoritos favorito : favoritos) {
+                        favDAO.borrarFavorito(session, favorito);
+                    }
+                    usuDAO.borrarUsuario(session, u);
+                    JOptionPane.showMessageDialog(null, "Usuario borrado con éxito.");
+                    comprobarExistenciaUsuarios();
+                    cargarComboUsuarios();
+
+                    if (uLogueado.getIdUsuario().equals(id)) {
+                        cerrarSesionUsuario();
+                        consultas.setVisible(false);
+                        controladorPrincipal.iniciarLogin();
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Datos incorrectos.");
+            }
+            HibernateUtil.commitTx(session);
+        } catch (NumberFormatException e) {
+            HibernateUtil.rollbackTx(session);
+            JOptionPane.showMessageDialog(null, "Error numérico");
+        } catch (Exception e) {
+            HibernateUtil.rollbackTx(session);
+            Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    public static void darAltaFavoritos() {
+        if (consultas.getComboAnimesFavoritos().getItemCount() == 0 || consultas.getComboFavoritosUsuarios().getItemCount() == 0) {
+            JOptionPane.showMessageDialog(null, "Faltan Datos");
+            return;
+        }
+        try {
+            HibernateUtil.beginTx(session);
+
+            Anime a = (Anime) consultas.getComboAnimesFavoritos().getSelectedItem();
+            Usuario u = (Usuario) consultas.getComboFavoritosUsuarios().getSelectedItem();
+            int valoracion = Integer.parseInt(consultas.getSpValoracion().getValue().toString());
+            int capActual = Integer.parseInt(consultas.getSpCapActual().getValue().toString());
+            FavoritosPK fPK = new FavoritosPK(a.getIdAnime(), u.getIdUsuario());
+            Favoritos f = new Favoritos(fPK, a, u, valoracion, capActual);
+
+            favDAO.darAltaFavorito(session, f);
+            JOptionPane.showMessageDialog(null, "Anime añadido a favoritos.");
+            comprobarExistenciaFavoritos();
+
+            HibernateUtil.commitTx(session);
+        } catch (NumberFormatException e) {
+            HibernateUtil.rollbackTx(session);
+            JOptionPane.showMessageDialog(null, "Error numérico");
+        } catch (Exception e) {
+            HibernateUtil.rollbackTx(session);
+            JOptionPane.showMessageDialog(null, "Error al añadir a favoritos.");
+            Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    public static void modificarFavoritos() {
+        try {
+        } catch (NumberFormatException e) {
+            HibernateUtil.rollbackTx(session);
+            JOptionPane.showMessageDialog(null, "Error numérico");
+        } catch (Exception e) {
+            HibernateUtil.rollbackTx(session);
+            Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    public static void darBajaFavoritos() {
+        try {
+        } catch (NumberFormatException e) {
+            HibernateUtil.rollbackTx(session);
+            JOptionPane.showMessageDialog(null, "Error numérico");
+        } catch (Exception e) {
+            HibernateUtil.rollbackTx(session);
+            Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    public static void comprobarExistenciaFavoritos() {
+        try {
+            Anime a = (Anime) consultas.getComboAnimesFavoritos().getSelectedItem();
+            Usuario u = (Usuario) consultas.getComboFavoritosUsuarios().getSelectedItem();
+            if (a != null && u != null) {
+                Favoritos f = favDAO.buscarFavorito(session, a, u);
+                if (f != null) {
+                    consultas.getBtnAltaFavorito().setEnabled(false);
+                    consultas.getBtnBajaFavorito().setEnabled(true);
+                    consultas.getBtnModFavorito().setEnabled(true);
+                    modeloSppinerCapActual.setMaximum(f.getAnime().getCapTotales());
+                    modeloSppinerCapActual.setValue(f.getCapActual());
+                    modeloSppinerValoracion.setValue(f.getValoracion());
+                } else {
+                    consultas.getBtnAltaFavorito().setEnabled(true);
+                    consultas.getBtnBajaFavorito().setEnabled(false);
+                    consultas.getBtnModFavorito().setEnabled(false);
+                    modeloSppinerCapActual.setMaximum(a.getCapTotales());
+                    modeloSppinerCapActual.setValue(0);
+                    modeloSppinerValoracion.setValue(0);
+                }
+            } else {
+                consultas.getBtnAltaFavorito().setEnabled(false);
+                consultas.getBtnBajaFavorito().setEnabled(false);
+                consultas.getBtnModFavorito().setEnabled(false);
+                modeloSppinerCapActual.setValue(0);
+                modeloSppinerValoracion.setValue(0);
             }
         } catch (Exception e) {
             HibernateUtil.rollbackTx(session);
