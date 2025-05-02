@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:strokeColor="@color/pastelSecondary"
+    app:strokeWidth="1dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    android:backgroundTint="@color/pastelBackground"
+    tools:context=".adapters.AnimeAdapter">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Imagen del anime (opcional) -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/anime_image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="8dp"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.None"
+            android:contentDescription="@string/anime_image_desc"/>
+
+        <!-- Nombre del anime -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/anime_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:lineHeight="20sp"
+            android:layout_marginBottom="4dp"/>
+
+        <!-- Descripción corta del anime con opción de "Leer más / Leer menos" -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/anime_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/pastelGray"
+            android:maxLines="3"
+            android:ellipsize="end"
+            app:lineHeight="18sp"
+            android:layout_marginTop="4dp"
+            android:clickable="true"
+            android:focusable="true"/>
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
