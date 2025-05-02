@@ -6,10 +6,11 @@ package vista;
 
 import controlador.controladorPrincipal;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -74,11 +75,9 @@ public class GestorYConsultas extends javax.swing.JFrame {
         btnAltaUsuario = new javax.swing.JButton();
         txtCategorias = new javax.swing.JTextField();
         btnBajaUsuario = new javax.swing.JButton();
-        txtAnhoSalida = new javax.swing.JTextField();
         btnModUsuarioFavoritos = new javax.swing.JButton();
         txtDescripcion = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        txtCapTotales = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
@@ -87,6 +86,9 @@ public class GestorYConsultas extends javax.swing.JFrame {
         jLabel24 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         btnAltaFavorito = new javax.swing.JButton();
+        SpCapTotales = new javax.swing.JSpinner();
+        SpAnhoSalida = new javax.swing.JSpinner();
+        btnCambiarNombreAnime = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         menuOpciones = new javax.swing.JMenu();
         menuItemSalir = new javax.swing.JMenuItem();
@@ -179,7 +181,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 15, 50, 0);
         panel.add(btnBajaFavorito, gridBagConstraints);
 
-        cbVerPasswordFavoritos.setText("Ver contraseña");
+        cbVerPasswordFavoritos.setText("Mostrar contraseña");
         cbVerPasswordFavoritos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbVerPasswordFavoritosActionPerformed(evt);
@@ -261,6 +263,11 @@ public class GestorYConsultas extends javax.swing.JFrame {
                 txtNombreAnimeFocusLost(evt);
             }
         });
+        txtNombreAnime.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtNombreAnimeKeyPressed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
@@ -317,6 +324,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 15);
         panel.add(jLabel20, gridBagConstraints);
 
+        txtIdAnime.setEditable(false);
         txtIdAnime.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtIdAnimeFocusLost(evt);
@@ -349,7 +357,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 40;
+        gridBagConstraints.ipadx = 20;
         gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 50);
         panel.add(btnAltaAnime, gridBagConstraints);
 
@@ -363,7 +371,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 40;
+        gridBagConstraints.ipadx = 20;
         gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 50);
         panel.add(btnBajaAnime, gridBagConstraints);
 
@@ -396,7 +404,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 40;
+        gridBagConstraints.ipadx = 20;
         gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 50);
         panel.add(btnModAnime, gridBagConstraints);
 
@@ -434,13 +442,6 @@ public class GestorYConsultas extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 0);
         panel.add(btnBajaUsuario, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 120;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        panel.add(txtAnhoSalida, gridBagConstraints);
 
         btnModUsuarioFavoritos.setText("Modificar");
         btnModUsuarioFavoritos.addActionListener(new java.awt.event.ActionListener() {
@@ -470,13 +471,6 @@ public class GestorYConsultas extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(30, 50, 0, 15);
         panel.add(jLabel11, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 120;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        panel.add(txtCapTotales, gridBagConstraints);
 
         jLabel12.setText("Anime");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -547,6 +541,38 @@ public class GestorYConsultas extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 0);
         panel.add(btnAltaFavorito, gridBagConstraints);
+
+        SpCapTotales.setModel(new javax.swing.SpinnerNumberModel(0, 0, 5, 1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 120;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        panel.add(SpCapTotales, gridBagConstraints);
+
+        SpAnhoSalida.setModel(new javax.swing.SpinnerNumberModel());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 120;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        panel.add(SpAnhoSalida, gridBagConstraints);
+
+        btnCambiarNombreAnime.setText("Cambiar Nombre");
+        btnCambiarNombreAnime.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCambiarNombreAnimeActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 50);
+        panel.add(btnCambiarNombreAnime, gridBagConstraints);
 
         getContentPane().add(panel, java.awt.BorderLayout.CENTER);
 
@@ -623,14 +649,17 @@ public class GestorYConsultas extends javax.swing.JFrame {
 
     private void btnAltaAnimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAltaAnimeActionPerformed
         // TODO add your handling code here:
+        controladorPrincipal.darAltaAnime();
     }//GEN-LAST:event_btnAltaAnimeActionPerformed
 
     private void btnBajaAnimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBajaAnimeActionPerformed
         // TODO add your handling code here:
+        controladorPrincipal.darBajaAnime();
     }//GEN-LAST:event_btnBajaAnimeActionPerformed
 
     private void btnModAnimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModAnimeActionPerformed
         // TODO add your handling code here:
+        controladorPrincipal.modAnime();
     }//GEN-LAST:event_btnModAnimeActionPerformed
 
     private void comboFavoritosUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboFavoritosUsuariosActionPerformed
@@ -680,6 +709,37 @@ public class GestorYConsultas extends javax.swing.JFrame {
         t.start();
     }//GEN-LAST:event_txtNombreUsuarioKeyPressed
 
+    private void txtNombreAnimeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreAnimeKeyPressed
+        // TODO add your handling code here:
+        btnCambiarNombreAnime.setEnabled(false);
+        btnAltaAnime.setEnabled(false);
+        btnModAnime.setEnabled(false);
+        btnBajaAnime.setEnabled(false);
+        if (t != null && t.isRunning()) {
+            t.stop();
+        }
+
+        t = new Timer(500, (ActionEvent evt1) -> {
+            controladorPrincipal.comprobarExistenciaAnimes();
+        });
+
+        t.setRepeats(false);
+        t.start();
+    }//GEN-LAST:event_txtNombreAnimeKeyPressed
+
+    private void btnCambiarNombreAnimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarNombreAnimeActionPerformed
+        // TODO add your handling code here:
+        controladorPrincipal.iniciarModAnime(this);
+    }//GEN-LAST:event_btnCambiarNombreAnimeActionPerformed
+
+    public JButton getBtnCambiarNombreAnime() {
+        return btnCambiarNombreAnime;
+    }
+
+    public void setBtnCambiarNombreAnime(JButton btnCambiarNombreAnime) {
+        this.btnCambiarNombreAnime = btnCambiarNombreAnime;
+    }
+    
     public JButton getBtnBajaAnime() {
         return btnBajaAnime;
     }
@@ -800,20 +860,20 @@ public class GestorYConsultas extends javax.swing.JFrame {
         this.spValoracion = spValoracion;
     }
 
-    public JTextField getTxtAnhoSalida() {
-        return txtAnhoSalida;
+    public JSpinner getSpAnhoSalida() {
+        return SpAnhoSalida;
     }
 
-    public void setTxtAnhoSalida(JTextField txtAnhoSalida) {
-        this.txtAnhoSalida = txtAnhoSalida;
+    public void setSpAnhoSalida(JSpinner SpAnhoSalida) {
+        this.SpAnhoSalida = SpAnhoSalida;
     }
 
-    public JTextField getTxtCapTotales() {
-        return txtCapTotales;
+    public JSpinner getSpCapTotales() {
+        return SpCapTotales;
     }
 
-    public void setTxtCapTotales(JTextField txtCapTotales) {
-        this.txtCapTotales = txtCapTotales;
+    public void setSpCapTotales(JSpinner SpCapTotales) {
+        this.SpCapTotales = SpCapTotales;
     }
 
     public JTextField getTxtCategorias() {
@@ -882,12 +942,15 @@ public class GestorYConsultas extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JSpinner SpAnhoSalida;
+    private javax.swing.JSpinner SpCapTotales;
     private javax.swing.JButton btnAltaAnime;
     private javax.swing.JButton btnAltaFavorito;
     private javax.swing.JButton btnAltaUsuario;
     private javax.swing.JButton btnBajaAnime;
     private javax.swing.JButton btnBajaFavorito;
     private javax.swing.JButton btnBajaUsuario;
+    private javax.swing.JButton btnCambiarNombreAnime;
     private javax.swing.JButton btnModAnime;
     private javax.swing.JButton btnModFavorito;
     private javax.swing.JButton btnModUsuarioFavoritos;
@@ -919,8 +982,6 @@ public class GestorYConsultas extends javax.swing.JFrame {
     private javax.swing.JPanel panel;
     private javax.swing.JSpinner spCapActual;
     private javax.swing.JSpinner spValoracion;
-    private javax.swing.JTextField txtAnhoSalida;
-    private javax.swing.JTextField txtCapTotales;
     private javax.swing.JTextField txtCategorias;
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JTextField txtIdAnime;

@@ -31,4 +31,37 @@ public class AnimeDAO {
         }
     }
 
+    public Anime buscarAnimePorNombre(Session session, String nombre) {
+        Anime a = null;
+
+        String namedQuery = "Anime.findByNombre";
+        Query q = session.createNamedQuery(namedQuery);
+        q.setParameter("nombre", nombre);
+        
+        Iterator it = q.list().iterator();
+        while (it.hasNext()) {
+            a = (Anime) it.next();
+        }
+        return a;
+    }
+
+    public void darAltaAnime(Session session, Anime a) {
+        session.save(a);
+    }
+
+    public void modificarAnime(Session session, Anime a) {
+        session.evict(a);
+        session.update(a);
+    }
+
+    public void darBajaAnime(Session session, Anime a) {
+        session.delete(a);
+    }
+
+    public void modificarNombreAnime(Session session, Anime a, String nuevoNombre) {
+        a.setNombre(nuevoNombre);
+        session.evict(a);
+        session.update(a);
+    }
+
 }

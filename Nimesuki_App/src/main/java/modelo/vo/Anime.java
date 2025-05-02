@@ -68,6 +68,16 @@ public class Anime implements Serializable {
     public Anime(Integer idAnime) {
         this.idAnime = idAnime;
     }
+    
+    public Anime(String nombre, String categorias, int anhoSalida, String descripcion, String imagen, int capTotales) {
+        this.nombre = nombre;
+        this.categorias = categorias;
+        this.anhoSalida = anhoSalida;
+        this.descripcion = descripcion;
+        this.imagen = imagen;
+        this.capTotales = capTotales;
+        this.favoritosList = new ArrayList<>();
+    }
 
     public Anime(Integer idAnime, String nombre, String descripcion, int capTotales) {
         this.idAnime = idAnime;

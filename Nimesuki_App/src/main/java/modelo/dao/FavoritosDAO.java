@@ -74,5 +74,16 @@ public class FavoritosDAO {
         return f;
     }
 
+    public void modificarFavorito(Session session, Favoritos f, int nuevaValoracion, int nuevoCapActual) {
+        f.setValoracion(nuevaValoracion);
+        f.setCapActual(nuevoCapActual);
+        session.evict(f);
+        session.update(f);
+    }
+
+    public void darBajaFavorito(Session session, Favoritos f) {
+        session.delete(f);
+    }
+
     
 }
