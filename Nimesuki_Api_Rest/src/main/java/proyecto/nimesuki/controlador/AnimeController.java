@@ -5,8 +5,6 @@
 package proyecto.nimesuki.controlador;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import proyecto.nimesuki.modelo.Anime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +38,6 @@ public class AnimeController {
     public ResponseEntity<List<Anime>> getByAnime(@PathVariable String nombre) {
         if (nombre != null) {
             List<Anime> animesFiltrados = animeRepository.findByNombreContaining(nombre);
-
             return ResponseEntity.ok(animesFiltrados);
         } else {
             return ResponseEntity.badRequest().build();

@@ -4,6 +4,7 @@
  */
 package proyecto.nimesuki.repositorio;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import proyecto.nimesuki.modelo.Usuario;
 
@@ -13,5 +14,5 @@ import proyecto.nimesuki.modelo.Usuario;
  */
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
-    public Usuario findByNombre(String nombre);
+    public List<Usuario> findByNombre(String nombre);
 }

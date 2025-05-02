@@ -5,9 +5,6 @@
 package proyecto.nimesuki.controlador;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,22 +37,24 @@ public class FavoritosController {
         return favoritosRepository.findAll();
     }
 
-    @GetMapping("/{idUsuario}/{nombre}")
-    public ResponseEntity<List<Favoritos>> getByUserAnime(@PathVariable Integer idUsuario, @PathVariable String nombre) {
-        if (nombre != null) {
-            List<Favoritos> favoritosFiltrados = favoritosRepository.findByUsuario_IdUsuarioAndAnime_NombreContaining(idUsuario, nombre);
-            
-            return ResponseEntity.ok(favoritosFiltrados);
+    @GetMapping("/{nombreUsuario}/{nombreAnime}")
+    public ResponseEntity<List<Favoritos>> getByUserAnime(@PathVariable String nombreUsuario, @PathVariable String nombreAnime) {
+        if (nombreUsuario != null) {
+            if (nombreAnime != null) {
+                List<Favoritos> favoritosFiltrados = favoritosRepository.findByUsuario_NombreAndAnime_NombreContaining(nombreUsuario, nombreAnime);
+                return ResponseEntity.ok(favoritosFiltrados);
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
         } else {
             return ResponseEntity.badRequest().build();
         }
     }
 
-    @GetMapping("/{idUsuario}")
-    public ResponseEntity<List<Favoritos>> getByUser(@PathVariable Integer idUsuario) {
-        if (idUsuario != null) {
-            List<Favoritos> favoritosFiltrados = favoritosRepository.findByUsuario_IdUsuario(idUsuario);
-            
+    @GetMapping("/{nombreUsuario}")
+    public ResponseEntity<List<Favoritos>> getByUser(@PathVariable String nombreUsuario) {
+        if (nombreUsuario != null) {
+            List<Favoritos> favoritosFiltrados = favoritosRepository.findByUsuario_Nombre(nombreUsuario);
             return ResponseEntity.ok(favoritosFiltrados);
         } else {
             return ResponseEntity.badRequest().build();

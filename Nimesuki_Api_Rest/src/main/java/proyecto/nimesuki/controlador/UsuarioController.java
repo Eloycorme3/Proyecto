@@ -5,7 +5,6 @@
 package proyecto.nimesuki.controlador;
 
 import java.util.List;
-import java.util.Optional;
 import proyecto.nimesuki.modelo.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,12 +35,13 @@ public class UsuarioController {
     }
 
     @GetMapping("/{nombre}")
-    public ResponseEntity<Usuario> getById(@PathVariable String nombre) {
-        Usuario usuario = usuarioRepository.findByNombre(nombre);
-
-        return Optional.ofNullable(usuario)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<List<Usuario>> getByNombre(@PathVariable String nombre) {
+        if (nombre != null) {
+            List<Usuario> usuarios = usuarioRepository.findByNombre(nombre);
+            return ResponseEntity.ok(usuarios);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PostMapping
@@ -56,7 +56,7 @@ public class UsuarioController {
                     usuario.setIdUsuario(id);
                     return ResponseEntity.ok(usuarioRepository.save(usuario));
                 })
-                .orElse(ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.badRequest().build());
     }
 
     @DeleteMapping("/{id}")
