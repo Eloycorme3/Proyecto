@@ -6,6 +6,7 @@ import androidx.room.RoomDatabase;
 
 import android.content.Context;
 
+import com.example.nimesukiapp.models.dao.AnimeDAO;
 import com.example.nimesukiapp.models.dao.FavoritosDAO;
 import com.example.nimesukiapp.models.dao.UsuarioDAO;
 import com.example.nimesukiapp.models.entities.AnimeEntity;

@@ -71,5 +71,3 @@ public class AnimeRandomView extends AppCompatActivity {
         return false;
     }
 }
-
-}

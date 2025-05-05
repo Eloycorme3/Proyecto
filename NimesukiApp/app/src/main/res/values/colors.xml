@@ -2,10 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="pastelPrimary">#A3D2CA</color>       <!-- Verde menta suave -->
-    <color name="pastelSecondary">#F6BD60</color>     <!-- Amarillo melocotón -->
-    <color name="pastelAccent">#F28482</color>        <!-- Coral suave -->
-    <color name="pastelBackground">#FFF1E6</color>    <!-- Fondo crema -->
-    <color name="pastelGray">#A9A9A9</color>          <!-- Gris tenue -->
-    <color name="pastelInputBackground">#FFEDE0</color> <!-- Un melocotón más claro -->
+    <color name="pastelPrimary">#A3D2CA</color>
+    <color name="pastelSecondary">#F6BD60</color>
+    <color name="pastelAccent">#F28482</color>
+    <color name="pastelBackground">#FFF1E6</color>
+    <color name="pastelGray">#A9A9A9</color>
+    <color name="pastelInputBackground">#FFEDE0</color>
 </resources>

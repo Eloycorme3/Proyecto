@@ -1,5 +1,8 @@
 package com.example.nimesukiapp.activities;
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -37,10 +40,12 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
                         .replace(R.id.fragment_container_main, new CatalogFragment())
                         .commit();
                 bottomNavigationView.setSelectedItemId(R.id.nav_catalog);
+                bottomNavigationView.setVisibility(VISIBLE);
             } else {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container_main, new LoginFragment())
                         .commit();
+                bottomNavigationView.setVisibility(INVISIBLE);
             }
         }
 

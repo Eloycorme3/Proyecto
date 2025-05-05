@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="RoundedImage" parent="">
+    <style name="RoundedImage">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">15%</item>
+        <item name="cornerSizeTopLeft">12dp</item>
+        <item name="cornerSizeTopRight">12dp</item>
+        <item name="cornerSizeBottomLeft">12dp</item>
+        <item name="cornerSizeBottomRight">12dp</item>
     </style>
+
     <string-array name="languages">
         <item>Español</item>
         <item>Gallego</item>

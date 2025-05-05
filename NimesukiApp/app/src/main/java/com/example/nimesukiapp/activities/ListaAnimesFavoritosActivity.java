@@ -12,12 +12,14 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.fragments.AnimeDetailFragment;
+import com.example.nimesukiapp.fragments.CatalogFavoritesFragment;
 import com.example.nimesukiapp.fragments.CatalogFragment;
 import com.example.nimesukiapp.fragments.LoginFragment;
 import com.example.nimesukiapp.models.vo.Anime;
+import com.example.nimesukiapp.models.vo.Favoritos;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class ListaAnimesFavoritosActivity extends AppCompatActivity implements CatalogFavoritesFragment.OnAnimeSelectedListener {
+public class ListaAnimesFavoritosActivity extends AppCompatActivity implements CatalogFavoritesFragment.OnAnimeFavoriteSelectedListener {
     private String nombreUSuarioLogueado = "";
     private BottomNavigationView bottomNavigationView;
 
@@ -73,16 +75,15 @@ public class ListaAnimesFavoritosActivity extends AppCompatActivity implements C
 
         return false;
     }
-
     @Override
-    public void onAnimeSelected(Anime anime) {
-        AnimeDetailFragment animeDetailFragment = AnimeDetailFragment.newInstance(
-                anime
+    public void onAnimeFavoritoSelected(Favoritos favorito) {
+        /*AnimeDetailFragment animeDetailFragment = AnimeDetailFragment.newInstance(
+                favorito
         );
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container_main, animeDetailFragment);
         transaction.addToBackStack(null);
         transaction.commit();
-    }
+    */}
 }

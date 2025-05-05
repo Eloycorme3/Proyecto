@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.activities.MainActivity;
 import com.example.nimesukiapp.mock.ServicioREST;
 import com.example.nimesukiapp.models.vo.Usuario;
+import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.shape.ShapeAppearanceModel;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -52,6 +55,23 @@ public class LoginFragment extends Fragment {
             editor.putString("tema", "claro");
             editor.apply();
         }
+
+        ShapeableImageView imageView = rootView.findViewById(R.id.login_image);
+
+        float radius = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                12,
+                getResources().getDisplayMetrics()
+        );
+
+        ShapeAppearanceModel shapeModel = new ShapeAppearanceModel()
+                .toBuilder()
+                .setAllCornerSizes(radius)
+                .build();
+
+        imageView.setShapeAppearanceModel(shapeModel);
+
+
 
         usernameEditText = rootView.findViewById(R.id.username_input);
         passwordEditText = rootView.findViewById(R.id.password_input);
