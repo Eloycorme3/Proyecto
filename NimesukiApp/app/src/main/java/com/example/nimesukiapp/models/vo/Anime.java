@@ -12,7 +12,6 @@ public class Anime implements Serializable {
     private String imagen;
     private int capTotales;
 
-    // Constructor
     public Anime(int idAnime, String nombre, String categorias, int anhoSalida, String descripcion, String imagen, int capTotales) {
         this.idAnime = idAnime;
         this.nombre = nombre;

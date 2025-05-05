@@ -1,5 +1,7 @@
 package com.example.nimesukiapp.fragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -40,6 +42,16 @@ public class LoginFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);
+
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
+
+        if (!sharedPreferences.contains("idioma")) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("nombreUsuario", null);
+            editor.putString("idioma", "es");
+            editor.putString("tema", "claro");
+            editor.apply();
+        }
 
         usernameEditText = rootView.findViewById(R.id.username_input);
         passwordEditText = rootView.findViewById(R.id.password_input);
@@ -85,11 +97,11 @@ public class LoginFragment extends Fragment {
                             public void onResponse(@NonNull Call call, @NonNull Response response) {
                                 if (response.isSuccessful()) {
                                     Toast.makeText(requireContext(), "Registrado correctamente", Toast.LENGTH_SHORT).show();
-                                    SharedPreferences prefs = requireActivity().getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
+                                    SharedPreferences prefs = requireActivity().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
                                     prefs.edit().putString("nombreUsuario", nombreUsuario).apply();
 
                                     requireActivity().getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.fragment_container, new CatalogFragment())
+                                            .replace(R.id.fragment_container_main, new CatalogFragment())
                                             .commit();
                                 } else {
                                     Toast.makeText(requireContext(), "Error al registrar", Toast.LENGTH_SHORT).show();
@@ -104,20 +116,16 @@ public class LoginFragment extends Fragment {
                     Toast.makeText(getContext(), "Error al obtener el usuario", Toast.LENGTH_SHORT).show();
                 }
             });
-
-
         });
         return rootView;
-
     }
 
     public void guardarUsuarioEnPreferencias(String nombreUsuario) {
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("MiAppPreferences", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("MiAppPreferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("usuario", nombreUsuario);
+        editor.putString("nombreUsuario", nombreUsuario);
         editor.apply();
     }
-
 
     private void loginUsuario(String username, String password) {
         servicioREST.obtenerUsuarioPorNombre(username, new ServicioREST.OnUsuarioObtenidoListener() {
@@ -126,8 +134,8 @@ public class LoginFragment extends Fragment {
                 if (usuario != null) {
                     if (BCrypt.checkpw(password, usuario.getContrasenha())) {
                         guardarUsuarioEnPreferencias(usuario.getNombre());
-                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                        intent.putExtra("username", username);
+                        Intent intent = new Intent(getContext(), MainActivity.class);
+                        intent.putExtra("nombreUsuario", username);
                         startActivity(intent);
                         getActivity().finish();
                     } else {
@@ -143,7 +151,5 @@ public class LoginFragment extends Fragment {
                 Toast.makeText(getContext(), "Error al obtener el usuario", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
-
 }

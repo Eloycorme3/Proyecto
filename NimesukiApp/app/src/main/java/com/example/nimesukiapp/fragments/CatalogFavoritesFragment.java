@@ -1,7 +1,15 @@
 package com.example.nimesukiapp.fragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,42 +17,44 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.adapters.AnimeAdapter;
+import com.example.nimesukiapp.adapters.FavoritoAdapter;
 import com.example.nimesukiapp.mock.ServicioREST;
 import com.example.nimesukiapp.models.vo.Anime;
+import com.example.nimesukiapp.models.vo.Favoritos;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class CatalogFragment extends Fragment {
-    private ArrayList<Anime> listaAnimes = new ArrayList<>();
+public class CatalogFavoritesFragment extends Fragment {
+    private ArrayList<Favoritos> listaAnimesFavoritos = new ArrayList<>();
 
-    private OnAnimeSelectedListener listener;
-    AnimeAdapter adapter;
+    private OnAnimeFavoriteSelectedListener listener;
+    FavoritoAdapter adapter;
+    private String nombreUSuarioLogueado = "";
 
-    public CatalogFragment() {
+    public CatalogFavoritesFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View vistaFrag = inflater.inflate(R.layout.fragment_catalog, container, false);
-        ListView listView = vistaFrag.findViewById(R.id.anime_listview);
+        View vistaFrag = inflater.inflate(R.layout.fragment_catalog_favorites, container, false);
+        ListView listView = vistaFrag.findViewById(R.id.animes_favoritos_listview);
 
-        cargarAnimes();
+        SharedPreferences prefs = getContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
+        nombreUSuarioLogueado = prefs.getString("nombreUsuario", null);
 
-        adapter = new AnimeAdapter(this.getContext(), listaAnimes);
+        cargarAnimesFavoritos();
+
+        adapter = new FavoritoAdapter(this.getContext(), listaAnimesFavoritos);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Anime animeSelected = (Anime) parent.getItemAtPosition(position);
-                listener.onAnimeSelected(animeSelected);
+                Favoritos animeFavoritoSelected = (Favoritos) parent.getItemAtPosition(position);
+                listener.onAnimeFavoritoSelected(animeFavoritoSelected);
             }
         });
 
@@ -54,10 +64,10 @@ public class CatalogFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof OnAnimeSelectedListener) {
-            listener = (OnAnimeSelectedListener) context;
+        if (context instanceof CatalogFragment.OnAnimeSelectedListener) {
+            listener = (OnAnimeFavoriteSelectedListener) context;
         } else {
-            throw new ClassCastException(context.toString() + " debe implementar OnAnimeSelectedListener");
+            throw new ClassCastException(context.toString() + " debe implementar OnAnimeFavoriteSelectedListener");
         }
 
     }
@@ -81,14 +91,15 @@ public class CatalogFragment extends Fragment {
 
     }
 
-    private void cargarAnimes() {
+    private void cargarAnimesFavoritos() {
         ServicioREST servicioREST = new ServicioREST();
-        servicioREST.obtenerAnimes(new ServicioREST.OnAnimesObtenidosListener() {
+        servicioREST.obtenerFavoritosPorUsuario(nombreUSuarioLogueado, new ServicioREST.OnAnimesFavoritosObtenidosListener() {
+
             @Override
-            public void onSuccess(ArrayList<Anime> animes) {
+            public void onSuccess(ArrayList<Favoritos> animesFavoritos) {
                 if (isAdded()) {
-                    listaAnimes.clear();
-                    listaAnimes.addAll(animes);
+                    listaAnimesFavoritos.clear();
+                    listaAnimesFavoritos.addAll(animesFavoritos);
 
                     requireActivity().runOnUiThread(() -> {
                         adapter.notifyDataSetChanged();
@@ -102,7 +113,7 @@ public class CatalogFragment extends Fragment {
                     requireActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getContext(), "Error al cargar los animes", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "Error al cargar los animes favoritos", Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -138,7 +149,7 @@ public class CatalogFragment extends Fragment {
         thread.start();
     }
 
-    public interface OnAnimeSelectedListener {
-        void onAnimeSelected(Anime anime);
+    public interface OnAnimeFavoriteSelectedListener {
+        void onAnimeFavoritoSelected(Favoritos favorito);
     }
 }

@@ -110,7 +110,7 @@ public class ServicioREST {
         return listaAnimes;
     }
 
-    public Anime obtenerPeliculaPorNombre(String nombre) throws IOException {
+    public Anime obtenerAnimePorNombre(String nombre) throws IOException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url("http://" + localhost + ":8088/animes/" + nombre)
@@ -130,7 +130,7 @@ public class ServicioREST {
         return a;
     }
 
-    public ArrayList<Favoritos> obtenerFavoritosPorUsuario(String nombreUsuario) {
+    public ArrayList<Favoritos> obtenerFavoritosPorUsuario(String nombreUsuario, OnAnimesFavoritosObtenidosListener listener) {
         ArrayList<Favoritos> listaFavoritos = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -141,6 +141,7 @@ public class ServicioREST {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.e("Error", "Error al realizar la solicitud", e);
+                listener.onError(e);
             }
 
             @Override
@@ -154,8 +155,10 @@ public class ServicioREST {
                     }.getType());
                     listaFavoritos.addAll(favoritosDevueltos);
                     Log.d("OK", "Respuesta exitosa: " + responseData);
+                    listener.onSuccess(favoritosDevueltos);
                 } else {
                     Log.e("KO", "Respuesta no exitosa: " + response.code());
+                    listener.onError(new IOException("Respuesta no exitosa: " + response.code()));
                 }
             }
         });
@@ -171,6 +174,12 @@ public class ServicioREST {
 
     public interface OnAnimesObtenidosListener {
         void onSuccess(ArrayList<Anime> animes);
+
+        void onError(Exception e);
+    }
+
+    public interface OnAnimesFavoritosObtenidosListener {
+        void onSuccess(ArrayList<Favoritos> favoritos);
 
         void onError(Exception e);
     }

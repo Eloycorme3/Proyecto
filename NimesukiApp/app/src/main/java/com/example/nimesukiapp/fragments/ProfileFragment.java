@@ -20,6 +20,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.nimesukiapp.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ProfileFragment extends Fragment {
 
@@ -45,10 +46,10 @@ public class ProfileFragment extends Fragment {
 
         prefs = requireContext().getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
 
-        String nombreGuardado = prefs.getString("nombreUsuarioLogueado", "");
-        String tema = prefs.getString("tema", "Claro");
+        String nombreGuardado = prefs.getString("nombreUsuario", "");
+        String tema = prefs.getString("tema", "claro");
 
-        if (tema.equals("Claro")) {
+        if (tema.equals("claro")) {
             switchTema.setSelected(false);
         } else {
             switchTema.setSelected(true);
@@ -61,7 +62,7 @@ public class ProfileFragment extends Fragment {
 
             // Llama a tu servicio REST para actualizar el nombre
 
-            prefs.edit().putString("nombreUsuarioLogueado", nuevoNombre).apply();
+            prefs.edit().putString("nombreUsuario", nuevoNombre).apply();
             Toast.makeText(getContext(), "Nombre actualizado", Toast.LENGTH_SHORT).show();
         });
 
@@ -72,9 +73,9 @@ public class ProfileFragment extends Fragment {
             // Aquí haz la comprobación con BCrypt y actualiza si todo va bien
         });
 
-        switchTema.setChecked(prefs.getBoolean("modo_oscuro", false));
+        switchTema.setChecked(prefs.getBoolean("oscuro", false));
         switchTema.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            prefs.edit().putBoolean("modo_oscuro", isChecked).apply();
+            prefs.edit().putBoolean("oscuro", isChecked).apply();
 
             // Aquí deberías reiniciar el theme, o guardar la preferencia y aplicar en el inicio
         });

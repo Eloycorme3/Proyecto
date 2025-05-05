@@ -7,9 +7,8 @@ public class Usuario implements Serializable {
     private int idUsuario;
     private String nombre;
     private String contrasenha;
-    private String tipo; // 'ADMIN' o 'USER'
+    private String tipo;
 
-    // Constructor
     public Usuario(int idUsuario, String nombre, String contrasenha, String tipo) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
@@ -22,7 +21,6 @@ public class Usuario implements Serializable {
         this.contrasenha = contrasenha;
     }
 
-    // Getters y Setters
     public int getIdUsuario() {
         return idUsuario;
     }

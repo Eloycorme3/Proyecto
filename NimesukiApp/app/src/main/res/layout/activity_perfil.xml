@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main"
+    android:id="@+id/perfil"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/pastelBackground">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment_container_main"
+        android:id="@+id/fragment_container_perfil"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:name="com.example.nimesukiapp.fragments.CatalogFragment"
-        android:layout_above="@id/bottomNavigationView_main" />
+        android:layout_above="@id/bottomNavigationView_perfil" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView_main"
+        android:id="@+id/bottomNavigationView_perfil"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

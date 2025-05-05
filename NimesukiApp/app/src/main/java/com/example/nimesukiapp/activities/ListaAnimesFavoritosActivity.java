@@ -17,16 +17,16 @@ import com.example.nimesukiapp.fragments.LoginFragment;
 import com.example.nimesukiapp.models.vo.Anime;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity implements CatalogFragment.OnAnimeSelectedListener {
-
+public class ListaAnimesFavoritosActivity extends AppCompatActivity implements CatalogFavoritesFragment.OnAnimeSelectedListener {
     private String nombreUSuarioLogueado = "";
     private BottomNavigationView bottomNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_lista_favoritos);
 
-        bottomNavigationView = findViewById(R.id.bottomNavigationView_main);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView_favoritos);
 
         if (savedInstanceState == null) {
             SharedPreferences prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
@@ -34,17 +34,15 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
 
             if (nombreUsuario != null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container_main, new CatalogFragment())
+                        .replace(R.id.fragment_container_favoritos, new CatalogFragment())
                         .commit();
                 bottomNavigationView.setSelectedItemId(R.id.nav_catalog);
             } else {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container_main, new LoginFragment())
+                        .replace(R.id.fragment_container_favoritos, new LoginFragment())
                         .commit();
             }
         }
-
-
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -87,5 +85,4 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
         transaction.addToBackStack(null);
         transaction.commit();
     }
-
 }

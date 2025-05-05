@@ -8,25 +8,22 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.nimesukiapp.R;
-import com.example.nimesukiapp.fragments.AnimeDetailFragment;
 import com.example.nimesukiapp.fragments.CatalogFragment;
 import com.example.nimesukiapp.fragments.LoginFragment;
-import com.example.nimesukiapp.models.vo.Anime;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity implements CatalogFragment.OnAnimeSelectedListener {
-
+public class VistaPerfil extends AppCompatActivity {
     private String nombreUSuarioLogueado = "";
     private BottomNavigationView bottomNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_perfil);
 
-        bottomNavigationView = findViewById(R.id.bottomNavigationView_main);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView_perfil);
 
         if (savedInstanceState == null) {
             SharedPreferences prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
@@ -34,17 +31,15 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
 
             if (nombreUsuario != null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container_main, new CatalogFragment())
+                        .replace(R.id.fragment_container_perfil, new CatalogFragment())
                         .commit();
                 bottomNavigationView.setSelectedItemId(R.id.nav_catalog);
             } else {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container_main, new LoginFragment())
+                        .replace(R.id.fragment_container_perfil, new LoginFragment())
                         .commit();
             }
         }
-
-
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -68,24 +63,9 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
             startActivity(intent);
             return true;
         } else if (item.getItemId() == R.id.nav_profile) {
-            Intent intent = new Intent(this, VistaPerfil.class);
-            startActivity(intent);
             return true;
         }
 
         return false;
     }
-
-    @Override
-    public void onAnimeSelected(Anime anime) {
-        AnimeDetailFragment animeDetailFragment = AnimeDetailFragment.newInstance(
-                anime
-        );
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container_main, animeDetailFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
 }
