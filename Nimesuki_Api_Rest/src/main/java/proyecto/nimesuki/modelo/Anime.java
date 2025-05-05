@@ -37,7 +37,7 @@ public class Anime implements Serializable {
     @Column(name = "descripcion", nullable = false, length = 1000)
     private String descripcion;
 
-    @Column(name = "imagen", length = 30)
+    @Column(name = "imagen", length = 100)
     private String imagen;
 
     @Column(name = "cap_totales", nullable = false)

@@ -1,76 +1,144 @@
 package com.example.nimesukiapp.fragments;
 
-
+import android.content.Context;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nimesukiapp.R;
+import com.example.nimesukiapp.adapters.AnimeAdapter;
+import com.example.nimesukiapp.mock.ServicioREST;
 import com.example.nimesukiapp.models.vo.Anime;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class CatalogFragment extends Fragment {
+    private ArrayList<Anime> listaAnimes = new ArrayList<>();
 
-    private EditText searchEditText;
-    private RecyclerView animeRecyclerView;
-    private AnimeAdapter animeAdapter;
-    private List<Anime> allAnimes = new ArrayList<>(); // Aquí almacenas todos los animes
+    private OnAnimeSelectedListener listener;
+    AnimeAdapter adapter;
+
+    public CatalogFragment() {
+    }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_catalog, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View vistaFrag = inflater.inflate(R.layout.fragment_catalog, container, false);
+        ListView listView = vistaFrag.findViewById(R.id.anime_listview);
 
-        searchEditText = root.findViewById(R.id.search_edit_text);
-        animeRecyclerView = root.findViewById(R.id.anime_recyclerview);
-        animeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        cargarAnimes();
 
-        // Inicializamos el adaptador con los animes cargados
-        animeAdapter = new AnimeAdapter(allAnimes);
-        animeRecyclerView.setAdapter(animeAdapter);
+        adapter = new AnimeAdapter(this.getContext(), listaAnimes);
+        listView.setAdapter(adapter);
 
-        // Evento de búsqueda
-        searchEditText.addTextChangedListener(new TextWatcher() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                filterAnimes(charSequence.toString());
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Anime animeSelected = (Anime) parent.getItemAtPosition(position);
+                listener.onAnimeSelected(animeSelected);
             }
-
-            @Override
-            public void afterTextChanged(Editable editable) {}
         });
 
-        return root;
+        return vistaFrag;
     }
 
-    private void filterAnimes(String query) {
-        List<Anime> filteredList = new ArrayList<>();
-        for (Anime anime : allAnimes) {
-            if (anime.getNombre().toLowerCase().contains(query.toLowerCase())) {
-                filteredList.add(anime);
-            }
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof OnAnimeSelectedListener) {
+            listener = (OnAnimeSelectedListener) context;
+        } else {
+            throw new ClassCastException(context.toString() + " debe implementar OnAnimeSelectedListener");
         }
-        animeAdapter.updateList(filteredList);
+
     }
 
-    private void loadAnimes() {
-        // Aquí debes cargar los animes, por ejemplo desde una base de datos o API.
+    @Override
+    public void onResume() {
+        super.onResume();
+        /*
+        try {
+            obtenerActor(1); //funciona
+            obtenerPelicula(1); //funciona
+            obtenerActoresPorPelicula(1); //funciona
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }*/
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+    }
+
+    private void cargarAnimes() {
+        ServicioREST servicioREST = new ServicioREST();
+        servicioREST.obtenerAnimes(new ServicioREST.OnAnimesObtenidosListener() {
+            @Override
+            public void onSuccess(ArrayList<Anime> animes) {
+                if (isAdded()) {
+                    listaAnimes.clear();
+                    listaAnimes.addAll(animes);
+
+                    requireActivity().runOnUiThread(() -> {
+                        adapter.notifyDataSetChanged();
+                    });
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                if (isAdded()) {
+                    requireActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getContext(), "Error al cargar los animes", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void obtenerPelicula(String nombreAnime) throws IOException {
+
+        ServicioREST servicioREST = new ServicioREST();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    try {
+                        Anime a;
+                        a = servicioREST.obtenerPeliculaPorNombre(nombreAnime);
+                        //Looper.prepare();
+                        requireActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getActivity().getBaseContext(), a.getNombre() + " prueba", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
+    }
+
+    public interface OnAnimeSelectedListener {
+        void onAnimeSelected(Anime anime);
     }
 }
-
-

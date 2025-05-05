@@ -32,6 +32,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.jbcrypt)
     implementation(libs.gson)
     implementation(libs.okhttp)
     implementation(libs.appcompat)
@@ -39,6 +40,8 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.room.common.jvm)
+    implementation(libs.glide)
+    annotationProcessor(libs.glide.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

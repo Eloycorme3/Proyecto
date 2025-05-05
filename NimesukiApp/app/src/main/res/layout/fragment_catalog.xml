@@ -34,13 +34,18 @@
             android:textColorHint="@color/pastelGray" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/anime_recyclerview"
-        android:layout_width="410dp"
-        android:layout_height="630dp"
+    <ListView
+        android:id="@+id/anime_listview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:divider="@color/pastelGray"
+        android:dividerHeight="1dp"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

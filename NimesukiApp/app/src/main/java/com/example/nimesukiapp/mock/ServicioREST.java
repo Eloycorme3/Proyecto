@@ -1,11 +1,14 @@
 package com.example.nimesukiapp.mock;
 
 import android.util.Log;
+import android.widget.Toast;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 
 import com.example.nimesukiapp.models.vo.Anime;
 import com.example.nimesukiapp.models.vo.Favoritos;
+import com.example.nimesukiapp.models.vo.Usuario;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -14,13 +17,65 @@ import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ServicioREST {
-    String localhost = "127.0.0.1";
-    public ArrayList<Anime> obtenerAnimes(OnPeliculasObtenidasListener listener) {
+    String localhost = "10.0.2.2";
+
+    public void registrarUsuario(Context contexto, String nombreUsuario, String contrasenha, Callback callback) {
+        OkHttpClient client = new OkHttpClient();
+        String json = "{"
+                + "\"nombreUsuario\":\"" + nombreUsuario + "\","
+                + "\"contrasenha\":\"" + contrasenha + "\""
+                + "}";
+
+        RequestBody body = RequestBody.create(
+                json,
+                MediaType.parse("application/json")
+        );
+
+        Request request = new Request.Builder()
+                .url("http://" + localhost + "8088/usuarios")
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(callback);
+    }
+
+
+    public void obtenerUsuarioPorNombre(String username, OnUsuarioObtenidoListener listener) {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("http://" + localhost + ":8088/usuarios/" + username)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.e("Error", "Error al realizar la solicitud", e);
+                listener.onError(e);
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful() && response.body() != null) {
+                    String responseData = response.body().string();
+                    Gson gson = new Gson();
+                    Usuario usuario = gson.fromJson(responseData, Usuario.class);
+                    listener.onSuccess(usuario);
+                } else {
+                    Log.e("KO", "Respuesta no exitosa: " + response.code());
+                    listener.onError(new IOException("Respuesta no exitosa: " + response.code()));
+                }
+            }
+        });
+    }
+
+    public ArrayList<Anime> obtenerAnimes(OnAnimesObtenidosListener listener) {
         ArrayList<Anime> listaAnimes = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -107,8 +162,15 @@ public class ServicioREST {
         return listaFavoritos;
     }
 
-    public interface OnPeliculasObtenidasListener {
-        void onSuccess(ArrayList<Anime> peliculas);
+    public interface OnUsuarioObtenidoListener {
+        void onSuccess(Usuario usuario);
+
+        void onError(Exception e);
+    }
+
+
+    public interface OnAnimesObtenidosListener {
+        void onSuccess(ArrayList<Anime> animes);
 
         void onError(Exception e);
     }

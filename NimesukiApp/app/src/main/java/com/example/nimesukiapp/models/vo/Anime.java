@@ -1,6 +1,8 @@
 package com.example.nimesukiapp.models.vo;
 
-public class Anime {
+import java.io.Serializable;
+
+public class Anime implements Serializable {
 
     private int idAnime;
     private String nombre;
@@ -21,7 +23,6 @@ public class Anime {
         this.capTotales = capTotales;
     }
 
-    // Getters y Setters
     public int getIdAnime() {
         return idAnime;
     }

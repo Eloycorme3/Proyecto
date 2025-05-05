@@ -1,6 +1,8 @@
 package com.example.nimesukiapp.models.vo;
 
-public class Usuario {
+import java.io.Serializable;
+
+public class Usuario implements Serializable {
 
     private int idUsuario;
     private String nombre;
@@ -13,6 +15,11 @@ public class Usuario {
         this.nombre = nombre;
         this.contrasenha = contrasenha;
         this.tipo = tipo;
+    }
+
+    public Usuario (String nombre, String contrasenha) {
+        this.nombre = nombre;
+        this.contrasenha = contrasenha;
     }
 
     // Getters y Setters

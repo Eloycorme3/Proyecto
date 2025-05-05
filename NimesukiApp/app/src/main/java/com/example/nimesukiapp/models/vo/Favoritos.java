@@ -1,6 +1,8 @@
 package com.example.nimesukiapp.models.vo;
 
-public class Favoritos {
+import java.io.Serializable;
+
+public class Favoritos implements Serializable {
 
     private int idAnime;
     private int idUsuario;
