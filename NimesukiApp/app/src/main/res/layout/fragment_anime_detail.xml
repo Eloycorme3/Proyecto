@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/pastelBackground">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/pastelBackground"
+    tools:context=".fragments.AnimeDetailFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"

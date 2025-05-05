@@ -4,4 +4,8 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">15%</item>
     </style>
+    <string-array name="languages">
+        <item>Español</item>
+        <item>Gallego</item>
+    </string-array>
 </resources>

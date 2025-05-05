@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.models.vo.Anime;
 import com.google.android.material.textview.MaterialTextView;
@@ -44,11 +45,11 @@ public class AnimeAdapter extends ArrayAdapter<Anime> {
 
         ImageView imagen = convertView.findViewById(R.id.anime_image);
 
-        /*Glide.with(contexto)
-                .load("http://tuservidor.com/imagen.jpg")
-                .error(R.drawable.ic_profile)      // opcional: imagen si falla
+        Glide.with(contexto)
+                .load(anime.getImagen())
+                .error(R.drawable.ic_profile)
                 .into(imagen);
-        */
+
         return convertView;
     }
 }
