@@ -588,6 +588,7 @@ public class controladorPrincipal {
                     usuDAO.borrarUsuario(session, u);
                     JOptionPane.showMessageDialog(null, "Usuario borrado con éxito.");
                     comprobarExistenciaUsuarios();
+                    consultas.getTxtNombreUsuario().setText("");
                     cargarComboUsuarios();
 
                     if (uLogueado.getIdUsuario().equals(id)) {
@@ -712,7 +713,6 @@ public class controladorPrincipal {
                 modeloSpinnerValoracion.setValue(0);
             }
         } catch (Exception e) {
-            HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
         }
     }
@@ -783,8 +783,10 @@ public class controladorPrincipal {
             cargarComboAnimes();
             HibernateUtil.commitTx(session);
         } catch (NumberFormatException e) {
+            HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
         } catch (Exception e) {
+            HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
         }
     }
@@ -806,10 +808,14 @@ public class controladorPrincipal {
             a.setCapTotales(nuevoCapTotales);
             aniDAO.modificarAnime(session, a);
             JOptionPane.showMessageDialog(null, "Anime modificado con éxito.");
+            favDAO.modificarFavoritosCambioEpisodios(session, a);
+            cargarComboAnimes();
             HibernateUtil.commitTx(session);
         } catch (NumberFormatException e) {
+            HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
         } catch (Exception e) {
+            HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
         }
     }
@@ -823,8 +829,10 @@ public class controladorPrincipal {
             JOptionPane.showMessageDialog(null, "Anime eliminado con éxito.");
             HibernateUtil.commitTx(session);
         } catch (NumberFormatException e) {
+            HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
         } catch (Exception e) {
+            HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
         }
     }

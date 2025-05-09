@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 
 /**
  *
- * @author Formacion3
+ * @author eloy.castro
  */
 public class GestorAdmin extends javax.swing.JDialog {
 

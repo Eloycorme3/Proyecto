@@ -6,11 +6,9 @@ package vista;
 
 import controlador.controladorPrincipal;
 import java.awt.event.ActionEvent;
-import java.time.LocalDate;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;

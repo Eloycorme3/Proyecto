@@ -5,15 +5,11 @@
 package vista;
 
 import controlador.controladorPrincipal;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 /**
  *
- * @author Formacion3
+ * @author eloy.castro
  */
 public class GestorNombreAnime extends javax.swing.JDialog {
 

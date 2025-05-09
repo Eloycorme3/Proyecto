@@ -85,5 +85,23 @@ public class FavoritosDAO {
         session.delete(f);
     }
 
+    public void modificarFavoritosCambioEpisodios(Session session, Anime a) {
+        Favoritos f = null;
+        String query = "Favoritos.findByIdAnimeFK";
+        Query q = session.createNamedQuery(query);
+        
+        q.setParameter("idanimeFK", a.getIdAnime());
+        
+        Iterator it = q.list().iterator();
+        while (it.hasNext()) {
+            f = (Favoritos) it.next();
+            if (f.getCapActual() > a.getCapTotales()) {
+                f.setCapActual(a.getCapTotales());
+                session.evict(f);
+                session.update(f);
+            }
+        }
+    }
+
     
 }
