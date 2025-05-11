@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.models.vo.Anime;
 import com.google.android.material.textview.MaterialTextView;
@@ -25,6 +26,7 @@ import java.util.List;
 
 public class AnimeAdapter extends ArrayAdapter<Anime> {
     Context contexto;
+    private String imageVersion = "?v=2";
 
     public AnimeAdapter(Context context, ArrayList<Anime> animes) {
         super(context, 0, animes);
@@ -46,7 +48,9 @@ public class AnimeAdapter extends ArrayAdapter<Anime> {
         ImageView imagen = convertView.findViewById(R.id.anime_image);
 
         Glide.with(contexto)
-                .load(anime.getImagen())
+                .load(anime.getImagen() + imageVersion)
+                .placeholder(R.drawable.placeholder)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .error(R.drawable.ic_profile)
                 .into(imagen);
 

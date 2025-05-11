@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.models.vo.Anime;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -28,6 +29,7 @@ public class AnimeDetailFragment extends Fragment {
     private ImageView imageViewAnime;
     private TextView textNombre, textDescripcion, textLeerMas,
             textAnho, textCategorias, textCapitulos;
+    private String imageVersion = "?v=2";
 
     private boolean isExpanded = false;
     private Anime anime;
@@ -79,10 +81,13 @@ public class AnimeDetailFragment extends Fragment {
             textDescripcion.setText(anime.getDescripcion());
             textAnho.setText("Año de salida: " + anime.getAnhoSalida());
             textCategorias.setText("Categorías: " + anime.getCategorias());
-            textCapitulos.setText("Capítulos totales: " + anime.getCapTotales());
+            textCapitulos.setText("Capítulos: " + anime.getCapTotales());
 
             Glide.with(this)
-                    .load(anime.getImagen())
+                    .load(anime.getImagen() + imageVersion)
+                    .placeholder(R.drawable.placeholder)
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                    .centerCrop()
                     .into(imageViewAnime);
 
             textLeerMas.setOnClickListener(v -> {

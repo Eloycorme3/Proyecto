@@ -13,7 +13,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -65,8 +67,10 @@ public class ServicioREST {
                 if (response.isSuccessful() && response.body() != null) {
                     String responseData = response.body().string();
                     Gson gson = new Gson();
-                    Usuario usuario = gson.fromJson(responseData, Usuario.class);
-                    listener.onSuccess(usuario);
+                    Type listType = new TypeToken<List<Usuario>>() {}.getType();
+                    List<Usuario> usuarios = gson.fromJson(responseData, listType);
+
+                    listener.onSuccess(usuarios.getFirst());
                 } else {
                     Log.e("KO", "Respuesta no exitosa: " + response.code());
                     listener.onError(new IOException("Respuesta no exitosa: " + response.code()));

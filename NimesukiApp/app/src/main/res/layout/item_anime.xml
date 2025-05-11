@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
+    android:backgroundTint="@color/pastelBackground"
     app:cardCornerRadius="16dp"
-    app:cardElevation="2dp"
-    android:backgroundTint="@color/pastelBackground">
+    app:cardElevation="2dp" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:contentDescription=""
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
             app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.MediumComponent" />
 
         <com.google.android.material.textview.MaterialTextView

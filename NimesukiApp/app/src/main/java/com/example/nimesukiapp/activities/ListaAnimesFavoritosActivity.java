@@ -1,8 +1,12 @@
 package com.example.nimesukiapp.activities;
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,15 +40,41 @@ public class ListaAnimesFavoritosActivity extends AppCompatActivity implements C
 
             if (nombreUsuario != null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container_favoritos, new CatalogFragment())
+                        .replace(R.id.fragment_container_favoritos, new CatalogFavoritesFragment())
                         .commit();
-                bottomNavigationView.setSelectedItemId(R.id.nav_catalog);
+                bottomNavigationView.setSelectedItemId(R.id.nav_favorites);
+                bottomNavigationView.setVisibility(VISIBLE);
             } else {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container_favoritos, new LoginFragment())
                         .commit();
+                bottomNavigationView.setVisibility(INVISIBLE);
             }
         }
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.nav_catalog) {
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                return true;
+            } else if (itemId == R.id.nav_favorites) {
+                Intent intent = new Intent(this, ListaAnimesFavoritosActivity.class);
+                startActivity(intent);
+                return true;
+            } else if (itemId == R.id.nav_random) {
+                Intent intent = new Intent(this, AnimeRandomView.class);
+                startActivity(intent);
+                return true;
+            } else if (itemId == R.id.nav_profile) {
+                Intent intent = new Intent(this, VistaPerfil.class);
+                startActivity(intent);
+                return true;
+            }
+
+            return false;
+        });
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -53,28 +83,6 @@ public class ListaAnimesFavoritosActivity extends AppCompatActivity implements C
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.nav_catalog) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            return true;
-        } else if (item.getItemId() == R.id.nav_favorites) {
-            Intent intent = new Intent(this, ListaAnimesFavoritosActivity.class);
-            startActivity(intent);
-            return true;
-        } else if (item.getItemId() == R.id.nav_random) {
-            Intent intent = new Intent(this, AnimeRandomView.class);
-            startActivity(intent);
-            return true;
-        } else if (item.getItemId() == R.id.nav_profile) {
-            Intent intent = new Intent(this, VistaPerfil.class);
-            startActivity(intent);
-            return true;
-        }
-
-        return false;
-    }
     @Override
     public void onAnimeFavoritoSelected(Favoritos favorito) {
         /*AnimeDetailFragment animeDetailFragment = AnimeDetailFragment.newInstance(

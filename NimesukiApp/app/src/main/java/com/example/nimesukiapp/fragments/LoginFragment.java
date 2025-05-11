@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,7 +73,6 @@ public class LoginFragment extends Fragment {
         imageView.setShapeAppearanceModel(shapeModel);
 
 
-
         usernameEditText = rootView.findViewById(R.id.username_input);
         passwordEditText = rootView.findViewById(R.id.password_input);
         loginButton = rootView.findViewById(R.id.login_button);
@@ -84,7 +84,9 @@ public class LoginFragment extends Fragment {
             String username = usernameEditText.getText().toString().trim();
             String password = passwordEditText.getText().toString().trim();
             if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(getContext(), "Por favor ingresa usuario y contraseña", Toast.LENGTH_SHORT).show();
+                requireActivity().runOnUiThread(() ->
+                        Toast.makeText(getContext(), "Por favor ingresa usuario y contraseña", Toast.LENGTH_SHORT).show()
+                );
             } else {
                 loginUsuario(username, password);
             }
@@ -95,7 +97,9 @@ public class LoginFragment extends Fragment {
             String contrasena = passwordEditText.getText().toString().trim();
 
             if (nombreUsuario.isEmpty() || contrasena.isEmpty()) {
-                Toast.makeText(requireContext(), "Rellena todos los campos", Toast.LENGTH_SHORT).show();
+                requireActivity().runOnUiThread(() ->
+                        Toast.makeText(requireContext(), "Rellena todos los campos", Toast.LENGTH_SHORT).show()
+                );
                 return;
             }
 
@@ -103,14 +107,18 @@ public class LoginFragment extends Fragment {
                 @Override
                 public void onSuccess(Usuario usuario) {
                     if (usuario != null) {
-                        Toast.makeText(requireContext(), "Ese usuario ya existe", Toast.LENGTH_SHORT).show();
+                        requireActivity().runOnUiThread(() ->
+                                Toast.makeText(requireContext(), "Ese usuario ya existe", Toast.LENGTH_SHORT).show()
+                        );
                     } else {
                         String hashedPassword = BCrypt.hashpw(contrasena, BCrypt.gensalt());
 
                         servicioREST.registrarUsuario(requireContext(), nombreUsuario, hashedPassword, new Callback() {
                             @Override
                             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                                Toast.makeText(requireContext(), "Error de red", Toast.LENGTH_SHORT).show();
+                                requireActivity().runOnUiThread(() ->
+                                        Toast.makeText(requireContext(), "Error de red", Toast.LENGTH_SHORT).show()
+                                );
                             }
 
                             @Override
@@ -124,7 +132,9 @@ public class LoginFragment extends Fragment {
                                             .replace(R.id.fragment_container_main, new CatalogFragment())
                                             .commit();
                                 } else {
-                                    Toast.makeText(requireContext(), "Error al registrar", Toast.LENGTH_SHORT).show();
+                                    requireActivity().runOnUiThread(() ->
+                                            Toast.makeText(requireContext(), "Error al registrar", Toast.LENGTH_SHORT).show()
+                                    );
                                 }
                             }
                         });
@@ -133,7 +143,9 @@ public class LoginFragment extends Fragment {
 
                 @Override
                 public void onError(Exception e) {
-                    Toast.makeText(getContext(), "Error al obtener el usuario", Toast.LENGTH_SHORT).show();
+                    requireActivity().runOnUiThread(() ->
+                            Toast.makeText(getContext(), "Error al obtener el usuario", Toast.LENGTH_SHORT).show()
+                    );
                 }
             });
         });
@@ -141,7 +153,7 @@ public class LoginFragment extends Fragment {
     }
 
     public void guardarUsuarioEnPreferencias(String nombreUsuario) {
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("MiAppPreferences", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("nombreUsuario", nombreUsuario);
         editor.apply();
@@ -154,21 +166,27 @@ public class LoginFragment extends Fragment {
                 if (usuario != null) {
                     if (BCrypt.checkpw(password, usuario.getContrasenha())) {
                         guardarUsuarioEnPreferencias(usuario.getNombre());
-                        Intent intent = new Intent(getContext(), MainActivity.class);
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
                         intent.putExtra("nombreUsuario", username);
                         startActivity(intent);
                         getActivity().finish();
                     } else {
-                        Toast.makeText(getContext(), "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                        requireActivity().runOnUiThread(() ->
+                                Toast.makeText(getContext(), "Contraseña incorrecta", Toast.LENGTH_SHORT).show()
+                        );
                     }
                 } else {
-                    Toast.makeText(getContext(), "Usuario no encontrado", Toast.LENGTH_SHORT).show();
+                    requireActivity().runOnUiThread(() ->
+                            Toast.makeText(getContext(), "Usuario no encontrado", Toast.LENGTH_SHORT).show()
+                    );
                 }
             }
 
             @Override
             public void onError(Exception e) {
-                Toast.makeText(getContext(), "Error al obtener el usuario", Toast.LENGTH_SHORT).show();
+                requireActivity().runOnUiThread(() ->
+                        Toast.makeText(getContext(), "Error al obtener el usuario", Toast.LENGTH_SHORT).show()
+                );
             }
         });
     }

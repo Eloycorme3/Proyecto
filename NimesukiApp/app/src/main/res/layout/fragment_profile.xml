@@ -72,6 +72,7 @@
         app:boxStrokeColor="@color/pastelPrimary"
         app:boxStrokeWidth="1dp"
         app:hintTextColor="@color/pastelPrimary"
+        app:endIconDrawable="@drawable/password_icon"
         app:endIconMode="password_toggle"
         app:boxBackgroundMode="filled"
         app:boxBackgroundColor="@color/white">
@@ -81,7 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Contraseña Actual"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -95,6 +96,7 @@
         app:boxStrokeColor="@color/pastelPrimary"
         app:boxStrokeWidth="1dp"
         app:hintTextColor="@color/pastelPrimary"
+        app:endIconDrawable="@drawable/password_icon"
         app:endIconMode="password_toggle"
         app:boxBackgroundMode="filled"
         app:boxBackgroundColor="@color/white">
@@ -104,7 +106,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nueva Contraseña"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton

@@ -6,6 +6,7 @@ import static android.view.View.VISIBLE;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -49,36 +50,33 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
             }
         }
 
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
 
+            if (itemId == R.id.nav_catalog) {
+                return true;
+            } else if (itemId == R.id.nav_favorites) {
+                Intent intent = new Intent(MainActivity.this, ListaAnimesFavoritosActivity.class);
+                startActivity(intent);
+                return true;
+            } else if (itemId == R.id.nav_random) {
+                Intent intent = new Intent(MainActivity.this, AnimeRandomView.class);
+                startActivity(intent);
+                return true;
+            } else if (itemId == R.id.nav_profile) {
+                Intent intent = new Intent(MainActivity.this, VistaPerfil.class);
+                startActivity(intent);
+                return true;
+            }
+
+            return false;
+        });
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.bottom_nav_menu, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.nav_catalog) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            return true;
-        } else if (item.getItemId() == R.id.nav_favorites) {
-            Intent intent = new Intent(this, ListaAnimesFavoritosActivity.class);
-            startActivity(intent);
-            return true;
-        } else if (item.getItemId() == R.id.nav_random) {
-            Intent intent = new Intent(this, AnimeRandomView.class);
-            startActivity(intent);
-            return true;
-        } else if (item.getItemId() == R.id.nav_profile) {
-            Intent intent = new Intent(this, VistaPerfil.class);
-            startActivity(intent);
-            return true;
-        }
-
-        return false;
     }
 
     @Override

@@ -15,11 +15,11 @@ public class Nimesuki {
     public static void main(String[] args) {
         try {
             FlatLaf.registerCustomDefaultsSource("themes");
-
             FlatLightLaf.setup();
+            controladorPrincipal.iniciar();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        controladorPrincipal.iniciar();
+        
     }
 }
