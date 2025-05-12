@@ -6,22 +6,18 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.nimesukiapp.R;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -29,7 +25,7 @@ import com.google.android.material.textfield.TextInputLayout;
 public class ProfileFragment extends Fragment {
 
     private TextInputEditText editTextNombre, editTextActualPass, editTextNuevaPass;
-    private TextInputLayout layoutActualPass, layoutNuevaPass;
+    private TextInputLayout layoutActualPass, layoutNuevaPass, layoutNombre;
     private Button buttonCambiarNombre, buttonCambiarPassword;
     private SwitchMaterial switchTema;
     private Spinner spinnerIdioma;
@@ -50,6 +46,7 @@ public class ProfileFragment extends Fragment {
         spinnerIdioma = view.findViewById(R.id.spinnerIdioma);
         layoutActualPass = view.findViewById(R.id.layoutActualPass);
         layoutNuevaPass = view.findViewById(R.id.layoutNuevaPass);
+        layoutNombre = view.findViewById(R.id.nombreLayout);
 
         prefs = requireContext().getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
 
@@ -57,12 +54,25 @@ public class ProfileFragment extends Fragment {
         String tema = prefs.getString("tema", "claro");
 
         if (tema.equals("claro")) {
-            switchTema.setSelected(false);
+            switchTema.setChecked(false);
         } else {
-            switchTema.setSelected(true);
+            switchTema.setChecked(true);
         }
 
         editTextNombre.setText(nombreGuardado);
+
+        layoutNombre.setEndIconOnClickListener(v -> {
+            boolean isEnabled = editTextNombre.isEnabled();
+
+            editTextNombre.setEnabled(!isEnabled);
+
+            if (editTextNombre.isEnabled()) {
+                layoutNombre.setEndIconDrawable(R.drawable.ic_done);
+            } else {
+                layoutNombre.setEndIconDrawable(R.drawable.ic_edit);
+            }
+        });
+
 
         buttonCambiarNombre.setOnClickListener(v -> {
             String nuevoNombre = editTextNombre.getText().toString();
@@ -70,7 +80,7 @@ public class ProfileFragment extends Fragment {
             // Llama a tu servicio REST para actualizar el nombre
 
             prefs.edit().putString("nombreUsuario", nuevoNombre).apply();
-            Toast.makeText(getContext(), "Nombre actualizado", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getString(R.string.name_updated), Toast.LENGTH_SHORT).show();
         });
 
         buttonCambiarPassword.setOnClickListener(v -> {
@@ -84,6 +94,13 @@ public class ProfileFragment extends Fragment {
         switchTema.setOnCheckedChangeListener((buttonView, isChecked) -> {
             prefs.edit().putBoolean("oscuro", isChecked).apply();
 
+            if (isChecked) {
+                // Activar el tema oscuro
+                setNightMode(true);
+            } else {
+                // Activar el tema claro
+                setNightMode(false);
+            }
             // Aquí deberías reiniciar el theme, o guardar la preferencia y aplicar en el inicio
         });
 
@@ -102,5 +119,13 @@ public class ProfileFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void setNightMode(boolean isNightMode) {
+        int nightMode = isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;
+
+        AppCompatDelegate.setDefaultNightMode(nightMode);
+
+        getActivity().recreate();
     }
 }

@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.nimesukiapp.R;
-import com.example.nimesukiapp.models.vo.Anime;
 import com.example.nimesukiapp.models.vo.Favoritos;
 
 import java.util.ArrayList;

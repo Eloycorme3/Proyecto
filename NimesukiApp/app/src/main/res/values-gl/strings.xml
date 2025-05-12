@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">NimesukiApp</string>
+    <string name="username">Nome de usuario</string>
+    <string name="change_name">Cambiar nome</string>
+    <string name="current_password">Contrasinal actual</string>
+    <string name="new_password">Novo contrasinal</string>
+    <string name="change_password">Cambiar contrasinal</string>
+    <string name="dark_mode">Modo escuro</string>
+    <string name="language">Idioma</string>
+    <string name="password">Contrasinal</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="register">Rexistrarse</string>
+    <string name="search_anime">Buscar anime</string>
+    <string name="anime_image">Esta imaxe do anime</string>
+    <string name="read_more">Ler máis</string>
+    <string name="read_less">Ler menos</string>
+    <string name="release_year">Ano de saída</string>
+    <string name="categories">Categorías</string>
+    <string name="episodes">Capítulos</string>
+    <string name="catalog">Catálogo</string>
+    <string name="favorites">Favoritos</string>
+    <string name="profile">Perfíl</string>
+    <string name="radom">Radom</string>
+    <string name="name_updated">Nome actualizado</string>
+    <string name="enter_user_and_password">Por favor, introduce o usuario e contrasinal</string>
+    <string name="fill_all_fields">Completa todos os campos</string>
+    <string name="user_exists">Ese usuario xa existe</string>
+    <string name="network_error">Erro de rede</string>
+    <string name="registered_successfully">Rexistro correcto</string>
+    <string name="register_error">Erro ao rexistrar</string>
+    <string name="get_user_error">Erro ao obter o usuario</string>
+    <string name="incorrect_password">Contrasinal incorrecto</string>
+    <string name="user_not_found">Usuario non atopado</string>
+    <string name="load_anime_error">Erro ao cargar os animes</string>
+    <string name="load_favorite_anime_error">Erro ao cargar os animes favoritos</string>
+</resources>

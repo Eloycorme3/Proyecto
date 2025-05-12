@@ -79,9 +79,9 @@ public class AnimeDetailFragment extends Fragment {
         if (anime != null) {
             textNombre.setText(anime.getNombre());
             textDescripcion.setText(anime.getDescripcion());
-            textAnho.setText("Año de salida: " + anime.getAnhoSalida());
-            textCategorias.setText("Categorías: " + anime.getCategorias());
-            textCapitulos.setText("Capítulos: " + anime.getCapTotales());
+            textAnho.setText(getString(R.string.release_year) + ": " + anime.getAnhoSalida());
+            textCategorias.setText(getString(R.string.categories) + ": " + anime.getCategorias());
+            textCapitulos.setText(getString(R.string.episodes) + ": " + anime.getCapTotales());
 
             Glide.with(this)
                     .load(anime.getImagen() + imageVersion)
@@ -94,11 +94,11 @@ public class AnimeDetailFragment extends Fragment {
                 if (isExpanded) {
                     textDescripcion.setMaxLines(5);
                     textDescripcion.setEllipsize(TextUtils.TruncateAt.END);
-                    textLeerMas.setText("Leer más");
+                    textLeerMas.setText(getString(R.string.read_more));
                 } else {
                     textDescripcion.setMaxLines(Integer.MAX_VALUE);
                     textDescripcion.setEllipsize(null);
-                    textLeerMas.setText("Leer menos");
+                    textLeerMas.setText(getString(R.string.read_less));
                 }
                 isExpanded = !isExpanded;
             });

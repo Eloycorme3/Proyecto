@@ -113,7 +113,7 @@ public class CatalogFavoritesFragment extends Fragment {
                     requireActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getContext(), "Error al cargar los animes favoritos", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), getString(R.string.load_favorite_anime_error), Toast.LENGTH_LONG).show();
                         }
                     });
                 }

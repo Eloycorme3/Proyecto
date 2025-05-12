@@ -6,20 +6,14 @@ import static android.view.View.VISIBLE;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.nimesukiapp.R;
-import com.example.nimesukiapp.fragments.AnimeDetailFragment;
 import com.example.nimesukiapp.fragments.CatalogFavoritesFragment;
-import com.example.nimesukiapp.fragments.CatalogFragment;
 import com.example.nimesukiapp.fragments.LoginFragment;
-import com.example.nimesukiapp.models.vo.Anime;
 import com.example.nimesukiapp.models.vo.Favoritos;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 

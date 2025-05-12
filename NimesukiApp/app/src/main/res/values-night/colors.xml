@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="pastelPrimary">#4E8071</color>
+    <color name="pastelSecondary">#C57B3A</color>
+    <color name="pastelAccent">#B65C6C</color>
+    <color name="pastelBackground">#2C2C2C</color>
+    <color name="pastelGray">#555555</color>
+    <color name="pastelInputBackground">#333333</color>
+</resources>

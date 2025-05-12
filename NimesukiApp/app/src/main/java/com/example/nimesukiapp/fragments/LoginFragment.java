@@ -85,7 +85,7 @@ public class LoginFragment extends Fragment {
             String password = passwordEditText.getText().toString().trim();
             if (username.isEmpty() || password.isEmpty()) {
                 requireActivity().runOnUiThread(() ->
-                        Toast.makeText(getContext(), "Por favor ingresa usuario y contraseña", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(getContext(), getString(R.string.enter_user_and_password), Toast.LENGTH_SHORT).show()
                 );
             } else {
                 loginUsuario(username, password);
@@ -98,7 +98,7 @@ public class LoginFragment extends Fragment {
 
             if (nombreUsuario.isEmpty() || contrasena.isEmpty()) {
                 requireActivity().runOnUiThread(() ->
-                        Toast.makeText(requireContext(), "Rellena todos los campos", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), getString(R.string.fill_all_fields), Toast.LENGTH_SHORT).show()
                 );
                 return;
             }
@@ -108,7 +108,7 @@ public class LoginFragment extends Fragment {
                 public void onSuccess(Usuario usuario) {
                     if (usuario != null) {
                         requireActivity().runOnUiThread(() ->
-                                Toast.makeText(requireContext(), "Ese usuario ya existe", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), getString(R.string.user_exists), Toast.LENGTH_SHORT).show()
                         );
                     } else {
                         String hashedPassword = BCrypt.hashpw(contrasena, BCrypt.gensalt());
@@ -117,14 +117,14 @@ public class LoginFragment extends Fragment {
                             @Override
                             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                                 requireActivity().runOnUiThread(() ->
-                                        Toast.makeText(requireContext(), "Error de red", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(requireContext(), getString(R.string.network_error), Toast.LENGTH_SHORT).show()
                                 );
                             }
 
                             @Override
                             public void onResponse(@NonNull Call call, @NonNull Response response) {
                                 if (response.isSuccessful()) {
-                                    Toast.makeText(requireContext(), "Registrado correctamente", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(requireContext(), getString(R.string.registered_successfully), Toast.LENGTH_SHORT).show();
                                     SharedPreferences prefs = requireActivity().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
                                     prefs.edit().putString("nombreUsuario", nombreUsuario).apply();
 
@@ -133,7 +133,7 @@ public class LoginFragment extends Fragment {
                                             .commit();
                                 } else {
                                     requireActivity().runOnUiThread(() ->
-                                            Toast.makeText(requireContext(), "Error al registrar", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(requireContext(), getString(R.string.register_error), Toast.LENGTH_SHORT).show()
                                     );
                                 }
                             }
@@ -144,7 +144,7 @@ public class LoginFragment extends Fragment {
                 @Override
                 public void onError(Exception e) {
                     requireActivity().runOnUiThread(() ->
-                            Toast.makeText(getContext(), "Error al obtener el usuario", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(getContext(), getString(R.string.get_user_error), Toast.LENGTH_SHORT).show()
                     );
                 }
             });

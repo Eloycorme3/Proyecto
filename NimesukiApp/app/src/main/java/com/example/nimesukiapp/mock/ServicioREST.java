@@ -70,7 +70,7 @@ public class ServicioREST {
                     Type listType = new TypeToken<List<Usuario>>() {}.getType();
                     List<Usuario> usuarios = gson.fromJson(responseData, listType);
 
-                    listener.onSuccess(usuarios.getFirst());
+                    listener.onSuccess(usuarios.get(0));
                 } else {
                     Log.e("KO", "Respuesta no exitosa: " + response.code());
                     listener.onError(new IOException("Respuesta no exitosa: " + response.code()));

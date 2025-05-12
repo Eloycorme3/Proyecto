@@ -1,7 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
+    <!-- Base application theme for dark mode -->
     <style name="Base.Theme.NimesukiApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <!-- Dark theme color settings -->
+        <item name="colorPrimary">@color/pastelPrimary</item>
+        <item name="colorSecondary">@color/pastelSecondary</item>
+        <item name="colorAccent">@color/pastelAccent</item>
+        <item name="android:background">@color/pastelBackground</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/pastelGray</item>
+        <item name="android:textColorHint">@color/pastelPrimary</item>
     </style>
+
+    <style name="Theme.NimesukiApp" parent="Base.Theme.NimesukiApp">
+        <!-- Additional customization for the dark theme can go here -->
+    </style>
+
 </resources>
