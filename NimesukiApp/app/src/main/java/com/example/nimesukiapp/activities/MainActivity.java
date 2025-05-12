@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
             if (nombreUsuarioLogueado != null) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container_main, new CatalogFragment())
-                        .addToBackStack(null)
                         .commit();
                 bottomNavigationView.setSelectedItemId(R.id.nav_catalog);
                 bottomNavigationView.setVisibility(VISIBLE);
