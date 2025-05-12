@@ -76,6 +76,13 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        bottomNavigationView.setSelectedItemId(R.id.nav_catalog);
+    }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.bottom_nav_menu, menu);

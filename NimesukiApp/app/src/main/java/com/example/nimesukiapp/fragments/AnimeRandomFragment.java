@@ -78,6 +78,32 @@ public class AnimeRandomFragment extends Fragment {
         collapsingToolbar.setTitle("");
 
         if (anime != null) {
+            actualizarVistaAnime(anime);
+        }
+
+        textLeerMas.setOnClickListener(v -> {
+            if (isExpanded) {
+                textDescripcion.setMaxLines(5);
+                textDescripcion.setEllipsize(TextUtils.TruncateAt.END);
+                textLeerMas.setText(getString(R.string.read_more));
+            } else {
+                textDescripcion.setMaxLines(Integer.MAX_VALUE);
+                textDescripcion.setEllipsize(null);
+                textLeerMas.setText(getString(R.string.read_less));
+            }
+            isExpanded = !isExpanded;
+        });
+    }
+
+    // Método para actualizar el anime en el fragmento
+    public void actualizarAnime(Anime nuevoAnime) {
+        this.anime = nuevoAnime;
+        actualizarVistaAnime(nuevoAnime);
+    }
+
+    // Método para actualizar la vista con la nueva información del anime
+    private void actualizarVistaAnime(Anime anime) {
+        if (anime != null) {
             textNombre.setText(anime.getNombre());
             textDescripcion.setText(anime.getDescripcion());
             textAnho.setText(getString(R.string.release_year) + ": " + anime.getAnhoSalida());
@@ -90,19 +116,6 @@ public class AnimeRandomFragment extends Fragment {
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .centerCrop()
                     .into(imageViewAnime);
-
-            textLeerMas.setOnClickListener(v -> {
-                if (isExpanded) {
-                    textDescripcion.setMaxLines(5);
-                    textDescripcion.setEllipsize(TextUtils.TruncateAt.END);
-                    textLeerMas.setText(getString(R.string.read_more));
-                } else {
-                    textDescripcion.setMaxLines(Integer.MAX_VALUE);
-                    textDescripcion.setEllipsize(null);
-                    textLeerMas.setText(getString(R.string.read_less));
-                }
-                isExpanded = !isExpanded;
-            });
         }
     }
 }

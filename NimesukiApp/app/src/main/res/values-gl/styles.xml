@@ -8,6 +8,10 @@
         <item name="cornerSizeBottomRight">12dp</item>
     </style>
 
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorControlHighlight">@color/pastelBackground</item>
+    </style>
+
     <string-array name="languages">
         <item>Español</item>
         <item>Galego</item>
