@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/pastelBackground"
-    tools:context=".fragments.AnimeDetailFragment">
+    tools:context=".fragments.AnimeRandomFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -14,7 +14,7 @@
         android:theme="@style/ThemeOverlay.Material3.Toolbar.Surface">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsingToolbar"
+            android:id="@+id/collapsingToolbarRandom"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
@@ -25,7 +25,7 @@
             app:collapsedTitleTextAppearance="@style/TextAppearance.Material3.TitleMedium">
 
             <ImageView
-                android:id="@+id/imageViewAnime"
+                android:id="@+id/imageViewAnimeRandom"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/anime_image"
@@ -49,7 +49,7 @@
             android:paddingBottom="32dp">
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/textNombre"
+                android:id="@+id/textNombreRandom"
                 style="@style/TextAppearance.Material3.HeadlineSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
             </LinearLayout>
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/textAnho"
+                android:id="@+id/textAnhoRandom"
                 style="@style/TextAppearance.Material3.BodySmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
                 android:textColor="@color/black" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/textCategorias"
+                android:id="@+id/textCategoriasRandom"
                 style="@style/TextAppearance.Material3.BodySmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -101,7 +101,7 @@
                 android:textColor="@color/black" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/textCapitulos"
+                android:id="@+id/textCapitulosRandom"
                 style="@style/TextAppearance.Material3.BodySmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

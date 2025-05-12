@@ -17,7 +17,7 @@ import com.example.nimesukiapp.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class VistaPerfil extends AppCompatActivity {
-    private String nombreUSuarioLogueado = "";
+    private String nombreUsuarioLogueado = "";
     private BottomNavigationView bottomNavigationView;
 
     @Override
@@ -29,12 +29,21 @@ public class VistaPerfil extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             SharedPreferences prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
-            String nombreUsuario = prefs.getString("nombreUsuario", null);
+            nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
 
-            if (nombreUsuario != null) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container_perfil, new ProfileFragment())
-                        .commit();
+            if (nombreUsuarioLogueado != null) {
+                boolean fromCatalog = getIntent().getBooleanExtra("fromCatalog", false);
+                if (fromCatalog) {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container_perfil, new ProfileFragment())
+                            .addToBackStack(null)
+                            .commit();
+                } else {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container_perfil, new ProfileFragment())
+                            .commit();
+                }
+
                 bottomNavigationView.setSelectedItemId(R.id.nav_profile);
                 bottomNavigationView.setVisibility(VISIBLE);
             } else {
@@ -50,6 +59,7 @@ public class VistaPerfil extends AppCompatActivity {
 
             if (itemId == R.id.nav_catalog) {
                 Intent intent = new Intent(this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 return true;
             } else if (itemId == R.id.nav_favorites) {

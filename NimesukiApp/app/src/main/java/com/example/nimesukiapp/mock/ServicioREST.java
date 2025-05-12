@@ -48,6 +48,25 @@ public class ServicioREST {
         client.newCall(request).enqueue(callback);
     }
 
+    public Anime obtenerAnimeNoFavorito(String nombreUsuario) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("http://" + localhost + ":8088/animes/no-favoritos/" + nombreUsuario)
+                .build();
+        Anime a = null;
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+            String responseData = response.body().string();
+            if (response.isSuccessful() && response.body() != null) {
+                Gson gson = new Gson();
+                a = gson.fromJson(responseData, Anime.class);
+                Log.d("OK", "Respuesta exitosa: " + responseData);
+            } else {
+                Log.e("KO", "Respuesta no exitosa: " + response.code());
+            }
+        }
+        return a;
+    }
 
     public void obtenerUsuarioPorNombre(String username, OnUsuarioObtenidoListener listener) {
         OkHttpClient client = new OkHttpClient();

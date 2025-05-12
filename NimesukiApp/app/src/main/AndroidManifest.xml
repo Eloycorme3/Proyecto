@@ -15,8 +15,10 @@
         android:theme="@style/Theme.NimesukiApp"
         android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="31">
+        <!-- Single Top para evitar que se duplique al hacer un intent sobre si misma -->
         <activity
             android:name=".activities.MainActivity"
+            android:launchMode="singleTop"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,7 +28,6 @@
         </activity>
         <activity android:name=".activities.AnimeRandomView"/>
         <activity android:name=".activities.ListaAnimesFavoritosActivity"/>
-        <activity android:name=".activities.VistaAnimeFavorito"/>
         <activity android:name=".activities.VistaPerfil"/>
     </application>
 

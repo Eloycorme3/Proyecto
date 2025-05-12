@@ -8,38 +8,61 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nimesukiapp.R;
-import com.example.nimesukiapp.fragments.CatalogFragment;
+import com.example.nimesukiapp.fragments.AnimeRandomFragment;
+import com.example.nimesukiapp.fragments.CatalogFavoritesFragment;
 import com.example.nimesukiapp.fragments.LoginFragment;
+import com.example.nimesukiapp.mock.ServicioREST;
+import com.example.nimesukiapp.models.vo.Anime;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 public class AnimeRandomView extends AppCompatActivity {
-    private String nombreUSuarioLogueado = "";
+    private String nombreUsuarioLogueado = "";
     private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lista_favoritos);
+        setContentView(R.layout.activity_random);
 
-        bottomNavigationView = findViewById(R.id.bottomNavigationView_favoritos);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView_random);
 
         if (savedInstanceState == null) {
             SharedPreferences prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
-            String nombreUsuario = prefs.getString("nombreUsuario", null);
+            nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
 
-            if (nombreUsuario != null) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container_favoritos, new CatalogFragment())
-                        .commit();
+            if (nombreUsuarioLogueado != null) {
+                Anime a = null;
+                try {
+                    a = obtenerAnimeRandom(nombreUsuarioLogueado);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                boolean fromCatalog = getIntent().getBooleanExtra("fromCatalog", false);
+                if (fromCatalog) {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container_random, new AnimeRandomFragment(a))
+                            .addToBackStack(null)
+                            .commit();
+                } else {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container_random, new AnimeRandomFragment(a))
+                            .commit();
+                }
+
                 bottomNavigationView.setSelectedItemId(R.id.nav_random);
                 bottomNavigationView.setVisibility(VISIBLE);
             } else {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container_favoritos, new LoginFragment())
+                        .replace(R.id.fragment_container_random, new LoginFragment())
                         .commit();
                 bottomNavigationView.setVisibility(INVISIBLE);
             }
@@ -50,6 +73,7 @@ public class AnimeRandomView extends AppCompatActivity {
 
             if (itemId == R.id.nav_catalog) {
                 Intent intent = new Intent(this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 return true;
             } else if (itemId == R.id.nav_favorites) {
@@ -68,6 +92,12 @@ public class AnimeRandomView extends AppCompatActivity {
 
             return false;
         });
+    }
+
+    private Anime obtenerAnimeRandom(String nombreUsuario) throws IOException {
+        ServicioREST servicioREST = new ServicioREST();
+        Anime a = servicioREST.obtenerAnimeNoFavorito(nombreUsuario);
+        return a;
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

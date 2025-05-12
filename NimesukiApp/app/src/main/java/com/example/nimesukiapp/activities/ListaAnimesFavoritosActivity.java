@@ -18,7 +18,7 @@ import com.example.nimesukiapp.models.vo.Favoritos;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ListaAnimesFavoritosActivity extends AppCompatActivity implements CatalogFavoritesFragment.OnAnimeFavoriteSelectedListener {
-    private String nombreUSuarioLogueado = "";
+    private String nombreUsuarioLogueado = "";
     private BottomNavigationView bottomNavigationView;
 
     @Override
@@ -30,12 +30,21 @@ public class ListaAnimesFavoritosActivity extends AppCompatActivity implements C
 
         if (savedInstanceState == null) {
             SharedPreferences prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
-            String nombreUsuario = prefs.getString("nombreUsuario", null);
+            nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
 
-            if (nombreUsuario != null) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container_favoritos, new CatalogFavoritesFragment())
-                        .commit();
+            if (nombreUsuarioLogueado != null) {
+                boolean fromCatalog = getIntent().getBooleanExtra("fromCatalog", false);
+                if (fromCatalog) {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container_favoritos, new CatalogFavoritesFragment())
+                            .addToBackStack(null)
+                            .commit();
+                } else {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container_favoritos, new CatalogFavoritesFragment())
+                            .commit();
+                }
+
                 bottomNavigationView.setSelectedItemId(R.id.nav_favorites);
                 bottomNavigationView.setVisibility(VISIBLE);
             } else {
@@ -51,6 +60,7 @@ public class ListaAnimesFavoritosActivity extends AppCompatActivity implements C
 
             if (itemId == R.id.nav_catalog) {
                 Intent intent = new Intent(this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 return true;
             } else if (itemId == R.id.nav_favorites) {

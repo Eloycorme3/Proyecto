@@ -23,7 +23,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity implements CatalogFragment.OnAnimeSelectedListener {
 
-    private String nombreUSuarioLogueado = "";
+    private String nombreUsuarioLogueado = "";
     private BottomNavigationView bottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +34,12 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
 
         if (savedInstanceState == null) {
             SharedPreferences prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
-            String nombreUsuario = prefs.getString("nombreUsuario", null);
+            nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
 
-            if (nombreUsuario != null) {
+            if (nombreUsuarioLogueado != null) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container_main, new CatalogFragment())
+                        .addToBackStack(null)
                         .commit();
                 bottomNavigationView.setSelectedItemId(R.id.nav_catalog);
                 bottomNavigationView.setVisibility(VISIBLE);
@@ -57,14 +58,17 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
                 return true;
             } else if (itemId == R.id.nav_favorites) {
                 Intent intent = new Intent(MainActivity.this, ListaAnimesFavoritosActivity.class);
+                intent.putExtra("fromCatalog", true);
                 startActivity(intent);
                 return true;
             } else if (itemId == R.id.nav_random) {
                 Intent intent = new Intent(MainActivity.this, AnimeRandomView.class);
+                intent.putExtra("fromCatalog", true);
                 startActivity(intent);
                 return true;
             } else if (itemId == R.id.nav_profile) {
                 Intent intent = new Intent(MainActivity.this, VistaPerfil.class);
+                intent.putExtra("fromCatalog", true);
                 startActivity(intent);
                 return true;
             }

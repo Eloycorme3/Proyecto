@@ -5,8 +5,10 @@
 package proyecto.nimesuki.controlador;
 
 import java.util.List;
+import java.util.Random;
 import proyecto.nimesuki.modelo.Anime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +44,20 @@ public class AnimeController {
         } else {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @GetMapping("/no-favoritos/{nombreUsuario}")
+    public ResponseEntity<Anime> getRandomAnimeNotInFavoritos(
+            @PathVariable String nombreUsuario) {
+
+        List<Anime> animes = animeRepository.findNotInFavoritosByUsuario(nombreUsuario);
+
+        if (animes.isEmpty()) {
+            return ResponseEntity.ok().body(null);
+        }
+
+        Anime randomAnime = animes.get(new Random().nextInt(animes.size()));
+        return ResponseEntity.ok(randomAnime);
     }
 
     @PostMapping
