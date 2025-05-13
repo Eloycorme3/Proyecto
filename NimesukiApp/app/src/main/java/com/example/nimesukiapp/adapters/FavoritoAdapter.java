@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.models.vo.Favoritos;
 
@@ -38,6 +39,8 @@ public class FavoritoAdapter extends ArrayAdapter<Favoritos> {
 
         Glide.with(contexto)
                 .load(favorito.getAnime().getImagen())
+                .placeholder(R.drawable.placeholder)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .error(R.drawable.ic_profile)
                 .into(imagen);
 

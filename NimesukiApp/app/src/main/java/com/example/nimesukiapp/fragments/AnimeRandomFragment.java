@@ -95,13 +95,11 @@ public class AnimeRandomFragment extends Fragment {
         });
     }
 
-    // Método para actualizar el anime en el fragmento
     public void actualizarAnime(Anime nuevoAnime) {
         this.anime = nuevoAnime;
         actualizarVistaAnime(nuevoAnime);
     }
 
-    // Método para actualizar la vista con la nueva información del anime
     private void actualizarVistaAnime(Anime anime) {
         if (anime != null) {
             textNombre.setText(anime.getNombre());

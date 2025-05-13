@@ -18,7 +18,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.nimesukiapp.R;
-import com.example.nimesukiapp.adapters.AnimeAdapter;
 import com.example.nimesukiapp.adapters.FavoritoAdapter;
 import com.example.nimesukiapp.mock.ServicioREST;
 import com.example.nimesukiapp.models.vo.Anime;
@@ -29,10 +28,10 @@ import java.util.ArrayList;
 
 public class CatalogFavoritesFragment extends Fragment {
     private ArrayList<Favoritos> listaAnimesFavoritos = new ArrayList<>();
-
     private OnAnimeFavoriteSelectedListener listener;
     FavoritoAdapter adapter;
     private String nombreUSuarioLogueado = "";
+    private SharedPreferences prefs;
 
     public CatalogFavoritesFragment() {
     }
@@ -42,7 +41,7 @@ public class CatalogFavoritesFragment extends Fragment {
         View vistaFrag = inflater.inflate(R.layout.fragment_catalog_favorites, container, false);
         ListView listView = vistaFrag.findViewById(R.id.animes_favoritos_listview);
 
-        SharedPreferences prefs = getContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
+        prefs = getContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         nombreUSuarioLogueado = prefs.getString("nombreUsuario", null);
 
         cargarAnimesFavoritos();

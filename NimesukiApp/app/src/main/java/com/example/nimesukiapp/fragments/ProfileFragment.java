@@ -2,6 +2,7 @@ package com.example.nimesukiapp.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,15 +16,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.nimesukiapp.R;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class ProfileFragment extends Fragment {
+import java.util.Locale;
 
+public class ProfileFragment extends Fragment {
     private TextInputEditText editTextNombre, editTextActualPass, editTextNuevaPass;
     private TextInputLayout layoutActualPass, layoutNuevaPass, layoutNombre;
     private Button buttonCambiarNombre, buttonCambiarPassword;
@@ -51,81 +52,78 @@ public class ProfileFragment extends Fragment {
         prefs = requireContext().getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
 
         String nombreGuardado = prefs.getString("nombreUsuario", "");
-        String tema = prefs.getString("tema", "claro");
+        boolean temaOscuro = prefs.getBoolean("oscuro", false);
 
-        if (tema.equals("claro")) {
-            switchTema.setChecked(false);
+        switchTema.setChecked(temaOscuro);
+
+        String idiomaGuardado = prefs.getString("idioma", "es");
+
+        if (idiomaGuardado.equals("es")) {
+            spinnerIdioma.setSelection(0);
         } else {
-            switchTema.setChecked(true);
+            spinnerIdioma.setSelection(1);
         }
 
         editTextNombre.setText(nombreGuardado);
 
         layoutNombre.setEndIconOnClickListener(v -> {
             boolean isEnabled = editTextNombre.isEnabled();
-
             editTextNombre.setEnabled(!isEnabled);
-
-            if (editTextNombre.isEnabled()) {
-                layoutNombre.setEndIconDrawable(R.drawable.ic_done);
-            } else {
-                layoutNombre.setEndIconDrawable(R.drawable.ic_edit);
-            }
+            layoutNombre.setEndIconDrawable(isEnabled ? R.drawable.ic_edit : R.drawable.ic_done);
         });
 
-
         buttonCambiarNombre.setOnClickListener(v -> {
-            String nuevoNombre = editTextNombre.getText().toString();
+            //String nuevoNombre = editTextNombre.getText().toString();
 
-            // Llama a tu servicio REST para actualizar el nombre
-
-            prefs.edit().putString("nombreUsuario", nuevoNombre).apply();
-            Toast.makeText(getContext(), getString(R.string.name_updated), Toast.LENGTH_SHORT).show();
+            //cambiar nombre dao
+            //prefs.edit().putString("nombreUsuario", nuevoNombre).apply();
+            //Toast.makeText(getContext(), getString(R.string.name_updated), Toast.LENGTH_SHORT).show();
         });
 
         buttonCambiarPassword.setOnClickListener(v -> {
-            String actual = editTextActualPass.getText().toString();
-            String nueva = editTextNuevaPass.getText().toString();
+            //String actual = editTextActualPass.getText().toString();
+            //String nueva = editTextNuevaPass.getText().toString();
 
-            // Aquí haz la comprobación con BCrypt y actualiza si todo va bien
+            // Aquí va la lógica para cambiar la contraseña
         });
 
-        switchTema.setChecked(prefs.getBoolean("oscuro", false));
         switchTema.setOnCheckedChangeListener((buttonView, isChecked) -> {
             prefs.edit().putBoolean("oscuro", isChecked).apply();
-
-            if (isChecked) {
-                // Activar el tema oscuro
-                setNightMode(true);
-            } else {
-                // Activar el tema claro
-                setNightMode(false);
-            }
-            // Aquí deberías reiniciar el theme, o guardar la preferencia y aplicar en el inicio
+            setNightMode(isChecked);
         });
 
-        spinnerIdioma.setSelection(prefs.getString("idioma", "es").equals("es") ? 0 : 1);
         spinnerIdioma.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String lang = (position == 0) ? "es" : "gl";
                 prefs.edit().putString("idioma", lang).apply();
 
-                // Aquí deberías recargar los textos cambiando el Locale
+                cambiarIdioma(lang);
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
 
         return view;
     }
 
+    private void cambiarIdioma(String idioma) {
+        Locale locale = new Locale(idioma);
+        Locale.setDefault(locale);
+
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+
+        requireContext().createConfigurationContext(config);
+
+        getActivity().recreate();
+    }
+
     private void setNightMode(boolean isNightMode) {
         int nightMode = isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;
-
         AppCompatDelegate.setDefaultNightMode(nightMode);
-
         getActivity().recreate();
     }
 }

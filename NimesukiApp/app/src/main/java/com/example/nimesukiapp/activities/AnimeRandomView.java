@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -26,7 +27,8 @@ import java.io.IOException;
 public class AnimeRandomView extends AppCompatActivity implements CatalogFragment.OnAnimeSelectedListener {
     private String nombreUsuarioLogueado = "";
     private BottomNavigationView bottomNavigationView;
-    private AnimeRandomFragment animeRandomFragment; // Referencia al fragmento de anime
+    private AnimeRandomFragment animeRandomFragment;
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +37,11 @@ public class AnimeRandomView extends AppCompatActivity implements CatalogFragmen
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView_random);
 
-        // Obtener el nombre de usuario guardado
-        SharedPreferences prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
+        prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
 
-        // Verificar si el usuario está logueado
         if (nombreUsuarioLogueado != null) {
-            obtenerYMostrarAnimeRandom(); // Obtener y mostrar un anime aleatorio
+            obtenerYMostrarAnimeRandom();
             bottomNavigationView.setSelectedItemId(R.id.nav_random);
             bottomNavigationView.setVisibility(VISIBLE);
         } else {
@@ -64,7 +64,7 @@ public class AnimeRandomView extends AppCompatActivity implements CatalogFragmen
                 startActivity(intent);
                 return true;
             } else if (itemId == R.id.nav_random) {
-                obtenerYMostrarAnimeRandom(); // Actualizar el anime al presionar el botón
+                obtenerYMostrarAnimeRandom();
                 return true;
             } else if (itemId == R.id.nav_profile) {
                 Intent intent = new Intent(this, VistaPerfil.class);
@@ -76,37 +76,32 @@ public class AnimeRandomView extends AppCompatActivity implements CatalogFragmen
         });
     }
 
-    // Función para obtener un anime aleatorio y mostrarlo
     private void obtenerYMostrarAnimeRandom() {
-        // Mostrar progreso mientras se carga el anime
         new Thread(() -> {
             try {
                 Anime animeAleatorio = obtenerAnimeRandom(nombreUsuarioLogueado);
 
                 runOnUiThread(() -> {
-                    // Si el fragmento ya está agregado, solo actualizamos el anime
                     if (animeRandomFragment == null) {
                         animeRandomFragment = new AnimeRandomFragment(animeAleatorio);
                         getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.fragment_container_random, animeRandomFragment)
                                 .commit();
                     } else {
-                        animeRandomFragment.actualizarAnime(animeAleatorio); // Actualizar el anime
+                        animeRandomFragment.actualizarAnime(animeAleatorio);
                     }
                 });
             } catch (IOException e) {
-                e.printStackTrace(); // Manejo de errores en caso de que falle la conexión
+                Toast.makeText(this, getString(R.string.load_anime_error), Toast.LENGTH_LONG).show();
             }
         }).start();
     }
 
-    // Función para obtener un anime aleatorio desde el servidor
     private Anime obtenerAnimeRandom(String nombreUsuario) throws IOException {
         ServicioREST servicioREST = new ServicioREST();
         return servicioREST.obtenerAnimeNoFavorito(nombreUsuario);
     }
 
-    // Función para inflar el menú
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.bottom_nav_menu, menu);
@@ -115,7 +110,10 @@ public class AnimeRandomView extends AppCompatActivity implements CatalogFragmen
 
     @Override
     public void onAnimeSelected(Anime anime) {
-        AnimeDetailFragment animeDetailFragment = AnimeDetailFragment.newInstance(anime);
+        AnimeDetailFragment animeDetailFragment = AnimeDetailFragment.newInstance(
+                anime
+        );
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container_main, animeDetailFragment);
         transaction.addToBackStack(null);

@@ -31,6 +31,7 @@
     <string name="get_user_error">Erro ao obter o usuario</string>
     <string name="incorrect_password">Contrasinal incorrecto</string>
     <string name="user_not_found">Usuario non atopado</string>
-    <string name="load_anime_error">Erro ao cargar os animes</string>
+    <string name="load_animes_error">Erro ao cargar os animes</string>
+    <string name="load_anime_error">Erro ao cargar o anime</string>
     <string name="load_favorite_anime_error">Erro ao cargar os animes favoritos</string>
 </resources>

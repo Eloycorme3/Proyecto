@@ -31,7 +31,8 @@
     <string name="get_user_error">Error al obtener el usuario</string>
     <string name="incorrect_password">Contraseña incorrecta</string>
     <string name="user_not_found">Usuario no encontrado</string>
-    <string name="load_anime_error">Error al cargar los animes</string>
+    <string name="load_animes_error">Error al cargar los animes</string>
+    <string name="load_anime_error">Error al cargar el anime</string>
     <string name="load_favorite_anime_error">Error al cargar los animes favoritos</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

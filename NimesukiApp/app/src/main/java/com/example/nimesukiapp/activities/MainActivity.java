@@ -5,13 +5,13 @@ import static android.view.View.VISIBLE;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.nimesukiapp.R;
@@ -21,22 +21,31 @@ import com.example.nimesukiapp.fragments.LoginFragment;
 import com.example.nimesukiapp.models.vo.Anime;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity implements CatalogFragment.OnAnimeSelectedListener {
+import java.util.Locale;
 
+public class MainActivity extends AppCompatActivity implements CatalogFragment.OnAnimeSelectedListener {
     private String nombreUsuarioLogueado = "";
     private BottomNavigationView bottomNavigationView;
+    private SharedPreferences prefs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
+        boolean oscuro = prefs.getBoolean("oscuro", false);
+        setNightMode(oscuro);
+        String idiomaGuardado = prefs.getString("idioma", "es");
+        cambiarIdioma(idiomaGuardado);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView_main);
 
         if (savedInstanceState == null) {
-            SharedPreferences prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
             nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
 
             if (nombreUsuarioLogueado != null) {
+
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container_main, new CatalogFragment())
                         .commit();
@@ -87,6 +96,26 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.bottom_nav_menu, menu);
         return true;
+    }
+
+    private void cambiarIdioma(String idioma) {
+        Locale locale = new Locale(idioma);
+        Locale.setDefault(locale);
+
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+
+        getApplicationContext().createConfigurationContext(config);
+
+        recreate();
+    }
+
+    private void setNightMode(boolean isNightMode) {
+        int nightMode = isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;
+
+        AppCompatDelegate.setDefaultNightMode(nightMode);
+
+        recreate();
     }
 
     @Override

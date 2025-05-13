@@ -10,8 +10,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.nimesukiapp.R;
+import com.example.nimesukiapp.fragments.AnimeFavoritoDetailFragment;
 import com.example.nimesukiapp.fragments.CatalogFavoritesFragment;
 import com.example.nimesukiapp.fragments.LoginFragment;
 import com.example.nimesukiapp.models.vo.Favoritos;
@@ -20,6 +22,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class ListaAnimesFavoritosActivity extends AppCompatActivity implements CatalogFavoritesFragment.OnAnimeFavoriteSelectedListener {
     private String nombreUsuarioLogueado = "";
     private BottomNavigationView bottomNavigationView;
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +32,7 @@ public class ListaAnimesFavoritosActivity extends AppCompatActivity implements C
         bottomNavigationView = findViewById(R.id.bottomNavigationView_favoritos);
 
         if (savedInstanceState == null) {
-            SharedPreferences prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
+            prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
             nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
 
             if (nombreUsuarioLogueado != null) {
@@ -81,6 +84,13 @@ public class ListaAnimesFavoritosActivity extends AppCompatActivity implements C
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        bottomNavigationView.setSelectedItemId(R.id.nav_favorites);
+    }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.bottom_nav_menu, menu);
@@ -89,13 +99,13 @@ public class ListaAnimesFavoritosActivity extends AppCompatActivity implements C
 
     @Override
     public void onAnimeFavoritoSelected(Favoritos favorito) {
-        /*AnimeDetailFragment animeDetailFragment = AnimeDetailFragment.newInstance(
+        AnimeFavoritoDetailFragment animeFavoritoDetailFragment = AnimeFavoritoDetailFragment.newInstance(
                 favorito
         );
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container_main, animeDetailFragment);
+        transaction.replace(R.id.fragment_container_favoritos, animeFavoritoDetailFragment);
         transaction.addToBackStack(null);
         transaction.commit();
-    */}
+    }
 }
