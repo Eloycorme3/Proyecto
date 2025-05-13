@@ -43,7 +43,9 @@ public class CatalogFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Anime animeSelected = (Anime) parent.getItemAtPosition(position);
-                listener.onAnimeSelected(animeSelected);
+                if (listener != null) {
+                    listener.onAnimeSelected(animeSelected);
+                }
             }
         });
 
@@ -56,7 +58,7 @@ public class CatalogFragment extends Fragment {
         if (context instanceof OnAnimeSelectedListener) {
             listener = (OnAnimeSelectedListener) context;
         } else {
-            throw new ClassCastException(context.toString() + " debe implementar OnAnimeSelectedListener");
+            listener = null;
         }
 
     }

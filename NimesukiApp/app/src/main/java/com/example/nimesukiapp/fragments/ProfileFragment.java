@@ -3,6 +3,7 @@ package com.example.nimesukiapp.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,10 +11,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
+import android.os.LocaleList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.example.nimesukiapp.R;
@@ -47,6 +50,7 @@ public class ProfileFragment extends Fragment {
         layoutActualPass = view.findViewById(R.id.layoutActualPass);
         layoutNuevaPass = view.findViewById(R.id.layoutNuevaPass);
         layoutNombre = view.findViewById(R.id.nombreLayout);
+        spinnerIdioma = view.findViewById(R.id.spinnerIdioma);
 
         prefs = requireContext().getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
 
@@ -56,6 +60,12 @@ public class ProfileFragment extends Fragment {
         switchTema.setChecked(temaOscuro);
 
         String idiomaGuardado = prefs.getString("idioma", "es");
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                requireContext(), R.array.languages, android.R.layout.simple_spinner_item
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerIdioma.setAdapter(adapter);
 
         if (idiomaGuardado.equals("es")) {
             spinnerIdioma.setSelection(0);
@@ -94,10 +104,13 @@ public class ProfileFragment extends Fragment {
         spinnerIdioma.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String lang = (position == 0) ? "es" : "gl";
-                prefs.edit().putString("idioma", lang).apply();
+                String idioma = (position == 0) ? "es" : "gl";
+                String idiomaActual = prefs.getString("idioma", "es");
 
-                cambiarIdioma(lang);
+                if (!idioma.equals(idiomaActual)) {
+                    prefs.edit().putString("idioma", idioma).apply();
+                    cambiarIdioma(idioma);
+                }
             }
 
             @Override
@@ -112,17 +125,22 @@ public class ProfileFragment extends Fragment {
         Locale locale = new Locale(idioma);
         Locale.setDefault(locale);
 
-        Configuration config = new Configuration();
-        config.setLocale(locale);
+        Configuration configuration = getResources().getConfiguration();
 
-        requireContext().createConfigurationContext(config);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            configuration.setLocales(new LocaleList(locale));
+        } else {
+            configuration.setLocale(locale);
+        }
+
+        getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
 
         getActivity().recreate();
     }
 
+
     private void setNightMode(boolean isNightMode) {
         int nightMode = isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;
         AppCompatDelegate.setDefaultNightMode(nightMode);
-        getActivity().recreate();
     }
 }

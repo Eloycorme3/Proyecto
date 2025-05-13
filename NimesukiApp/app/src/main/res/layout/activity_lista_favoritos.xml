@@ -22,6 +22,5 @@
         app:itemIconTint="@color/selector_icon"
         app:itemTextColor="@color/selector_text"
         app:menu="@menu/bottom_nav_menu"
-        app:labelVisibilityMode="labeled"
-        app:itemBackground="@color/selector_nav_item_background" />
+        app:labelVisibilityMode="labeled"/>
 </RelativeLayout>

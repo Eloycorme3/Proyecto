@@ -156,7 +156,7 @@ public class ServicioREST {
         ArrayList<Favoritos> listaFavoritos = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("http://" + localhost + ":8080/favoritos/" + nombreUsuario)
+                .url("http://" + localhost + ":8088/favoritos/" + nombreUsuario)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {

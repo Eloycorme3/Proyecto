@@ -63,7 +63,7 @@ public class CatalogFavoritesFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof CatalogFragment.OnAnimeSelectedListener) {
+        if (context instanceof CatalogFavoritesFragment.OnAnimeFavoriteSelectedListener) {
             listener = (OnAnimeFavoriteSelectedListener) context;
         } else {
             throw new ClassCastException(context.toString() + " debe implementar OnAnimeFavoriteSelectedListener");

@@ -67,8 +67,6 @@ public class ListaAnimesFavoritosActivity extends AppCompatActivity implements C
                 startActivity(intent);
                 return true;
             } else if (itemId == R.id.nav_favorites) {
-                Intent intent = new Intent(this, ListaAnimesFavoritosActivity.class);
-                startActivity(intent);
                 return true;
             } else if (itemId == R.id.nav_random) {
                 Intent intent = new Intent(this, AnimeRandomView.class);
