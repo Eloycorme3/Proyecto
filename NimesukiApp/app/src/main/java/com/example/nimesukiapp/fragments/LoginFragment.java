@@ -14,16 +14,16 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.activities.MainActivity;
 import com.example.nimesukiapp.mock.ServicioREST;
 import com.example.nimesukiapp.models.vo.Usuario;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.shape.ShapeAppearanceModel;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -35,9 +35,8 @@ import okhttp3.Response;
 
 public class LoginFragment extends Fragment {
 
-    private EditText usernameEditText, passwordEditText;
-    private Button loginButton;
-    private Button registerButton;
+    private TextInputEditText usernameEditText, passwordEditText;
+    private MaterialButton loginButton, registerButton;
     private ServicioREST servicioREST;
 
     @Override

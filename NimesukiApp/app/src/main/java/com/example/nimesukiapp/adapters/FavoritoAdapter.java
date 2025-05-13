@@ -5,13 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.models.vo.Favoritos;
+import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
 
@@ -31,11 +31,11 @@ public class FavoritoAdapter extends ArrayAdapter<Favoritos> {
 
         Favoritos favorito = getItem(position);
 
-        TextView nombre = convertView.findViewById(R.id.anime_name);
+        MaterialTextView nombre = convertView.findViewById(R.id.anime_name);
 
         nombre.setText(favorito.getAnime().getNombre());
 
-        ImageView imagen = convertView.findViewById(R.id.anime_image);
+        ShapeableImageView imagen = convertView.findViewById(R.id.anime_image);
 
         Glide.with(contexto)
                 .load(favorito.getAnime().getImagen())

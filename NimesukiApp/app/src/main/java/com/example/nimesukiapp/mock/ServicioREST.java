@@ -1,7 +1,6 @@
 package com.example.nimesukiapp.mock;
 
 import android.util.Log;
-import android.widget.Toast;
 import android.content.Context;
 
 import androidx.annotation.NonNull;

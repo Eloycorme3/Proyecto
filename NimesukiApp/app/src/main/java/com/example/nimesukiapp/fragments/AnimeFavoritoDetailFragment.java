@@ -11,13 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.models.vo.Favoritos;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.textview.MaterialTextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,10 +28,10 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 public class AnimeFavoritoDetailFragment extends Fragment {
 
     private ImageView imageViewAnimeFav;
-    private TextView textNombreFav, textDescripcionFav, textLeerMasFav,
+    private MaterialTextView textNombreFav, textDescripcionFav, textLeerMasFav,
             textAnhoFav, textCategoriasFav, textCapitulosFav;
+    private MaterialToolbar toolbar;
     private String imageVersionFav = "?v=2";
-
     private boolean isExpanded = false;
     private Favoritos animeFav;
 
@@ -72,6 +73,7 @@ public class AnimeFavoritoDetailFragment extends Fragment {
         textAnhoFav = view.findViewById(R.id.textAnhoFav);
         textCategoriasFav = view.findViewById(R.id.textCategoriasFav);
         textCapitulosFav = view.findViewById(R.id.textCapitulosFav);
+        toolbar = view.findViewById(R.id.topAppBar);
 
         CollapsingToolbarLayout collapsingToolbarFav = view.findViewById(R.id.collapsingToolbarFav);
         collapsingToolbarFav.setTitle("");
@@ -103,5 +105,13 @@ public class AnimeFavoritoDetailFragment extends Fragment {
                 isExpanded = !isExpanded;
             });
         }
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requireActivity().getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
+
     }
 }

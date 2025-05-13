@@ -5,13 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.models.vo.Anime;
+import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
 
@@ -32,11 +32,11 @@ public class AnimeAdapter extends ArrayAdapter<Anime> {
 
         Anime anime = getItem(position);
 
-        TextView nombre = convertView.findViewById(R.id.anime_name);
+        MaterialTextView nombre = convertView.findViewById(R.id.anime_name);
 
         nombre.setText(anime.getNombre());
 
-        ImageView imagen = convertView.findViewById(R.id.anime_image);
+        ShapeableImageView imagen = convertView.findViewById(R.id.anime_image);
 
         Glide.with(contexto)
                 .load(anime.getImagen() + imageVersion)

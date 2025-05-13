@@ -14,10 +14,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.Spinner;
 
 import com.example.nimesukiapp.R;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -27,7 +27,7 @@ import java.util.Locale;
 public class ProfileFragment extends Fragment {
     private TextInputEditText editTextNombre, editTextActualPass, editTextNuevaPass;
     private TextInputLayout layoutActualPass, layoutNuevaPass, layoutNombre;
-    private Button buttonCambiarNombre, buttonCambiarPassword;
+    private MaterialButton buttonCambiarNombre, buttonCambiarPassword;
     private SwitchMaterial switchTema;
     private Spinner spinnerIdioma;
     private SharedPreferences prefs;
@@ -44,7 +44,6 @@ public class ProfileFragment extends Fragment {
         editTextNuevaPass = view.findViewById(R.id.editTextNuevaPass);
         buttonCambiarPassword = view.findViewById(R.id.buttonCambiarPassword);
         switchTema = view.findViewById(R.id.switchTema);
-        spinnerIdioma = view.findViewById(R.id.spinnerIdioma);
         layoutActualPass = view.findViewById(R.id.layoutActualPass);
         layoutNuevaPass = view.findViewById(R.id.layoutNuevaPass);
         layoutNombre = view.findViewById(R.id.nombreLayout);

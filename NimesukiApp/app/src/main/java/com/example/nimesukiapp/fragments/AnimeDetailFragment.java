@@ -1,12 +1,20 @@
 package com.example.nimesukiapp.fragments;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +26,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.models.vo.Anime;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.textview.MaterialTextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,11 +37,12 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 public class AnimeDetailFragment extends Fragment {
 
     private ImageView imageViewAnime;
-    private TextView textNombre, textDescripcion, textLeerMas,
+    private MaterialTextView textNombre, textDescripcion,
             textAnho, textCategorias, textCapitulos;
+    private MaterialToolbar toolbar;
     private String imageVersion = "?v=2";
-
     private boolean isExpanded = false;
+    private String fullText;
     private Anime anime;
 
     public AnimeDetailFragment() {
@@ -68,20 +79,22 @@ public class AnimeDetailFragment extends Fragment {
         imageViewAnime = view.findViewById(R.id.imageViewAnime);
         textNombre = view.findViewById(R.id.textNombre);
         textDescripcion = view.findViewById(R.id.textDescripcion);
-        textLeerMas = view.findViewById(R.id.textLeerMas);
         textAnho = view.findViewById(R.id.textAnho);
         textCategorias = view.findViewById(R.id.textCategorias);
         textCapitulos = view.findViewById(R.id.textCapitulos);
+        toolbar = view.findViewById(R.id.topAppBar);
 
         CollapsingToolbarLayout collapsingToolbar = view.findViewById(R.id.collapsingToolbar);
         collapsingToolbar.setTitle("");
 
         if (anime != null) {
             textNombre.setText(anime.getNombre());
-            textDescripcion.setText(anime.getDescripcion());
             textAnho.setText(getString(R.string.release_year) + ": " + anime.getAnhoSalida());
             textCategorias.setText(getString(R.string.categories) + ": " + anime.getCategorias());
             textCapitulos.setText(getString(R.string.episodes) + ": " + anime.getCapTotales());
+
+            fullText = anime.getDescripcion();
+            mostrarTextoColapsado();
 
             Glide.with(this)
                     .load(anime.getImagen() + imageVersion)
@@ -90,7 +103,7 @@ public class AnimeDetailFragment extends Fragment {
                     .centerCrop()
                     .into(imageViewAnime);
 
-            textLeerMas.setOnClickListener(v -> {
+            /*textLeerMas.setOnClickListener(v -> {
                 if (isExpanded) {
                     textDescripcion.setMaxLines(5);
                     textDescripcion.setEllipsize(TextUtils.TruncateAt.END);
@@ -101,7 +114,90 @@ public class AnimeDetailFragment extends Fragment {
                     textLeerMas.setText(getString(R.string.read_less));
                 }
                 isExpanded = !isExpanded;
-            });
+            });*/
+
         }
+
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requireActivity().getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
+    }
+    private void mostrarTextoColapsado() {
+        textDescripcion.setMaxLines(5);
+        textDescripcion.setEllipsize(TextUtils.TruncateAt.END);
+
+        String truncated = obtenerTextoTruncado(textDescripcion, fullText, 5);
+        String leerMas = " Leer más";
+        SpannableString spannable = new SpannableString(truncated + leerMas);
+
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View widget) {
+                mostrarTextoExpandido();
+            }
+
+            @Override
+            public void updateDrawState(@NonNull TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setColor(ContextCompat.getColor(getContext(), R.color.pastelAccent));
+                ds.setUnderlineText(false);
+                ds.setTypeface(Typeface.DEFAULT_BOLD);
+            }
+        };
+
+        spannable.setSpan(clickableSpan, truncated.length(), spannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        textDescripcion.setText(spannable);
+        textDescripcion.setMovementMethod(LinkMovementMethod.getInstance());
+
+        isExpanded = false;
+    }
+
+    private void mostrarTextoExpandido() {
+        String leerMenos = " Leer menos";
+        SpannableString spannable = new SpannableString(fullText + leerMenos);
+
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View widget) {
+                mostrarTextoColapsado();
+            }
+
+            @Override
+            public void updateDrawState(@NonNull TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setColor(ContextCompat.getColor(getContext(), R.color.pastelAccent));
+                ds.setUnderlineText(false);
+                ds.setTypeface(Typeface.DEFAULT_BOLD);
+            }
+        };
+
+        spannable.setSpan(clickableSpan, fullText.length(), spannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        textDescripcion.setText(spannable);
+        textDescripcion.setMovementMethod(LinkMovementMethod.getInstance());
+
+        isExpanded = true;
+    }
+
+    private String obtenerTextoTruncado(MaterialTextView textView, String text, int maxLines) {
+        TextPaint textPaint = textView.getPaint();
+        int width = textView.getWidth();
+
+        if (width <= 0) {
+            textView.post(() -> mostrarTextoColapsado());
+            return "";
+        }
+
+        StaticLayout staticLayout = StaticLayout.Builder
+                .obtain(text, 0, text.length(), textPaint, width)
+                .setMaxLines(maxLines)
+                .setEllipsize(TextUtils.TruncateAt.END)
+                .build();
+
+        int endIndex = staticLayout.getLineEnd(maxLines - 1);
+        return text.substring(0, Math.min(endIndex, text.length())).trim();
     }
 }

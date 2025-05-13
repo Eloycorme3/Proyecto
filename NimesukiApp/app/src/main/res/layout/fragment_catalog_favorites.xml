@@ -12,7 +12,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-
         app:boxCornerRadiusTopStart="50dp"
         app:boxCornerRadiusTopEnd="50dp"
         app:boxCornerRadiusBottomStart="50dp"

@@ -11,13 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.models.vo.Anime;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.textview.MaterialTextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,7 +27,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 public class AnimeRandomFragment extends Fragment {
 
     private ImageView imageViewAnime;
-    private TextView textNombre, textDescripcion, textLeerMas,
+    private MaterialTextView textNombre, textDescripcion, textLeerMas,
             textAnho, textCategorias, textCapitulos;
     private String imageVersion = "?v=2";
 

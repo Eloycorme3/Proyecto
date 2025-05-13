@@ -23,7 +23,6 @@ import java.util.ArrayList;
 
 public class CatalogFragment extends Fragment {
     private ArrayList<Anime> listaAnimes = new ArrayList<>();
-
     private OnAnimeSelectedListener listener;
     AnimeAdapter adapter;
 
