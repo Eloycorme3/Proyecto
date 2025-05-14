@@ -37,18 +37,9 @@ public class ListaAnimesFavoritosActivity extends AppCompatActivity implements C
             nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
 
             if (nombreUsuarioLogueado != null) {
-                boolean fromCatalog = getIntent().getBooleanExtra("fromCatalog", false);
-                if (fromCatalog) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container_favoritos, new CatalogFavoritesFragment())
-                            .addToBackStack(null)
-                            .commit();
-                } else {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container_favoritos, new CatalogFavoritesFragment())
-                            .commit();
-                }
-
+                getSupportFragmentManager().beginTransaction()
+                       .replace(R.id.fragment_container_favoritos, new CatalogFavoritesFragment())
+                       .commit();
                 bottomNavigationView.setSelectedItemId(R.id.nav_favorites);
                 bottomNavigationView.setVisibility(VISIBLE);
             } else {
@@ -76,12 +67,14 @@ public class ListaAnimesFavoritosActivity extends AppCompatActivity implements C
                 ActivityOptions options = ActivityOptions
                         .makeCustomAnimation(this, R.anim.slide_in_right, R.anim.slide_out_left);
                 startActivity(intent, options.toBundle());
+                finish();
                 return true;
             } else if (itemId == R.id.nav_profile) {
                 Intent intent = new Intent(this, VistaPerfil.class);
                 ActivityOptions options = ActivityOptions
                         .makeCustomAnimation(this, R.anim.slide_in_right, R.anim.slide_out_left);
                 startActivity(intent, options.toBundle());
+                finish();
                 return true;
             }
 

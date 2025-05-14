@@ -73,21 +73,18 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
                 return true;
             } else if (itemId == R.id.nav_favorites) {
                 Intent intent = new Intent(MainActivity.this, ListaAnimesFavoritosActivity.class);
-                intent.putExtra("fromCatalog", true);
                 ActivityOptions options = ActivityOptions
                         .makeCustomAnimation(this, R.anim.slide_in_right, R.anim.slide_out_left);
                 startActivity(intent, options.toBundle());
                 return true;
             } else if (itemId == R.id.nav_random) {
                 Intent intent = new Intent(MainActivity.this, AnimeRandomView.class);
-                intent.putExtra("fromCatalog", true);
                 ActivityOptions options = ActivityOptions
                         .makeCustomAnimation(this, R.anim.slide_in_right, R.anim.slide_out_left);
                 startActivity(intent, options.toBundle());
                 return true;
             } else if (itemId == R.id.nav_profile) {
                 Intent intent = new Intent(MainActivity.this, VistaPerfil.class);
-                intent.putExtra("fromCatalog", true);
                 ActivityOptions options = ActivityOptions
                         .makeCustomAnimation(this, R.anim.slide_in_right, R.anim.slide_out_left);
                 startActivity(intent, options.toBundle());

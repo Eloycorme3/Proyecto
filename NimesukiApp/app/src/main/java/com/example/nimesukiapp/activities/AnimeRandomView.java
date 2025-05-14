@@ -68,6 +68,7 @@ public class AnimeRandomView extends AppCompatActivity {
                 ActivityOptions options = ActivityOptions
                         .makeCustomAnimation(this, R.anim.slide_in_left, R.anim.slide_out_right);
                 startActivity(intent, options.toBundle());
+                finish();
                 return true;
             } else if (itemId == R.id.nav_random) {
                 obtenerYMostrarAnimeRandom();
@@ -77,6 +78,7 @@ public class AnimeRandomView extends AppCompatActivity {
                 ActivityOptions options = ActivityOptions
                         .makeCustomAnimation(this, R.anim.slide_in_right, R.anim.slide_out_left);
                 startActivity(intent, options.toBundle());
+                finish();
                 return true;
             }
 
@@ -90,19 +92,15 @@ public class AnimeRandomView extends AppCompatActivity {
                 Anime animeAleatorio = obtenerAnimeRandom(nombreUsuarioLogueado);
 
                 runOnUiThread(() -> {
+                    if (isDestroyed() || getSupportFragmentManager().isStateSaved()) {
+                        return;
+                    }
+
                     if (animeRandomFragment == null) {
-                        animeRandomFragment = new AnimeRandomFragment(animeAleatorio);
-                        boolean fromCatalog = getIntent().getBooleanExtra("fromCatalog", false);
-                        if (fromCatalog) {
-                            getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.fragment_container_random, animeRandomFragment)
-                                    .addToBackStack(null)
-                                    .commit();
-                        } else {
-                            getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.fragment_container_random, animeRandomFragment)
-                                    .commit();
-                        }
+                        animeRandomFragment = AnimeRandomFragment.newInstance(animeAleatorio);
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragment_container_random, animeRandomFragment)
+                                .commit();
                     } else {
                         animeRandomFragment.actualizarAnime(animeAleatorio);
                     }

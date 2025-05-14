@@ -14,8 +14,8 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profileImage"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="175dp"
+            android:layout_height="175dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
@@ -30,7 +30,7 @@
             android:id="@+id/nombreLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             app:boxBackgroundColor="@color/white"
             app:boxBackgroundMode="filled"
             app:boxCornerRadiusBottomEnd="16dp"
@@ -140,6 +140,36 @@
             app:layout_constraintTop_toBottomOf="@id/layoutNuevaPass" />
 
         <LinearLayout
+            android:id="@+id/layoutTema"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/buttonCambiarPassword">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:gravity="start"
+                android:text="@string/dark_mode"
+                android:textColor="@color/pastelPrimary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switchTema"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/layoutSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -150,7 +180,7 @@
             android:padding="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/buttonCambiarPassword">
+            app:layout_constraintTop_toBottomOf="@id/layoutTema">
 
             <TextView
                 android:id="@+id/textIdioma"
@@ -173,36 +203,6 @@
                 android:padding="12dp" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/layoutTema"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layoutSpinner">
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:gravity="start"
-                android:text="@string/dark_mode"
-                android:textColor="@color/pastelPrimary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/switchTema"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end" />
-        </LinearLayout>
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonCerrarSesion"
             android:layout_width="200dp"
@@ -214,7 +214,7 @@
             app:cornerRadius="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layoutTema" />
+            app:layout_constraintTop_toBottomOf="@id/layoutSpinner" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonEliminarCuenta"

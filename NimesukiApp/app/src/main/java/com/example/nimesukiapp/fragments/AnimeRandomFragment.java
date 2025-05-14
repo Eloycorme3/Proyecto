@@ -38,6 +38,8 @@ public class AnimeRandomFragment extends Fragment {
         this.anime = anime;
     }
 
+    public AnimeRandomFragment() {}
+
     public static AnimeRandomFragment newInstance(Anime anime) {
         AnimeRandomFragment fragment = new AnimeRandomFragment(anime);
         Bundle args = new Bundle();

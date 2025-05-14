@@ -33,17 +33,9 @@ public class VistaPerfil extends AppCompatActivity {
             nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
 
             if (nombreUsuarioLogueado != null) {
-                boolean fromCatalog = getIntent().getBooleanExtra("fromCatalog", false);
-                if (fromCatalog) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container_perfil, new ProfileFragment())
-                            .addToBackStack(null)
-                            .commit();
-                } else {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container_perfil, new ProfileFragment())
-                            .commit();
-                }
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container_perfil, new ProfileFragment())
+                        .commit();
 
                 bottomNavigationView.setSelectedItemId(R.id.nav_profile);
                 bottomNavigationView.setVisibility(VISIBLE);
@@ -70,12 +62,14 @@ public class VistaPerfil extends AppCompatActivity {
                 ActivityOptions options = ActivityOptions
                         .makeCustomAnimation(this, R.anim.slide_in_left, R.anim.slide_out_right);
                 startActivity(intent, options.toBundle());
+                finish();
                 return true;
             } else if (itemId == R.id.nav_random) {
                 Intent intent = new Intent(this, AnimeRandomView.class);
                 ActivityOptions options = ActivityOptions
                         .makeCustomAnimation(this, R.anim.slide_in_left, R.anim.slide_out_right);
                 startActivity(intent, options.toBundle());
+                finish();
                 return true;
             } else if (itemId == R.id.nav_profile) {
                 return true;
