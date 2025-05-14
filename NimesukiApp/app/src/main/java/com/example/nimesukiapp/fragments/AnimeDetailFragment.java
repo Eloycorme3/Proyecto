@@ -94,7 +94,8 @@ public class AnimeDetailFragment extends Fragment {
             textCapitulos.setText(getString(R.string.episodes) + ": " + anime.getCapTotales());
 
             fullText = anime.getDescripcion();
-            mostrarTextoColapsado();
+            textDescripcion.post(() -> mostrarTextoColapsado()); // importante esperar a que tenga ancho
+
 
             Glide.with(this)
                     .load(anime.getImagen() + imageVersion)
@@ -130,8 +131,9 @@ public class AnimeDetailFragment extends Fragment {
         textDescripcion.setMaxLines(5);
         textDescripcion.setEllipsize(TextUtils.TruncateAt.END);
 
-        String truncated = obtenerTextoTruncado(textDescripcion, fullText, 5);
         String leerMas = " Leer más";
+        String truncated = obtenerTextoTruncado(textDescripcion, fullText, 5, leerMas);
+
         SpannableString spannable = new SpannableString(truncated + leerMas);
 
         ClickableSpan clickableSpan = new ClickableSpan() {
@@ -182,7 +184,7 @@ public class AnimeDetailFragment extends Fragment {
         isExpanded = true;
     }
 
-    private String obtenerTextoTruncado(MaterialTextView textView, String text, int maxLines) {
+    private String obtenerTextoTruncado(MaterialTextView textView, String text, int maxLines, String leerMas) {
         TextPaint textPaint = textView.getPaint();
         int width = textView.getWidth();
 
@@ -191,13 +193,18 @@ public class AnimeDetailFragment extends Fragment {
             return "";
         }
 
-        StaticLayout staticLayout = StaticLayout.Builder
-                .obtain(text, 0, text.length(), textPaint, width)
-                .setMaxLines(maxLines)
-                .setEllipsize(TextUtils.TruncateAt.END)
-                .build();
+        int end = text.length();
+        StaticLayout layout;
 
-        int endIndex = staticLayout.getLineEnd(maxLines - 1);
-        return text.substring(0, Math.min(endIndex, text.length())).trim();
+        do {
+            end--;
+            layout = StaticLayout.Builder
+                    .obtain(text.substring(0, end) + leerMas, 0, end + leerMas.length(), textPaint, width)
+                    .setMaxLines(maxLines)
+                    .setEllipsize(TextUtils.TruncateAt.END)
+                    .build();
+        } while (layout.getLineCount() > maxLines && end > 0);
+
+        return text.substring(0, end).trim();
     }
 }

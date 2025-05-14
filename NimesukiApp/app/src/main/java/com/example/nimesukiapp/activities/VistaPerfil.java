@@ -3,6 +3,7 @@ package com.example.nimesukiapp.activities;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -60,15 +61,21 @@ public class VistaPerfil extends AppCompatActivity {
             if (itemId == R.id.nav_catalog) {
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
+                ActivityOptions options = ActivityOptions
+                        .makeCustomAnimation(this, R.anim.slide_in_left, R.anim.slide_out_right);
+                startActivity(intent, options.toBundle());
                 return true;
             } else if (itemId == R.id.nav_favorites) {
                 Intent intent = new Intent(this, ListaAnimesFavoritosActivity.class);
-                startActivity(intent);
+                ActivityOptions options = ActivityOptions
+                        .makeCustomAnimation(this, R.anim.slide_in_left, R.anim.slide_out_right);
+                startActivity(intent, options.toBundle());
                 return true;
             } else if (itemId == R.id.nav_random) {
                 Intent intent = new Intent(this, AnimeRandomView.class);
-                startActivity(intent);
+                ActivityOptions options = ActivityOptions
+                        .makeCustomAnimation(this, R.anim.slide_in_left, R.anim.slide_out_right);
+                startActivity(intent, options.toBundle());
                 return true;
             } else if (itemId == R.id.nav_profile) {
                 return true;

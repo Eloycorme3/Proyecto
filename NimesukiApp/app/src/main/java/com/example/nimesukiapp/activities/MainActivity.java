@@ -3,6 +3,7 @@ package com.example.nimesukiapp.activities;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
+import android.app.ActivityOptions;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
                 nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
             }
 
-            if (nombreUsuarioLogueado != null) {
+            if (nombreUsuarioLogueado != null && !nombreUsuarioLogueado.isEmpty()) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container_main, new CatalogFragment())
                         .commit();
@@ -73,17 +74,23 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
             } else if (itemId == R.id.nav_favorites) {
                 Intent intent = new Intent(MainActivity.this, ListaAnimesFavoritosActivity.class);
                 intent.putExtra("fromCatalog", true);
-                startActivity(intent);
+                ActivityOptions options = ActivityOptions
+                        .makeCustomAnimation(this, R.anim.slide_in_right, R.anim.slide_out_left);
+                startActivity(intent, options.toBundle());
                 return true;
             } else if (itemId == R.id.nav_random) {
                 Intent intent = new Intent(MainActivity.this, AnimeRandomView.class);
                 intent.putExtra("fromCatalog", true);
-                startActivity(intent);
+                ActivityOptions options = ActivityOptions
+                        .makeCustomAnimation(this, R.anim.slide_in_right, R.anim.slide_out_left);
+                startActivity(intent, options.toBundle());
                 return true;
             } else if (itemId == R.id.nav_profile) {
                 Intent intent = new Intent(MainActivity.this, VistaPerfil.class);
                 intent.putExtra("fromCatalog", true);
-                startActivity(intent);
+                ActivityOptions options = ActivityOptions
+                        .makeCustomAnimation(this, R.anim.slide_in_right, R.anim.slide_out_left);
+                startActivity(intent, options.toBundle());
                 return true;
             }
 
@@ -144,6 +151,12 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
         );
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(
+                R.anim.fragment_enter,
+                R.anim.fragment_exit,
+                R.anim.fragment_pop_enter,
+                R.anim.fragment_pop_exit
+        ); //Animaciones
         transaction.replace(R.id.fragment_container_main, animeDetailFragment);
         transaction.addToBackStack(null);
         transaction.commit();

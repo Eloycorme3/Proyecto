@@ -3,6 +3,7 @@ package com.example.nimesukiapp.activities;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -64,17 +65,23 @@ public class ListaAnimesFavoritosActivity extends AppCompatActivity implements C
             if (itemId == R.id.nav_catalog) {
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
+                ActivityOptions options = ActivityOptions
+                        .makeCustomAnimation(this, R.anim.slide_in_left, R.anim.slide_out_right);
+                startActivity(intent, options.toBundle());
                 return true;
             } else if (itemId == R.id.nav_favorites) {
                 return true;
             } else if (itemId == R.id.nav_random) {
                 Intent intent = new Intent(this, AnimeRandomView.class);
-                startActivity(intent);
+                ActivityOptions options = ActivityOptions
+                        .makeCustomAnimation(this, R.anim.slide_in_right, R.anim.slide_out_left);
+                startActivity(intent, options.toBundle());
                 return true;
             } else if (itemId == R.id.nav_profile) {
                 Intent intent = new Intent(this, VistaPerfil.class);
-                startActivity(intent);
+                ActivityOptions options = ActivityOptions
+                        .makeCustomAnimation(this, R.anim.slide_in_right, R.anim.slide_out_left);
+                startActivity(intent, options.toBundle());
                 return true;
             }
 
@@ -102,6 +109,12 @@ public class ListaAnimesFavoritosActivity extends AppCompatActivity implements C
         );
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(
+                R.anim.fragment_enter,
+                R.anim.fragment_exit,
+                R.anim.fragment_pop_enter,
+                R.anim.fragment_pop_exit
+        ); //Animaciones
         transaction.replace(R.id.fragment_container_favoritos, animeFavoritoDetailFragment);
         transaction.addToBackStack(null);
         transaction.commit();

@@ -66,14 +66,7 @@ public class CatalogFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        /*
-        try {
-            obtenerActor(1); //funciona
-            obtenerPelicula(1); //funciona
-            obtenerActoresPorPelicula(1); //funciona
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }*/
+
     }
 
     @Override
@@ -84,59 +77,27 @@ public class CatalogFragment extends Fragment {
 
     private void cargarAnimes() {
         ServicioREST servicioREST = new ServicioREST();
-        servicioREST.obtenerAnimes(new ServicioREST.OnAnimesObtenidosListener() {
+        new Thread(() -> servicioREST.obtenerAnimes(new ServicioREST.OnAnimesObtenidosListener() {
             @Override
-            public void onSuccess(ArrayList<Anime> animes) {
+            public void onSuccess(final ArrayList<Anime> animes) {
                 if (isAdded()) {
                     listaAnimes.clear();
                     listaAnimes.addAll(animes);
-
-                    requireActivity().runOnUiThread(() -> {
-                        adapter.notifyDataSetChanged();
-                    });
+                    requireActivity().runOnUiThread(() ->
+                            adapter.notifyDataSetChanged()
+                    );
                 }
             }
 
             @Override
             public void onError(Exception e) {
                 if (isAdded()) {
-                    requireActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getContext(), getString(R.string.load_animes_error), Toast.LENGTH_LONG).show();
-                        }
-                    });
+                    requireActivity().runOnUiThread(() ->
+                            Toast.makeText(getContext(), getString(R.string.load_animes_error), Toast.LENGTH_LONG).show()
+                    );
                 }
             }
-        });
-    }
-
-    private void obtenerPelicula(String nombreAnime) throws IOException {
-
-        ServicioREST servicioREST = new ServicioREST();
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    try {
-                        Anime a;
-                        a = servicioREST.obtenerAnimePorNombre(nombreAnime);
-                        //Looper.prepare();
-                        requireActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getActivity().getBaseContext(), a.getNombre() + " prueba", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
+        })).start();
     }
 
     public interface OnAnimeSelectedListener {

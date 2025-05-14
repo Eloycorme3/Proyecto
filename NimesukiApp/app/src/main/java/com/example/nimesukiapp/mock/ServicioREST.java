@@ -132,24 +132,39 @@ public class ServicioREST {
         return listaAnimes;
     }
 
-    public Anime obtenerAnimePorNombre(String nombre) throws IOException {
+    public ArrayList<Anime> obtenerAnimesPorNombre(String nombre, OnAnimesObtenidosPorNombreListener listener) throws IOException {
+        ArrayList<Anime> animesPorNombre = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url("http://" + localhost + ":8088/animes/" + nombre)
                 .build();
-        Anime a = null;
-        try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-            String responseData = response.body().string();
-            if (response.isSuccessful() && response.body() != null) {
-                Gson gson = new Gson();
-                a = gson.fromJson(responseData, Anime.class);
-                Log.d("OK", "Respuesta exitosa: " + responseData);
-            } else {
-                Log.e("KO", "Respuesta no exitosa: " + response.code());
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.e("Error", "Error al realizar la solicitud", e);
+                listener.onError(e);
             }
-        }
-        return a;
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful() && response.body() != null) {
+                    animesPorNombre.clear();
+                    String responseData = response.body().string();
+                    ArrayList<Anime> animesPorNombreDevueltos;
+                    Gson gson = new Gson();
+                    animesPorNombreDevueltos = gson.fromJson(responseData, new TypeToken<ArrayList<Favoritos>>() {
+                    }.getType());
+                    animesPorNombre.addAll(animesPorNombreDevueltos);
+                    Log.d("OK", "Respuesta exitosa: " + responseData);
+                    listener.onSuccess(animesPorNombreDevueltos);
+                } else {
+                    Log.e("KO", "Respuesta no exitosa: " + response.code());
+                    listener.onError(new IOException("Respuesta no exitosa: " + response.code()));
+                }
+            }
+        });
+        return animesPorNombre;
     }
 
     public ArrayList<Favoritos> obtenerFavoritosPorUsuario(String nombreUsuario, OnAnimesFavoritosObtenidosListener listener) {
@@ -205,5 +220,12 @@ public class ServicioREST {
 
         void onError(Exception e);
     }
+
+    public interface OnAnimesObtenidosPorNombreListener {
+        void onSuccess(ArrayList<Anime> animes);
+
+        void onError(Exception e);
+    }
+
 
 }

@@ -1,6 +1,11 @@
 package com.example.nimesukiapp.fragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -10,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.LocaleList;
 import android.view.LayoutInflater;
@@ -20,6 +26,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.example.nimesukiapp.R;
+import com.example.nimesukiapp.activities.MainActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
@@ -30,7 +38,7 @@ import java.util.Locale;
 public class ProfileFragment extends Fragment {
     private TextInputEditText editTextNombre, editTextActualPass, editTextNuevaPass;
     private TextInputLayout layoutActualPass, layoutNuevaPass, layoutNombre;
-    private MaterialButton buttonCambiarNombre, buttonCambiarPassword;
+    private MaterialButton btnCambiarNombre, btnCambiarPassword, btnCerrarSesion, btnEliminarCuenta;
     private SwitchMaterial switchTema;
     private Spinner spinnerIdioma;
     private SharedPreferences prefs;
@@ -42,17 +50,19 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         editTextNombre = view.findViewById(R.id.editTextNombre);
-        buttonCambiarNombre = view.findViewById(R.id.buttonCambiarNombre);
+        btnCambiarNombre = view.findViewById(R.id.buttonCambiarNombre);
         editTextActualPass = view.findViewById(R.id.editTextActualPass);
         editTextNuevaPass = view.findViewById(R.id.editTextNuevaPass);
-        buttonCambiarPassword = view.findViewById(R.id.buttonCambiarPassword);
+        btnCambiarPassword = view.findViewById(R.id.buttonCambiarPassword);
         switchTema = view.findViewById(R.id.switchTema);
         layoutActualPass = view.findViewById(R.id.layoutActualPass);
         layoutNuevaPass = view.findViewById(R.id.layoutNuevaPass);
         layoutNombre = view.findViewById(R.id.nombreLayout);
         spinnerIdioma = view.findViewById(R.id.spinnerIdioma);
+        btnCerrarSesion = view.findViewById(R.id.buttonCerrarSesion);
+        btnEliminarCuenta = view.findViewById(R.id.buttonEliminarCuenta);
 
-        prefs = requireContext().getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
+        prefs = requireContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
 
         String nombreGuardado = prefs.getString("nombreUsuario", "");
         boolean temaOscuro = prefs.getBoolean("oscuro", false);
@@ -62,7 +72,7 @@ public class ProfileFragment extends Fragment {
         String idiomaGuardado = prefs.getString("idioma", "es");
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                requireContext(), R.array.languages, android.R.layout.simple_spinner_item
+                requireContext(), R.array.languages, R.layout.spinner_item
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerIdioma.setAdapter(adapter);
@@ -81,7 +91,7 @@ public class ProfileFragment extends Fragment {
             layoutNombre.setEndIconDrawable(isEnabled ? R.drawable.ic_edit : R.drawable.ic_done);
         });
 
-        buttonCambiarNombre.setOnClickListener(v -> {
+        btnCambiarNombre.setOnClickListener(v -> {
             //String nuevoNombre = editTextNombre.getText().toString();
 
             //cambiar nombre dao
@@ -89,7 +99,7 @@ public class ProfileFragment extends Fragment {
             //Toast.makeText(getContext(), getString(R.string.name_updated), Toast.LENGTH_SHORT).show();
         });
 
-        buttonCambiarPassword.setOnClickListener(v -> {
+        btnCambiarPassword.setOnClickListener(v -> {
             //String actual = editTextActualPass.getText().toString();
             //String nueva = editTextNuevaPass.getText().toString();
 
@@ -117,6 +127,38 @@ public class ProfileFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
+        btnCerrarSesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(requireContext())
+                        .setTitle(getString(R.string.logout))
+                        .setMessage(getString(R.string.logout_confirmation))
+                        .setPositiveButton(getString(R.string.accept), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                prefs.edit().clear().apply();
+
+                                requireActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                                requireActivity().getSupportFragmentManager().beginTransaction()
+                                        .replace(R.id.fragment_container_perfil, new LoginFragment())
+                                        .commit();
+
+                                BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottomNavigationView_perfil);
+                                bottomNavigationView.setVisibility(View.INVISIBLE);
+
+                                Intent intent = new Intent(requireActivity(), MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                requireActivity().finish();
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.cancel), null)
+                        .show();
+            }
+        });
+
 
         return view;
     }

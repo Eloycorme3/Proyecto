@@ -3,6 +3,7 @@ package com.example.nimesukiapp.activities;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,7 +25,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
 
-public class AnimeRandomView extends AppCompatActivity implements CatalogFragment.OnAnimeSelectedListener {
+public class AnimeRandomView extends AppCompatActivity {
     private String nombreUsuarioLogueado = "";
     private BottomNavigationView bottomNavigationView;
     private AnimeRandomFragment animeRandomFragment;
@@ -58,17 +59,24 @@ public class AnimeRandomView extends AppCompatActivity implements CatalogFragmen
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
+                ActivityOptions options = ActivityOptions
+                        .makeCustomAnimation(this, R.anim.slide_in_left, R.anim.slide_out_right);
+                startActivity(intent, options.toBundle());
                 return true;
             } else if (itemId == R.id.nav_favorites) {
                 Intent intent = new Intent(this, ListaAnimesFavoritosActivity.class);
-                startActivity(intent);
+                ActivityOptions options = ActivityOptions
+                        .makeCustomAnimation(this, R.anim.slide_in_left, R.anim.slide_out_right);
+                startActivity(intent, options.toBundle());
                 return true;
             } else if (itemId == R.id.nav_random) {
                 obtenerYMostrarAnimeRandom();
                 return true;
             } else if (itemId == R.id.nav_profile) {
                 Intent intent = new Intent(this, VistaPerfil.class);
-                startActivity(intent);
+                ActivityOptions options = ActivityOptions
+                        .makeCustomAnimation(this, R.anim.slide_in_right, R.anim.slide_out_left);
+                startActivity(intent, options.toBundle());
                 return true;
             }
 
@@ -84,9 +92,17 @@ public class AnimeRandomView extends AppCompatActivity implements CatalogFragmen
                 runOnUiThread(() -> {
                     if (animeRandomFragment == null) {
                         animeRandomFragment = new AnimeRandomFragment(animeAleatorio);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragment_container_random, animeRandomFragment)
-                                .commit();
+                        boolean fromCatalog = getIntent().getBooleanExtra("fromCatalog", false);
+                        if (fromCatalog) {
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.fragment_container_random, animeRandomFragment)
+                                    .addToBackStack(null)
+                                    .commit();
+                        } else {
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.fragment_container_random, animeRandomFragment)
+                                    .commit();
+                        }
                     } else {
                         animeRandomFragment.actualizarAnime(animeAleatorio);
                     }
@@ -106,17 +122,5 @@ public class AnimeRandomView extends AppCompatActivity implements CatalogFragmen
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.bottom_nav_menu, menu);
         return true;
-    }
-
-    @Override
-    public void onAnimeSelected(Anime anime) {
-        AnimeDetailFragment animeDetailFragment = AnimeDetailFragment.newInstance(
-                anime
-        );
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container_main, animeDetailFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
     }
 }

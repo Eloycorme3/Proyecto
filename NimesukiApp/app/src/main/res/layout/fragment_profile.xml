@@ -1,214 +1,233 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/pastelBackground"
     android:padding="24dp"
-    tools:context=".fragments.ProfileFragment" >
+    tools:context=".fragments.ProfileFragment">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/profileImage"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="24dp"
-        android:src="@drawable/ic_profile"
-        android:scaleType="centerCrop"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.None" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/nombreLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/profileImage"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:boxStrokeColor="@color/pastelPrimary"
-        app:boxStrokeWidth="1dp"
-        app:boxBackgroundMode="filled"
-        app:boxBackgroundColor="@color/white"
-        app:endIconMode="custom"
-        app:endIconDrawable="@drawable/ic_edit"
-        app:boxCornerRadiusTopStart="16dp"
-        app:boxCornerRadiusTopEnd="16dp"
-        app:boxCornerRadiusBottomEnd="16dp"
-        app:boxCornerRadiusBottomStart="16dp" >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextNombre"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/username"
-            android:enabled="false"
-            android:inputType="text"
-            android:focusable="true"
-            android:clickable="true" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/buttonCambiarNombre"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="@string/change_name"
-        android:textColor="#FFFFFF"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/nombreLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:cornerRadius="16dp"
-        app:backgroundTint="@color/pastelPrimary" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layoutActualPass"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/buttonCambiarNombre"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"
-        app:boxStrokeColor="@color/pastelPrimary"
-        app:boxStrokeWidth="1dp"
-        app:hintTextColor="@color/pastelPrimary"
-        app:endIconDrawable="@drawable/password_icon"
-        app:endIconMode="password_toggle"
-        app:boxBackgroundMode="filled"
-        app:boxBackgroundColor="@color/white"
-        app:boxCornerRadiusTopStart="16dp"
-        app:boxCornerRadiusTopEnd="16dp"
-        app:boxCornerRadiusBottomEnd="16dp"
-        app:boxCornerRadiusBottomStart="16dp" >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextActualPass"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/current_password"
-            android:inputType="textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layoutNuevaPass"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/layoutActualPass"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp"
-        app:boxStrokeColor="@color/pastelPrimary"
-        app:boxStrokeWidth="1dp"
-        app:hintTextColor="@color/pastelPrimary"
-        app:endIconDrawable="@drawable/password_icon"
-        app:endIconMode="password_toggle"
-        app:boxBackgroundMode="filled"
-        app:boxBackgroundColor="@color/white"
-        app:boxCornerRadiusTopStart="16dp"
-        app:boxCornerRadiusTopEnd="16dp"
-        app:boxCornerRadiusBottomEnd="16dp"
-        app:boxCornerRadiusBottomStart="16dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextNuevaPass"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/new_password"
-            android:inputType="textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/buttonCambiarPassword"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="@string/change_password"
-        android:textColor="#FFFFFF"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/layoutNuevaPass"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:cornerRadius="16dp"
-        app:backgroundTint="@color/pastelPrimary" />
-
-    <LinearLayout
-        android:id="@+id/layoutTema"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="14dp"
-        app:layout_constraintTop_toBottomOf="@id/buttonCambiarPassword"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:gravity="center_vertical">
+        android:background="@color/pastelBackground">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/dark_mode"
-            android:textColor="@color/pastelPrimary"
-            android:textSize="16sp"
-            android:textStyle="bold"
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profileImage"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:gravity="start" />
-
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/switchTema"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:background="@color/pastelBackground"
-        app:layout_constraintTop_toBottomOf="@id/layoutTema"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="10dp"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:id="@+id/textIdioma"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Idioma"
-            android:textColor="@color/pastelPrimary"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginEnd="16dp"
-            android:gravity="start" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_profile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.None" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutIdioma"
+            android:id="@+id/nombreLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:boxStrokeColor="@color/pastelPrimary"
-            app:boxStrokeWidth="1dp"
-            app:hintTextColor="@color/pastelPrimary"
-            app:boxBackgroundMode="outline"
+            android:layout_marginTop="16dp"
             app:boxBackgroundColor="@color/white"
-            app:boxCornerRadiusTopStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
+            app:boxBackgroundMode="filled"
             app:boxCornerRadiusBottomEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp" >
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxStrokeColor="@color/pastelPrimary"
+            app:boxStrokeWidth="0dp"
+            app:endIconDrawable="@drawable/ic_edit"
+            app:endIconMode="custom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profileImage">
 
-            <android.widget.Spinner
-                android:id="@+id/spinnerIdioma"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextNombre"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:entries="@array/languages" />
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:enabled="false"
+                android:focusable="true"
+                android:hint="@string/username"
+                android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonCambiarNombre"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/change_name"
+            android:textColor="#FFFFFF"
+            app:backgroundTint="@color/pastelPrimary"
+            app:cornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/nombreLayout" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutActualPass"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            app:boxBackgroundColor="@color/white"
+            app:boxBackgroundMode="filled"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxStrokeColor="@color/pastelPrimary"
+            app:boxStrokeWidth="0dp"
+            app:endIconDrawable="@drawable/password_icon"
+            app:endIconMode="password_toggle"
+            app:hintTextColor="@color/pastelPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/buttonCambiarNombre">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextActualPass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/current_password"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutNuevaPass"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:boxBackgroundColor="@color/white"
+            app:boxBackgroundMode="filled"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxStrokeColor="@color/pastelPrimary"
+            app:boxStrokeWidth="0dp"
+            app:endIconDrawable="@drawable/password_icon"
+            app:endIconMode="password_toggle"
+            app:hintTextColor="@color/pastelPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutActualPass">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextNuevaPass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/new_password"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonCambiarPassword"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/change_password"
+            android:textColor="#FFFFFF"
+            app:backgroundTint="@color/pastelPrimary"
+            app:cornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutNuevaPass" />
+
+        <LinearLayout
+            android:id="@+id/layoutSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@color/pastelBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/buttonCambiarPassword">
+
+            <TextView
+                android:id="@+id/textIdioma"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:gravity="start"
+                android:text="Idioma"
+                android:textColor="@color/pastelPrimary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spinnerIdioma"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/spinner_background"
+                android:entries="@array/languages"
+                android:padding="12dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutTema"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutSpinner">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:gravity="start"
+                android:text="@string/dark_mode"
+                android:textColor="@color/pastelPrimary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switchTema"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonCerrarSesion"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="@string/logout"
+            android:layout_marginTop="32dp"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/pastelSecondary"
+            app:cornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutTema" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonEliminarCuenta"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/delete_account"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/pastelAccent"
+            app:cornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/buttonCerrarSesion" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

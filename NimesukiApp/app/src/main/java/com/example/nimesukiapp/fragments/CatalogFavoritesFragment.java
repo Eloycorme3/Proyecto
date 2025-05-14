@@ -30,7 +30,7 @@ public class CatalogFavoritesFragment extends Fragment {
     private ArrayList<Favoritos> listaAnimesFavoritos = new ArrayList<>();
     private OnAnimeFavoriteSelectedListener listener;
     FavoritoAdapter adapter;
-    private String nombreUSuarioLogueado = "";
+    private String nombreUsuarioLogueado = "";
     private SharedPreferences prefs;
 
     public CatalogFavoritesFragment() {
@@ -42,7 +42,7 @@ public class CatalogFavoritesFragment extends Fragment {
         ListView listView = vistaFrag.findViewById(R.id.animes_favoritos_listview);
 
         prefs = getContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
-        nombreUSuarioLogueado = prefs.getString("nombreUsuario", null);
+        nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
 
         cargarAnimesFavoritos();
 
@@ -92,60 +92,28 @@ public class CatalogFavoritesFragment extends Fragment {
 
     private void cargarAnimesFavoritos() {
         ServicioREST servicioREST = new ServicioREST();
-        servicioREST.obtenerFavoritosPorUsuario(nombreUSuarioLogueado, new ServicioREST.OnAnimesFavoritosObtenidosListener() {
-
+        new Thread(() -> servicioREST.obtenerFavoritosPorUsuario(nombreUsuarioLogueado, new ServicioREST.OnAnimesFavoritosObtenidosListener() {
             @Override
-            public void onSuccess(ArrayList<Favoritos> animesFavoritos) {
+            public void onSuccess(final ArrayList<Favoritos> animesFavoritos) {
                 if (isAdded()) {
                     listaAnimesFavoritos.clear();
                     listaAnimesFavoritos.addAll(animesFavoritos);
 
-                    requireActivity().runOnUiThread(() -> {
-                        adapter.notifyDataSetChanged();
-                    });
+                    requireActivity().runOnUiThread(() ->
+                            adapter.notifyDataSetChanged()
+                    );
                 }
             }
 
             @Override
             public void onError(Exception e) {
                 if (isAdded()) {
-                    requireActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getContext(), getString(R.string.load_favorite_anime_error), Toast.LENGTH_LONG).show();
-                        }
-                    });
+                    requireActivity().runOnUiThread(() ->
+                            Toast.makeText(getContext(), getString(R.string.load_favorite_anime_error), Toast.LENGTH_LONG).show()
+                    );
                 }
             }
-        });
-    }
-
-    private void obtenerPelicula(String nombreAnime) throws IOException {
-
-        ServicioREST servicioREST = new ServicioREST();
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    try {
-                        Anime a;
-                        a = servicioREST.obtenerAnimePorNombre(nombreAnime);
-                        //Looper.prepare();
-                        requireActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getActivity().getBaseContext(), a.getNombre() + " prueba", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
+        })).start();
     }
 
     public interface OnAnimeFavoriteSelectedListener {

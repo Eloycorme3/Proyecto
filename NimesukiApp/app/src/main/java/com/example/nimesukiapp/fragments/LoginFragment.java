@@ -100,7 +100,7 @@ public class LoginFragment extends Fragment {
                 return;
             }
 
-            servicioREST.obtenerUsuarioPorNombre(nombreUsuario, new ServicioREST.OnUsuarioObtenidoListener() {
+            new Thread(() -> servicioREST.obtenerUsuarioPorNombre(nombreUsuario, new ServicioREST.OnUsuarioObtenidoListener() {
                 @Override
                 public void onSuccess(Usuario usuario) {
                     if (usuario != null) {
@@ -144,7 +144,7 @@ public class LoginFragment extends Fragment {
                             Toast.makeText(getContext(), getString(R.string.get_user_error), Toast.LENGTH_SHORT).show()
                     );
                 }
-            });
+            })).start();
         });
         return rootView;
     }
@@ -157,7 +157,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void loginUsuario(String username, String password) {
-        servicioREST.obtenerUsuarioPorNombre(username, new ServicioREST.OnUsuarioObtenidoListener() {
+        new Thread(() -> servicioREST.obtenerUsuarioPorNombre(username, new ServicioREST.OnUsuarioObtenidoListener() {
             @Override
             public void onSuccess(Usuario usuario) {
                 if (usuario != null) {
@@ -185,6 +185,6 @@ public class LoginFragment extends Fragment {
                         Toast.makeText(getContext(), "Error al obtener el usuario", Toast.LENGTH_SHORT).show()
                 );
             }
-        });
+        })).start();
     }
 }
