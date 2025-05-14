@@ -1,5 +1,5 @@
 # Proyecto
-Este proyecto es sobre una aplicación móvil llamada Nimesuki,la cual permite a los usuarios agregar, calificar y compartir su opinión sobre sus animes favoritos.
+Este proyecto es sobre una aplicación móvil llamada Nimesuki, la cual permite a los usuarios organizar y calificar sus animes favoritos y explorar multitud de títulos interesantes de todas las épocas.
 
 ## Enlaces
 - **App Móvil:** [Nimesuki App Móvil](./NimesukiApp)
@@ -13,8 +13,8 @@ Este proyecto es sobre una aplicación móvil llamada Nimesuki,la cual permite a
   
 ## Tecnologías
 - **App Móvil:** Android Studio, Java, Material Design
-- **Backend:** Java, MySQL
-- **App de Escritorio:** Java Swing
+- **Backend:** Java, SpringBoot
+- **App de Escritorio:** Java Swing, Hibernate, FlatLaf Custom
 - **Base de Datos:** MySQL
 
 ## Instalación
