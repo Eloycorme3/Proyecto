@@ -1,5 +1,5 @@
 # Proyecto
-Este proyecto es sobre una aplicación móvil llamada Nimesuki, la cual permite a los usuarios organizar y calificar sus animes favoritos y explorar multitud de títulos interesantes de todas las épocas.
+Este proyecto es sobre una aplicación móvil llamada Nimesuki, la cual permite a los usuarios no solo organizar y calificar sus animes favoritos, sino también explorar multitud de títulos interesantes de todas las épocas.
 
 ## Enlaces
 - **App Móvil:** [Nimesuki App Móvil](./NimesukiApp)
