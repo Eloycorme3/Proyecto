@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/pastelBackground"
-    tools:context=".fragments.AnimeDetailFragment">
+    tools:context=".vista.fragments.AnimeDetailFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -28,7 +28,6 @@
                 android:id="@+id/imageViewAnime"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:contentDescription="@string/anime_image"
                 app:layout_collapseMode="parallax" />
 
             <com.google.android.material.appbar.MaterialToolbar
@@ -64,7 +63,7 @@
                 style="@style/TextAppearance.Material3.HeadlineSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:textColor="@color/pastelGray"
                 android:layout_marginBottom="16dp" />
 
             <LinearLayout
@@ -79,20 +78,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:maxLines="5"
-                    android:ellipsize="end"
-                    android:textColor="@color/black" />
-
-                <!--<com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/textLeerMas"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/read_more"
-                    android:textColor="@color/pastelAccent"
-                    android:textStyle="bold"
-                    android:paddingStart="8dp"
-                    android:clickable="true"
-                    android:focusable="true" />-->
+                    android:textColor="@color/pastelGray" />
             </LinearLayout>
 
             <com.google.android.material.textview.MaterialTextView
@@ -101,7 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/pastelGray" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textCategorias"
@@ -109,7 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/pastelGray" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textCapitulos"
@@ -117,7 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/pastelGray" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

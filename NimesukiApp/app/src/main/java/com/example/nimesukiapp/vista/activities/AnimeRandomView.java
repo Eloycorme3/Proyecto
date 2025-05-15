@@ -1,4 +1,4 @@
-package com.example.nimesukiapp.activities;
+package com.example.nimesukiapp.vista.activities;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -12,13 +12,10 @@ import android.view.MenuInflater;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.nimesukiapp.R;
-import com.example.nimesukiapp.fragments.AnimeDetailFragment;
-import com.example.nimesukiapp.fragments.AnimeRandomFragment;
-import com.example.nimesukiapp.fragments.CatalogFragment;
-import com.example.nimesukiapp.fragments.LoginFragment;
+import com.example.nimesukiapp.vista.fragments.AnimeRandomFragment;
+import com.example.nimesukiapp.vista.fragments.LoginFragment;
 import com.example.nimesukiapp.mock.ServicioREST;
 import com.example.nimesukiapp.models.vo.Anime;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

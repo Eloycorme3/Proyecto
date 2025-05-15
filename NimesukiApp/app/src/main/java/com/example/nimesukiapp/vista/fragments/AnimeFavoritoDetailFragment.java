@@ -1,4 +1,4 @@
-package com.example.nimesukiapp.fragments;
+package com.example.nimesukiapp.vista.fragments;
 
 import android.os.Bundle;
 

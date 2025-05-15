@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/pastelBackground"
     android:padding="24dp"
-    tools:context=".fragments.LoginFragment" >
+    tools:context=".vista.fragments.LoginFragment" >
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/login_image"

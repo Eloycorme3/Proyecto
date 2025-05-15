@@ -10,7 +10,7 @@
         android:id="@+id/fragment_container_random"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.example.nimesukiapp.fragments.CatalogFragment"
+        android:name="com.example.nimesukiapp.vista.fragments.CatalogFragment"
         android:layout_above="@id/bottomNavigationView_random" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

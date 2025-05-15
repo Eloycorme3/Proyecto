@@ -8,9 +8,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.LocaleList;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatDelegate;
 import java.util.Locale;
 
 public class MyApplication extends Application {
@@ -21,13 +19,9 @@ public class MyApplication extends Application {
         super.onCreate();
 
         SharedPreferences prefs = getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
-        String idiomaGuardado = prefs.getString("idioma", "es");  // Idioma por defecto
+        String idiomaGuardado = prefs.getString("idioma", "es");
 
         cambiarIdioma(idiomaGuardado);
-
-        Toast.makeText(this, "Idioma cambiado a " + idiomaGuardado, Toast.LENGTH_SHORT).show();
-
-
 
         Intent intent = new Intent(ACTION_LANGUAGE_CHANGED);
         sendBroadcast(intent);
@@ -37,19 +31,16 @@ public class MyApplication extends Application {
         Locale locale = new Locale(idioma);
         Locale.setDefault(locale);
 
-        // Crear la configuración para el idioma
         Configuration configuration = getResources().getConfiguration();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            configuration.setLocales(new LocaleList(locale));  // Para versiones modernas
+            configuration.setLocales(new LocaleList(locale));
         } else {
-            configuration.setLocale(locale);  // Para versiones antiguas
+            configuration.setLocale(locale);
         }
 
-        // Cambiar la configuración del contexto global
         Context context = createConfigurationContext(configuration);
         Resources resources = context.getResources();
 
-        // Aplicar la nueva configuración de idioma
         resources.updateConfiguration(configuration, resources.getDisplayMetrics());
     }
 

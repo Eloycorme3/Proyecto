@@ -1,4 +1,4 @@
-package com.example.nimesukiapp.fragments;
+package com.example.nimesukiapp.vista.fragments;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -18,12 +18,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.nimesukiapp.R;
-import com.example.nimesukiapp.adapters.FavoritoAdapter;
+import com.example.nimesukiapp.vista.adapters.FavoritoAdapter;
 import com.example.nimesukiapp.mock.ServicioREST;
-import com.example.nimesukiapp.models.vo.Anime;
 import com.example.nimesukiapp.models.vo.Favoritos;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class CatalogFavoritesFragment extends Fragment {

@@ -27,12 +27,13 @@ import okhttp3.Response;
 public class ServicioREST {
     String localhost = "10.0.2.2";
 
-    public void registrarUsuario(Context contexto, String nombreUsuario, String contrasenha, Callback callback) {
+    public void registrarUsuario(String nombreUsuario, String contrasenha, Callback callback) {
         OkHttpClient client = new OkHttpClient();
         String json = "{"
                 + "\"nombreUsuario\":\"" + nombreUsuario + "\","
                 + "\"contrasenha\":\"" + contrasenha + "\""
                 + "}";
+        //Cambiar y pasarle objeto sin id (String json = gson.toJson(item);)
 
         RequestBody body = RequestBody.create(
                 json,

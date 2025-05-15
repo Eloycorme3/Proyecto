@@ -18,8 +18,7 @@
             android:id="@+id/anime_image"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:contentDescription=""
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.MediumComponent" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -28,6 +27,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_marginStart="12dp"
+            android:layout_marginEnd="6dp"
             android:gravity="center_vertical"
             android:textColor="@color/pastelAccent"
             android:textSize="18sp"
@@ -35,6 +35,13 @@
             android:maxLines="2"
             android:ellipsize="end" />
 
+        <ImageButton
+            android:id="@+id/favorite_button"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:background="?selectableItemBackgroundBorderless"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_favorite_selector" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
 

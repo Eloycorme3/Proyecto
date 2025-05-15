@@ -1,11 +1,9 @@
-package com.example.nimesukiapp.activities;
+package com.example.nimesukiapp.vista.activities;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 import android.app.ActivityOptions;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -20,10 +18,9 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.nimesukiapp.R;
-import com.example.nimesukiapp.application.MyApplication;
-import com.example.nimesukiapp.fragments.AnimeDetailFragment;
-import com.example.nimesukiapp.fragments.CatalogFragment;
-import com.example.nimesukiapp.fragments.LoginFragment;
+import com.example.nimesukiapp.vista.fragments.AnimeDetailFragment;
+import com.example.nimesukiapp.vista.fragments.CatalogFragment;
+import com.example.nimesukiapp.vista.fragments.LoginFragment;
 import com.example.nimesukiapp.models.vo.Anime;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -153,10 +150,9 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
                 R.anim.fragment_exit,
                 R.anim.fragment_pop_enter,
                 R.anim.fragment_pop_exit
-        ); //Animaciones
+        );
         transaction.replace(R.id.fragment_container_main, animeDetailFragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
-
 }

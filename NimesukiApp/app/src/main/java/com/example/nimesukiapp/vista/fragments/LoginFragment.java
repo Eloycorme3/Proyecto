@@ -1,4 +1,4 @@
-package com.example.nimesukiapp.fragments;
+package com.example.nimesukiapp.vista.fragments;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.nimesukiapp.R;
-import com.example.nimesukiapp.activities.MainActivity;
+import com.example.nimesukiapp.vista.activities.MainActivity;
 import com.example.nimesukiapp.mock.ServicioREST;
 import com.example.nimesukiapp.models.vo.Usuario;
 import com.google.android.material.button.MaterialButton;
@@ -100,6 +100,20 @@ public class LoginFragment extends Fragment {
                 return;
             }
 
+            if (nombreUsuario.contains(" ")) {
+                requireActivity().runOnUiThread(() ->
+                        Toast.makeText(requireContext(), getString(R.string.username_no_whitespace_error), Toast.LENGTH_SHORT).show()
+                );
+                return;
+            }
+
+            if (contrasena.contains(" ")) {
+                requireActivity().runOnUiThread(() ->
+                        Toast.makeText(requireContext(), getString(R.string.password_no_whitespace_error), Toast.LENGTH_SHORT).show()
+                );
+                return;
+            }
+
             new Thread(() -> servicioREST.obtenerUsuarioPorNombre(nombreUsuario, new ServicioREST.OnUsuarioObtenidoListener() {
                 @Override
                 public void onSuccess(Usuario usuario) {
@@ -110,7 +124,7 @@ public class LoginFragment extends Fragment {
                     } else {
                         String hashedPassword = BCrypt.hashpw(contrasena, BCrypt.gensalt());
 
-                        servicioREST.registrarUsuario(requireContext(), nombreUsuario, hashedPassword, new Callback() {
+                        servicioREST.registrarUsuario(nombreUsuario, hashedPassword, new Callback() {
                             @Override
                             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                                 requireActivity().runOnUiThread(() ->

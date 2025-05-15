@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    android:background="@color/pastelBackground"
+    android:layout_gravity="center">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/nimesuki_splash"
+        android:scaleType="centerInside"/>
+
+    <View
+        android:id="@+id/shimmer_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shimmer"
+        android:visibility="visible" />
+
+</FrameLayout>

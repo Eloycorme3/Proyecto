@@ -1,9 +1,8 @@
-package com.example.nimesukiapp.fragments;
+package com.example.nimesukiapp.vista.fragments;
 
 import static android.content.Context.MODE_PRIVATE;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,7 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.example.nimesukiapp.R;
-import com.example.nimesukiapp.activities.MainActivity;
+import com.example.nimesukiapp.vista.activities.MainActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -72,9 +71,11 @@ public class ProfileFragment extends Fragment {
         String idiomaGuardado = prefs.getString("idioma", "es");
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                requireContext(), R.array.languages, R.layout.spinner_item
+                requireContext(),
+                R.array.languages,
+                R.layout.spinner_item
         );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinnerIdioma.setAdapter(adapter);
 
         if (idiomaGuardado.equals("es")) {
@@ -103,7 +104,7 @@ public class ProfileFragment extends Fragment {
             //String actual = editTextActualPass.getText().toString();
             //String nueva = editTextNuevaPass.getText().toString();
 
-            // Aquí va la lógica para cambiar la contraseña
+            //cambiar la contraseña
         });
 
         switchTema.setOnCheckedChangeListener((buttonView, isChecked) -> {

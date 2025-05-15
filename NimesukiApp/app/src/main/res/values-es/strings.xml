@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NimesukiApp</string>
+    <string name="app_name">Nimesuki</string>
     <string name="username">Nombre de Usuario</string>
     <string name="change_name">Cambiar Nombre</string>
     <string name="current_password">Contraseña Actual</string>
@@ -11,7 +11,6 @@
     <string name="login">Iniciar sesión</string>
     <string name="register">Registrarse</string>
     <string name="search_anime">Buscar anime</string>
-    <string name="anime_image">Esta imagen del anime</string>
     <string name="read_more">Leer más</string>
     <string name="read_less">Leer menos</string>
     <string name="release_year">Año de salida</string>
@@ -39,4 +38,6 @@
     <string name="accept">Aceptar</string>
     <string name="cancel">Cancelar</string>
     <string name="delete_account">Eliminar cuenta</string>
+    <string name="username_no_whitespace_error">El nombre de usuario no puede contener espacios en blanco</string>
+    <string name="password_no_whitespace_error">La contraseña no puede contener espacios en blanco</string>
 </resources>

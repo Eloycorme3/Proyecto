@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    tools:context=".fragments.ProfileFragment">
+    tools:context=".vista.fragments.ProfileFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -199,8 +199,8 @@
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:background="@drawable/spinner_background"
-                android:entries="@array/languages"
-                android:padding="12dp" />
+                android:padding="12dp"
+                android:dropDownVerticalOffset="0dp" />
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
