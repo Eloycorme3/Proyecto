@@ -41,6 +41,7 @@
             app:boxStrokeWidth="0dp"
             app:endIconDrawable="@drawable/ic_edit"
             app:endIconMode="custom"
+            app:endIconTint="@color/pastelAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/profileImage">
@@ -84,6 +85,7 @@
             app:boxStrokeColor="@color/pastelPrimary"
             app:boxStrokeWidth="0dp"
             app:endIconDrawable="@drawable/password_icon"
+            app:endIconTint="@color/pastelAccent"
             app:endIconMode="password_toggle"
             app:hintTextColor="@color/pastelPrimary"
             app:layout_constraintEnd_toEndOf="parent"
@@ -114,6 +116,7 @@
             app:endIconDrawable="@drawable/password_icon"
             app:endIconMode="password_toggle"
             app:hintTextColor="@color/pastelPrimary"
+            app:endIconTint="@color/pastelAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layoutActualPass">

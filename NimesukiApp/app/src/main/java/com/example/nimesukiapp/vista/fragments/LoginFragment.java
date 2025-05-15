@@ -2,6 +2,7 @@ package com.example.nimesukiapp.vista.fragments;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.shape.ShapeAppearanceModel;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.Gson;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -123,8 +125,8 @@ public class LoginFragment extends Fragment {
                         );
                     } else {
                         String hashedPassword = BCrypt.hashpw(contrasena, BCrypt.gensalt());
-
-                        servicioREST.registrarUsuario(nombreUsuario, hashedPassword, new Callback() {
+                        Usuario u = new Usuario(nombreUsuario, hashedPassword);
+                        servicioREST.registrarUsuario(u, new Callback() {
                             @Override
                             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                                 requireActivity().runOnUiThread(() ->
@@ -163,10 +165,13 @@ public class LoginFragment extends Fragment {
         return rootView;
     }
 
-    public void guardarUsuarioEnPreferencias(String nombreUsuario) {
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("nombreUsuario", nombreUsuario);
+    public void guardarUsuarioEnPreferencias(Usuario usuario) {
+        SharedPreferences prefs = getContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("nombreUsuario", usuario.getNombre());
+        Gson gson = new Gson();
+        String usuarioJson = gson.toJson(usuario);
+        editor.putString("usuario_completo", usuarioJson);
         editor.apply();
     }
 
@@ -176,9 +181,8 @@ public class LoginFragment extends Fragment {
             public void onSuccess(Usuario usuario) {
                 if (usuario != null) {
                     if (BCrypt.checkpw(password, usuario.getContrasenha())) {
-                        guardarUsuarioEnPreferencias(usuario.getNombre());
+                        guardarUsuarioEnPreferencias(usuario);
                         Intent intent = new Intent(getActivity(), MainActivity.class);
-                        intent.putExtra("nombreUsuario", username);
                         startActivity(intent);
                         getActivity().finish();
                     } else {

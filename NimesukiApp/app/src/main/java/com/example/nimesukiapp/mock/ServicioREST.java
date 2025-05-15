@@ -27,13 +27,14 @@ import okhttp3.Response;
 public class ServicioREST {
     String localhost = "10.0.2.2";
 
-    public void registrarUsuario(String nombreUsuario, String contrasenha, Callback callback) {
+    public void registrarUsuario(Usuario u, Callback callback) {
         OkHttpClient client = new OkHttpClient();
-        String json = "{"
+        /*String json = "{"
                 + "\"nombreUsuario\":\"" + nombreUsuario + "\","
                 + "\"contrasenha\":\"" + contrasenha + "\""
-                + "}";
-        //Cambiar y pasarle objeto sin id (String json = gson.toJson(item);)
+                + "}";*/
+        Gson gson = new Gson();
+        String json = gson.toJson(u);
 
         RequestBody body = RequestBody.create(
                 json,
@@ -68,10 +69,10 @@ public class ServicioREST {
         return a;
     }
 
-    public void obtenerUsuarioPorNombre(String username, OnUsuarioObtenidoListener listener) {
+    public void obtenerUsuarioPorNombre(String nombreUsuario, OnUsuarioObtenidoListener listener) {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("http://" + localhost + ":8088/usuarios/" + username)
+                .url("http://" + localhost + ":8088/usuarios/" + nombreUsuario)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -86,7 +87,8 @@ public class ServicioREST {
                 if (response.isSuccessful() && response.body() != null) {
                     String responseData = response.body().string();
                     Gson gson = new Gson();
-                    Type listType = new TypeToken<List<Usuario>>() {}.getType();
+                    Type listType = new TypeToken<List<Usuario>>() {
+                    }.getType();
                     List<Usuario> usuarios = gson.fromJson(responseData, listType);
 
                     listener.onSuccess(usuarios.get(0));
@@ -133,7 +135,7 @@ public class ServicioREST {
         return listaAnimes;
     }
 
-    public ArrayList<Anime> obtenerAnimesPorNombre(String nombre, OnAnimesObtenidosPorNombreListener listener) throws IOException {
+    public ArrayList<Anime> obtenerAnimesPorNombre(String nombre, OnAnimesObtenidosPorNombreListener listener) {
         ArrayList<Anime> animesPorNombre = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -154,7 +156,7 @@ public class ServicioREST {
                     String responseData = response.body().string();
                     ArrayList<Anime> animesPorNombreDevueltos;
                     Gson gson = new Gson();
-                    animesPorNombreDevueltos = gson.fromJson(responseData, new TypeToken<ArrayList<Favoritos>>() {
+                    animesPorNombreDevueltos = gson.fromJson(responseData, new TypeToken<ArrayList<Anime>>() {
                     }.getType());
                     animesPorNombre.addAll(animesPorNombreDevueltos);
                     Log.d("OK", "Respuesta exitosa: " + responseData);
@@ -166,6 +168,41 @@ public class ServicioREST {
             }
         });
         return animesPorNombre;
+    }
+
+    public ArrayList<Favoritos> obtenerFavoritosPorNombre(String nombreUsuario, String nombreAnime, OnAnimesFavoritosObtenidosPorNombreListener listener) {
+        ArrayList<Favoritos> favoritosPorNombre = new ArrayList<>();
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("http://" + localhost + ":8088/favoritos/" + nombreUsuario + "/" + nombreAnime)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.e("Error", "Error al realizar la solicitud", e);
+                listener.onError(e);
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful() && response.body() != null) {
+                    favoritosPorNombre.clear();
+                    String responseData = response.body().string();
+                    ArrayList<Favoritos> favoritosPorNombreDevueltos;
+                    Gson gson = new Gson();
+                    favoritosPorNombreDevueltos = gson.fromJson(responseData, new TypeToken<ArrayList<Favoritos>>() {
+                    }.getType());
+                    favoritosPorNombre.addAll(favoritosPorNombreDevueltos);
+                    Log.d("OK", "Respuesta exitosa: " + responseData);
+                    listener.onSuccess(favoritosPorNombreDevueltos);
+                } else {
+                    Log.e("KO", "Respuesta no exitosa: " + response.code());
+                    listener.onError(new IOException("Respuesta no exitosa: " + response.code()));
+                }
+            }
+        });
+        return favoritosPorNombre;
     }
 
     public ArrayList<Favoritos> obtenerFavoritosPorUsuario(String nombreUsuario, OnAnimesFavoritosObtenidosListener listener) {
@@ -228,5 +265,10 @@ public class ServicioREST {
         void onError(Exception e);
     }
 
+    public interface OnAnimesFavoritosObtenidosPorNombreListener {
+        void onSuccess(ArrayList<Favoritos> favoritos);
+
+        void onError(Exception e);
+    }
 
 }

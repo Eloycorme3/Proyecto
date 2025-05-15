@@ -31,7 +31,7 @@
             android:hint="@string/search_anime"
             android:drawablePadding="8dp"
             android:inputType="text"
-            android:textColor="@color/black"
+            android:textColor="@color/pastelGray"
             android:textColorHint="@color/pastelGray" />
     </com.google.android.material.textfield.TextInputLayout>
 

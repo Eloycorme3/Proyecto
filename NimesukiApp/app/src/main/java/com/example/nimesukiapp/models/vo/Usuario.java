@@ -9,16 +9,17 @@ public class Usuario implements Serializable {
     private String contrasenha;
     private String tipo;
 
-    public Usuario(int idUsuario, String nombre, String contrasenha, String tipo) {
+    public Usuario(int idUsuario, String nombre, String contrasenha) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.contrasenha = contrasenha;
-        this.tipo = tipo;
+        this.tipo = "USER";
     }
 
     public Usuario (String nombre, String contrasenha) {
         this.nombre = nombre;
         this.contrasenha = contrasenha;
+        this.tipo = "USER";
     }
 
     public int getIdUsuario() {

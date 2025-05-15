@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -17,10 +18,14 @@ import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.vista.adapters.AnimeAdapter;
 import com.example.nimesukiapp.mock.ServicioREST;
 import com.example.nimesukiapp.models.vo.Anime;
+import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class CatalogFragment extends Fragment {
+    private ListView listView;
+    private TextInputEditText searchEditText;
     private ArrayList<Anime> listaAnimes = new ArrayList<>();
     private OnAnimeSelectedListener listener;
     AnimeAdapter adapter;
@@ -31,7 +36,8 @@ public class CatalogFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vistaFrag = inflater.inflate(R.layout.fragment_catalog, container, false);
-        ListView listView = vistaFrag.findViewById(R.id.anime_listview);
+        listView = vistaFrag.findViewById(R.id.anime_listview);
+        searchEditText = vistaFrag.findViewById(R.id.search_edit_text);
 
         cargarAnimes();
 
@@ -46,6 +52,17 @@ public class CatalogFragment extends Fragment {
                     listener.onAnimeSelected(animeSelected);
                 }
             }
+        });
+
+        searchEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
+                String textoBusqueda = searchEditText.getText().toString();
+                if (!textoBusqueda.isEmpty()) {
+                    buscarAnimes(textoBusqueda);
+                }
+                return true;
+            }
+            return false;
         });
 
         return vistaFrag;
@@ -82,6 +99,31 @@ public class CatalogFragment extends Fragment {
                 if (isAdded()) {
                     listaAnimes.clear();
                     listaAnimes.addAll(animes);
+                    requireActivity().runOnUiThread(() ->
+                            adapter.notifyDataSetChanged()
+                    );
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                if (isAdded()) {
+                    requireActivity().runOnUiThread(() ->
+                            Toast.makeText(getContext(), getString(R.string.load_animes_error), Toast.LENGTH_LONG).show()
+                    );
+                }
+            }
+        })).start();
+    }
+
+    private void buscarAnimes(String textoBusqueda) {
+        ServicioREST servicioREST = new ServicioREST();
+        new Thread(() -> servicioREST.obtenerAnimesPorNombre(textoBusqueda, new ServicioREST.OnAnimesObtenidosPorNombreListener() {
+            @Override
+            public void onSuccess(final ArrayList<Anime> animesPorNombre) {
+                if (isAdded()) {
+                    listaAnimes.clear();
+                    listaAnimes.addAll(animesPorNombre);
                     requireActivity().runOnUiThread(() ->
                             adapter.notifyDataSetChanged()
                     );

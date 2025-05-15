@@ -13,18 +13,23 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.nimesukiapp.R;
+import com.example.nimesukiapp.models.vo.Anime;
 import com.example.nimesukiapp.vista.adapters.FavoritoAdapter;
 import com.example.nimesukiapp.mock.ServicioREST;
 import com.example.nimesukiapp.models.vo.Favoritos;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 
 public class CatalogFavoritesFragment extends Fragment {
+    private ListView listView;
+    private TextInputEditText searchEditText;
     private ArrayList<Favoritos> listaAnimesFavoritos = new ArrayList<>();
     private OnAnimeFavoriteSelectedListener listener;
     FavoritoAdapter adapter;
@@ -37,7 +42,8 @@ public class CatalogFavoritesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vistaFrag = inflater.inflate(R.layout.fragment_catalog_favorites, container, false);
-        ListView listView = vistaFrag.findViewById(R.id.animes_favoritos_listview);
+        listView = vistaFrag.findViewById(R.id.animes_favoritos_listview);
+        searchEditText = vistaFrag.findViewById(R.id.search_edit_text_favorites);
 
         prefs = getContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
@@ -53,6 +59,17 @@ public class CatalogFavoritesFragment extends Fragment {
                 Favoritos animeFavoritoSelected = (Favoritos) parent.getItemAtPosition(position);
                 listener.onAnimeFavoritoSelected(animeFavoritoSelected);
             }
+        });
+
+        searchEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
+                String textoBusqueda = searchEditText.getText().toString();
+                if (!textoBusqueda.isEmpty()) {
+                    buscarAnimesFavoritos(textoBusqueda);
+                }
+                return true;
+            }
+            return false;
         });
 
         return vistaFrag;
@@ -97,6 +114,31 @@ public class CatalogFavoritesFragment extends Fragment {
                     listaAnimesFavoritos.clear();
                     listaAnimesFavoritos.addAll(animesFavoritos);
 
+                    requireActivity().runOnUiThread(() ->
+                            adapter.notifyDataSetChanged()
+                    );
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                if (isAdded()) {
+                    requireActivity().runOnUiThread(() ->
+                            Toast.makeText(getContext(), getString(R.string.load_favorite_anime_error), Toast.LENGTH_LONG).show()
+                    );
+                }
+            }
+        })).start();
+    }
+
+    private void buscarAnimesFavoritos(String textoBusqueda) {
+        ServicioREST servicioREST = new ServicioREST();
+        new Thread(() -> servicioREST.obtenerFavoritosPorNombre(nombreUsuarioLogueado, textoBusqueda, new ServicioREST.OnAnimesFavoritosObtenidosPorNombreListener() {
+            @Override
+            public void onSuccess(final ArrayList<Favoritos> favoritosPorNombre) {
+                if (isAdded()) {
+                    listaAnimesFavoritos.clear();
+                    listaAnimesFavoritos.addAll(favoritosPorNombre);
                     requireActivity().runOnUiThread(() ->
                             adapter.notifyDataSetChanged()
                     );

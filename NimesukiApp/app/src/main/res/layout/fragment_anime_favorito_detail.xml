@@ -64,7 +64,7 @@
                 style="@style/TextAppearance.Material3.HeadlineSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:textColor="@color/pastelGray"
                 android:layout_marginBottom="16dp" />
 
             <LinearLayout
@@ -81,7 +81,7 @@
                     android:layout_weight="1"
                     android:maxLines="5"
                     android:ellipsize="end"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/pastelGray" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textLeerMasFav"
@@ -101,7 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/pastelGray" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textCategoriasFav"
@@ -109,7 +109,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/pastelGray" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textCapitulosFav"
@@ -117,7 +117,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/pastelGray" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
