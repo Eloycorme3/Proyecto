@@ -6,12 +6,14 @@
     android:layout_margin="8dp"
     android:backgroundTint="@color/pastelBackground"
     app:cardCornerRadius="16dp"
-    app:cardElevation="2dp" >
+    app:cardElevation="2dp">
 
     <LinearLayout
+        android:id="@+id/layout_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:descendantFocusability="blocksDescendants"
         android:padding="8dp">
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -25,15 +27,15 @@
             android:id="@+id/anime_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="6dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
             android:gravity="center_vertical"
+            android:maxLines="2"
             android:textColor="@color/pastelAccent"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:maxLines="2"
-            android:ellipsize="end" />
+            android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/favorite_button"
@@ -41,7 +43,8 @@
             android:layout_height="match_parent"
             android:background="?selectableItemBackgroundBorderless"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_favorite_selector" />
+            android:src="@drawable/ic_favorite_selector"/>
     </LinearLayout>
+
 </com.google.android.material.card.MaterialCardView>
 

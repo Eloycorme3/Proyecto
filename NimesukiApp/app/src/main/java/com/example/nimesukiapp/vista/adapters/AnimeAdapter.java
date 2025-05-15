@@ -72,20 +72,6 @@ public class AnimeAdapter extends ArrayAdapter<Anime> {
         ImageButton favoriteButton = convertView.findViewById(R.id.favorite_button);
 
 
-        new Thread(() -> {
-            boolean isFavorite = false;
-
-            try {
-                //verificar si está en favoritos
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            boolean finalIsFavorite = isFavorite;
-
-            ((Activity) contexto).runOnUiThread(() -> favoriteButton.setSelected(finalIsFavorite));
-        }).start();
-
         favoriteButton.setOnClickListener(v -> {
             boolean currentlySelected = favoriteButton.isSelected();
             boolean newState = !currentlySelected;

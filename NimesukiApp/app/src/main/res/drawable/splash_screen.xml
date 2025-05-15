@@ -1,0 +1,10 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/pastelBackground" />
+
+    <item>
+        <bitmap
+            android:gravity="center_horizontal"
+            android:src="@drawable/nimesuki_splash" />
+    </item>
+
+</layer-list>
