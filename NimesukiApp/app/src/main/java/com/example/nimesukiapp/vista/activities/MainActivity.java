@@ -40,19 +40,25 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView_main);
 
-        if (savedInstanceState == null) {
-            if (prefs.contains("nombreUsuario")) {
-                if (prefs.contains("oscuro")) {
-                    boolean modoOscuro = prefs.getBoolean("oscuro", false);
-                    setNightMode(modoOscuro);
-                } else {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                }
-                String idioma = prefs.getString("idioma", "es");
-                cambiarIdioma(idioma);
-                nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
+        if (prefs.contains("nombreUsuario")) {
+            if (prefs.contains("oscuro")) {
+                boolean modoOscuro = prefs.getBoolean("oscuro", false);
+                setNightMode(modoOscuro);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
             }
+            String idioma = prefs.getString("idioma", "es");
+            cambiarIdioma(idioma);
+            nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
+        }
 
+        if (nombreUsuarioLogueado != null && !nombreUsuarioLogueado.isEmpty()) {
+            bottomNavigationView.setVisibility(VISIBLE);
+        } else {
+            bottomNavigationView.setVisibility(INVISIBLE);
+        }
+
+        if (savedInstanceState == null) {
             if (nombreUsuarioLogueado != null && !nombreUsuarioLogueado.isEmpty()) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container_main, new CatalogFragment())
