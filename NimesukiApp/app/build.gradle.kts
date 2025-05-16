@@ -37,6 +37,7 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.appcompat)
     implementation(libs.material)
+    implementation(libs.core.splashscreen)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.room.common.jvm)

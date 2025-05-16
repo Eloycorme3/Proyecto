@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
@@ -50,24 +51,12 @@ public class AnimeAdapter extends ArrayAdapter<Anime> {
 
         Glide.with(contexto)
                 .load(anime.getImagen() + imageVersion)
+                .format(DecodeFormat.PREFER_RGB_565)
                 .placeholder(R.drawable.placeholder)
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .error(R.drawable.ic_profile)
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model,
-                                                Target<Drawable> target, boolean isFirstResource) {
-                        Log.e("GlideError", "Fallo al cargar: " + anime.getNombre() + " → " + anime.getImagen(), e);
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model,
-                                                   Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        return false;
-                    }
-                })
                 .into(imagen);
+
 
         ImageButton favoriteButton = convertView.findViewById(R.id.favorite_button);
 

@@ -57,7 +57,6 @@
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonCambiarNombre"
             android:layout_width="200dp"

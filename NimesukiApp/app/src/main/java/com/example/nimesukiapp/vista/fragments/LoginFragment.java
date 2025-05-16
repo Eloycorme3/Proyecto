@@ -5,16 +5,19 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.method.PasswordTransformationMethod;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.nimesukiapp.R;
@@ -39,6 +42,7 @@ public class LoginFragment extends Fragment {
 
     private TextInputEditText usernameEditText, passwordEditText;
     private MaterialButton loginButton, registerButton;
+    private ImageButton toggleVisibilityButton;
     private ServicioREST servicioREST;
 
     @Override
@@ -76,6 +80,26 @@ public class LoginFragment extends Fragment {
         passwordEditText = rootView.findViewById(R.id.password_input);
         loginButton = rootView.findViewById(R.id.login_button);
         registerButton = rootView.findViewById(R.id.register_button);
+        toggleVisibilityButton = rootView.findViewById(R.id.password_toggle_button);
+
+        toggleVisibilityButton.setOnClickListener(new View.OnClickListener() {
+            boolean isPasswordVisible = false;
+
+            @Override
+            public void onClick(View v) {
+                if (isPasswordVisible) {
+                    passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    toggleVisibilityButton.setImageResource(R.drawable.ic_visibility_off);
+                } else {
+                    passwordEditText.setTransformationMethod(null);
+                    toggleVisibilityButton.setImageResource(R.drawable.ic_visibility_on);
+                }
+
+                passwordEditText.setSelection(passwordEditText.getText().length());
+
+                isPasswordVisible = !isPasswordVisible;
+            }
+        });
 
         servicioREST = new ServicioREST();
 

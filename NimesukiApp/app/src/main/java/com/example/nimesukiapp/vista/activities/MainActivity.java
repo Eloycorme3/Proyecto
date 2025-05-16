@@ -42,8 +42,12 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
 
         if (savedInstanceState == null) {
             if (prefs.contains("nombreUsuario")) {
-                boolean modoOscuroGuardado = prefs.getBoolean("oscuro", false);
-                setNightMode(modoOscuroGuardado);
+                if (prefs.contains("oscuro")) {
+                    boolean modoOscuro = prefs.getBoolean("oscuro", false);
+                    setNightMode(modoOscuro);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                }
                 String idioma = prefs.getString("idioma", "es");
                 cambiarIdioma(idioma);
                 nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
@@ -123,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
             AppCompatDelegate.setDefaultNightMode(nightMode);
         }
     }
-
 
     @Override
     protected void onResume() {

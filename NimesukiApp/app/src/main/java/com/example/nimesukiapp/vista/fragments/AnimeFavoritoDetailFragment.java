@@ -1,5 +1,6 @@
 package com.example.nimesukiapp.vista.fragments;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.models.vo.Favoritos;
@@ -85,8 +87,9 @@ public class AnimeFavoritoDetailFragment extends Fragment {
             textCategoriasFav.setText(getString(R.string.categories) + ": " + animeFav.getAnime().getCategorias());
             textCapitulosFav.setText(getString(R.string.episodes) + ": " + animeFav.getAnime().getCapTotales());
 
-            Glide.with(this)
+            Glide.with(requireContext())
                     .load(animeFav.getAnime().getImagen() + imageVersionFav)
+                    .format(DecodeFormat.PREFER_RGB_565)
                     .placeholder(R.drawable.placeholder)
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .centerCrop()

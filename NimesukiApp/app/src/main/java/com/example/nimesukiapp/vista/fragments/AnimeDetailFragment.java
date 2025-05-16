@@ -1,5 +1,6 @@
 package com.example.nimesukiapp.vista.fragments;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.models.vo.Anime;
@@ -88,12 +90,13 @@ public class AnimeDetailFragment extends Fragment {
             textCategorias.setText(getString(R.string.categories) + ": " + anime.getCategorias());
             textCapitulos.setText(getString(R.string.episodes) + ": " + anime.getCapTotales());
 
-            String  descripcion = anime.getDescripcion();
+            String descripcion = anime.getDescripcion();
             makeTextViewExpandable(textDescripcion, descripcion, 3);
 
 
-            Glide.with(this)
+            Glide.with(requireContext())
                     .load(anime.getImagen() + imageVersion)
+                    .format(DecodeFormat.PREFER_RGB_565)
                     .placeholder(R.drawable.placeholder)
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .centerCrop()
