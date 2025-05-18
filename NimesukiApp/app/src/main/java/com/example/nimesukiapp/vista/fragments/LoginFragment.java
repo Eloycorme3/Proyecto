@@ -18,6 +18,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.example.nimesukiapp.R;
@@ -25,9 +27,11 @@ import com.example.nimesukiapp.vista.activities.MainActivity;
 import com.example.nimesukiapp.mock.ServicioREST;
 import com.example.nimesukiapp.models.vo.Usuario;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.shape.ShapeAppearanceModel;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.theme.overlay.MaterialThemeOverlay;
 import com.google.gson.Gson;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -42,18 +46,20 @@ public class LoginFragment extends Fragment {
 
     private TextInputEditText usernameEditText, passwordEditText;
     private MaterialButton loginButton, registerButton;
-    private ImageButton toggleVisibilityButton;
+    private ImageButton toggleVisibilityButton, btnOpciones;
     private ServicioREST servicioREST;
+    private SharedPreferences prefs;
+    private OnLoginSuccessListener loginSuccessListener;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);
 
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
+        prefs = getContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
 
-        if (!sharedPreferences.contains("idioma")) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+        if (!prefs.contains("idioma")) {
+            SharedPreferences.Editor editor = prefs.edit();
             editor.putString("nombreUsuario", null);
             editor.putString("idioma", "es");
             editor.putBoolean("oscuro", false);
@@ -102,6 +108,12 @@ public class LoginFragment extends Fragment {
         });
 
         servicioREST = new ServicioREST();
+
+        btnOpciones = rootView.findViewById(R.id.options_button);
+
+        btnOpciones.setOnClickListener(v -> {
+            mostrarDialogoConfiguracion();
+        });
 
         loginButton.setOnClickListener(v -> {
             String username = usernameEditText.getText().toString().trim();
@@ -189,14 +201,49 @@ public class LoginFragment extends Fragment {
         return rootView;
     }
 
-    public void guardarUsuarioEnPreferencias(Usuario usuario) {
-        SharedPreferences prefs = getContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("nombreUsuario", usuario.getNombre());
-        Gson gson = new Gson();
-        String usuarioJson = gson.toJson(usuario);
-        editor.putString("usuario_completo", usuarioJson);
-        editor.apply();
+    private void mostrarDialogoConfiguracion() {
+        LayoutInflater inflater = LayoutInflater.from(requireContext());
+        View view = inflater.inflate(R.layout.dialog_config, null);
+
+        TextInputEditText editNombre = view.findViewById(R.id.edit_nombre);
+        TextInputEditText editContrasena = view.findViewById(R.id.edit_contrasena);
+        TextInputEditText editIp = view.findViewById(R.id.edit_ip);
+
+        editNombre.setText(prefs.getString("nombreBD", ""));
+        editContrasena.setText(prefs.getString("contrasenhaBD", ""));
+        editIp.setText(prefs.getString("ip", ""));
+
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle(getString(R.string.configuration))
+                .setView(view)
+                .setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.dismiss())
+                .setPositiveButton(R.string.save, (dialog, which) -> {
+                    String nombre = editNombre.getText().toString();
+                    String contrasena = editContrasena.getText().toString();
+                    String ip = editIp.getText().toString();
+
+                    prefs = requireContext().getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("nombreBD", nombre);
+                    editor.putString("contrasenhaBD", contrasena);
+                    editor.putString("ip", ip);
+                    editor.apply();
+                })
+                .show();
+    }
+
+    public interface OnLoginSuccessListener {
+        void onLoginSuccess(Usuario usuario);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof OnLoginSuccessListener) {
+            loginSuccessListener = (OnLoginSuccessListener) context;
+        } else {
+            loginSuccessListener = null;
+        }
     }
 
     private void loginUsuario(String username, String password) {
@@ -205,10 +252,7 @@ public class LoginFragment extends Fragment {
             public void onSuccess(Usuario usuario) {
                 if (usuario != null) {
                     if (BCrypt.checkpw(password, usuario.getContrasenha())) {
-                        guardarUsuarioEnPreferencias(usuario);
-                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                        startActivity(intent);
-                        getActivity().finish();
+                        loginSuccessListener.onLoginSuccess(usuario);
                     } else {
                         requireActivity().runOnUiThread(() ->
                                 Toast.makeText(getContext(), "Contraseña incorrecta", Toast.LENGTH_SHORT).show()

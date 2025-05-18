@@ -8,6 +8,18 @@
     android:padding="24dp"
     tools:context=".vista.fragments.LoginFragment">
 
+    <ImageButton
+        android:id="@+id/options_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_config"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/pastelAccent" />
+
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/login_image"
         android:layout_width="150dp"
@@ -64,15 +76,15 @@
         android:id="@+id/password_toggle_button"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Mostrar/ocultar contraseña"
         android:layout_marginTop="8dp"
         android:layout_marginRight="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Mostrar/ocultar contraseña"
         android:src="@drawable/ic_visibility_off"
-        app:tint="@color/pastelAccent"
         app:layout_constraintBottom_toBottomOf="@id/password_layout"
         app:layout_constraintEnd_toEndOf="@id/password_layout"
-        app:layout_constraintTop_toTopOf="@id/password_layout" />
+        app:layout_constraintTop_toTopOf="@id/password_layout"
+        app:tint="@color/pastelAccent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/login_button"

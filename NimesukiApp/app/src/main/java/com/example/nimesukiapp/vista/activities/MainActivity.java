@@ -7,26 +7,30 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.LocaleList;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.nimesukiapp.R;
+import com.example.nimesukiapp.models.vo.Usuario;
 import com.example.nimesukiapp.vista.fragments.AnimeDetailFragment;
 import com.example.nimesukiapp.vista.fragments.CatalogFragment;
 import com.example.nimesukiapp.vista.fragments.LoginFragment;
 import com.example.nimesukiapp.models.vo.Anime;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
 
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements CatalogFragment.OnAnimeSelectedListener {
+public class MainActivity extends AppCompatActivity implements CatalogFragment.OnAnimeSelectedListener, LoginFragment.OnLoginSuccessListener {
     private String nombreUsuarioLogueado = "";
     private BottomNavigationView bottomNavigationView;
     private SharedPreferences prefs;
@@ -50,6 +54,25 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
             String idioma = prefs.getString("idioma", "es");
             cambiarIdioma(idioma);
             nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+
+            Locale defaultLocale;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                defaultLocale = Resources.getSystem().getConfiguration().getLocales().get(0);
+            } else {
+                defaultLocale = Resources.getSystem().getConfiguration().locale;
+            }
+
+            Locale.setDefault(defaultLocale);
+            Configuration config = getResources().getConfiguration();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                config.setLocales(new LocaleList(defaultLocale));
+            } else {
+                config.setLocale(defaultLocale);
+            }
+
+            getResources().updateConfiguration(config, getResources().getDisplayMetrics());
         }
 
         if (nombreUsuarioLogueado != null && !nombreUsuarioLogueado.isEmpty()) {
@@ -63,13 +86,10 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container_main, new CatalogFragment())
                         .commit();
-                bottomNavigationView.setSelectedItemId(R.id.nav_catalog);
-                bottomNavigationView.setVisibility(VISIBLE);
             } else {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container_main, new LoginFragment())
                         .commit();
-                bottomNavigationView.setVisibility(INVISIBLE);
             }
         }
 
@@ -163,5 +183,26 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
         transaction.replace(R.id.fragment_container_main, animeDetailFragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    @Override
+    public void onLoginSuccess(Usuario usuario) {
+        runOnUiThread(() -> {
+            guardarUsuarioEnPreferencias(usuario);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container_main, new CatalogFragment())
+                    .commit();
+            bottomNavigationView.setVisibility(View.VISIBLE);
+        });
+    }
+
+    public void guardarUsuarioEnPreferencias(Usuario usuario) {
+        SharedPreferences prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("nombreUsuario", usuario.getNombre());
+        Gson gson = new Gson();
+        String usuarioJson = gson.toJson(usuario);
+        editor.putString("usuario_completo", usuarioJson);
+        editor.apply();
     }
 }

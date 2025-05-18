@@ -3,10 +3,12 @@ package com.example.nimesukiapp.vista.fragments;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -140,18 +142,10 @@ public class ProfileFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 prefs.edit().clear().apply();
 
-                                requireActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-                                requireActivity().getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.fragment_container_perfil, new LoginFragment())
-                                        .commit();
-
-                                BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottomNavigationView_perfil);
-                                bottomNavigationView.setVisibility(View.INVISIBLE);
-
                                 Intent intent = new Intent(requireActivity(), MainActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
+
                                 requireActivity().finish();
                             }
                         })
@@ -159,7 +153,6 @@ public class ProfileFragment extends Fragment {
                         .show();
             }
         });
-
 
         return view;
     }
@@ -180,7 +173,6 @@ public class ProfileFragment extends Fragment {
 
         getActivity().recreate();
     }
-
 
     private void setNightMode(boolean isNightMode) {
         int nightMode = isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;

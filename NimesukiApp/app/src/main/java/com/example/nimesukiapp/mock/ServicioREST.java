@@ -25,7 +25,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ServicioREST {
-    String localhost = "10.0.2.2";
+    String localhost = "10.0.2.2"; //ip
 
     public void registrarUsuario(Usuario u, Callback callback) {
         OkHttpClient client = new OkHttpClient();
@@ -87,11 +87,14 @@ public class ServicioREST {
                 if (response.isSuccessful() && response.body() != null) {
                     String responseData = response.body().string();
                     Gson gson = new Gson();
-                    Type listType = new TypeToken<List<Usuario>>() {
-                    }.getType();
+                    Type listType = new TypeToken<List<Usuario>>() {}.getType();
                     List<Usuario> usuarios = gson.fromJson(responseData, listType);
 
-                    listener.onSuccess(usuarios.get(0));
+                    if (usuarios != null && !usuarios.isEmpty()) {
+                        listener.onSuccess(usuarios.get(0));
+                    } else {
+                        listener.onError(new IOException("Respuesta no exitosa: " + response.code()));
+                    }
                 } else {
                     Log.e("KO", "Respuesta no exitosa: " + response.code());
                     listener.onError(new IOException("Respuesta no exitosa: " + response.code()));

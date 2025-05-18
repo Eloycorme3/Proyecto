@@ -40,4 +40,9 @@
     <string name="delete_account">Eliminar cuenta</string>
     <string name="username_no_whitespace_error">El nombre de usuario no puede contener espacios en blanco</string>
     <string name="password_no_whitespace_error">La contraseña no puede contener espacios en blanco</string>
+    <string name="configuration">Configuración</string>
+    <string name="save">Guardar</string>
+    <string name="hint_nombre">Nombre</string>
+    <string name="hint_contrasena">Contraseña</string>
+    <string name="hint_direccion_ip">Dirección IP</string>
 </resources>
