@@ -1,5 +1,6 @@
 package com.example.nimesukiapp.mock;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.content.Context;
 
@@ -25,14 +26,31 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ServicioREST {
-    String localhost = "10.0.2.2"; //ip
+
+    private SharedPreferences prefs;
+    private String localhost = "127.0.0.1";
+
+    private String nombreBD;
+    private String contrasenhaBD;
+    private String ip;
+
+    public ServicioREST(Context context) {
+        prefs = context.getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
+        nombreBD = prefs.getString("nombreBD", "");
+        contrasenhaBD = prefs.getString("contrasenhaBD", "");
+        ip = prefs.getString("ip", "");
+    }
+
+    private String baseUrl() {
+        return "http://" + localhost + ":8088";
+    }
+
+    private String authParams() {
+        return "?ip=" + ip + "&user=" + nombreBD + "&pass=" + contrasenhaBD;
+    }
 
     public void registrarUsuario(Usuario u, Callback callback) {
         OkHttpClient client = new OkHttpClient();
-        /*String json = "{"
-                + "\"nombreUsuario\":\"" + nombreUsuario + "\","
-                + "\"contrasenha\":\"" + contrasenha + "\""
-                + "}";*/
         Gson gson = new Gson();
         String json = gson.toJson(u);
 
@@ -42,7 +60,7 @@ public class ServicioREST {
         );
 
         Request request = new Request.Builder()
-                .url("http://" + localhost + "8088/usuarios")
+                .url(baseUrl() + "/usuarios" + authParams())
                 .post(body)
                 .build();
 
@@ -52,8 +70,9 @@ public class ServicioREST {
     public Anime obtenerAnimeNoFavorito(String nombreUsuario) throws IOException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("http://" + localhost + ":8088/animes/no-favoritos/" + nombreUsuario)
+                .url(baseUrl() + "/animes/no-favoritos/" + nombreUsuario + authParams())
                 .build();
+
         Anime a = null;
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
@@ -72,7 +91,7 @@ public class ServicioREST {
     public void obtenerUsuarioPorNombre(String nombreUsuario, OnUsuarioObtenidoListener listener) {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("http://" + localhost + ":8088/usuarios/" + nombreUsuario)
+                .url(baseUrl() + "/usuarios/" + nombreUsuario + authParams())
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -87,7 +106,8 @@ public class ServicioREST {
                 if (response.isSuccessful() && response.body() != null) {
                     String responseData = response.body().string();
                     Gson gson = new Gson();
-                    Type listType = new TypeToken<List<Usuario>>() {}.getType();
+                    Type listType = new TypeToken<List<Usuario>>() {
+                    }.getType();
                     List<Usuario> usuarios = gson.fromJson(responseData, listType);
 
                     if (usuarios != null && !usuarios.isEmpty()) {
@@ -107,7 +127,7 @@ public class ServicioREST {
         ArrayList<Anime> listaAnimes = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("http://" + localhost + ":8088/animes")
+                .url(baseUrl() + "/animes" + authParams())
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -142,7 +162,7 @@ public class ServicioREST {
         ArrayList<Anime> animesPorNombre = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("http://" + localhost + ":8088/animes/" + nombre)
+                .url(baseUrl() + "/animes/" + nombre + authParams())
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -177,7 +197,7 @@ public class ServicioREST {
         ArrayList<Favoritos> favoritosPorNombre = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("http://" + localhost + ":8088/favoritos/" + nombreUsuario + "/" + nombreAnime)
+                .url(baseUrl() + "/favoritos/" + nombreUsuario + "/" + nombreAnime + authParams())
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -212,7 +232,7 @@ public class ServicioREST {
         ArrayList<Favoritos> listaFavoritos = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("http://" + localhost + ":8088/favoritos/" + nombreUsuario)
+                .url(baseUrl() + "/favoritos/" + nombreUsuario + authParams())
                 .build();
 
         client.newCall(request).enqueue(new Callback() {

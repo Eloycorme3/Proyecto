@@ -4,21 +4,86 @@
  */
 package proyecto.nimesuki.repositorio;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import proyecto.nimesuki.modelo.Anime;
 
 /**
  *
  * @author eloy.castro
  */
-public interface AnimeRepository extends JpaRepository<Anime, Integer> {
+public class AnimeRepository {
 
-    public List<Anime> findByNombreContaining(String nombre);
+    public List<Anime> findAll(EntityManager em) {
+        return em.createQuery("SELECT a FROM Anime a", Anime.class).getResultList();
+    }
 
-    @Query("SELECT a FROM Anime a WHERE a.idAnime NOT IN "
-            + "(SELECT f.id.anime FROM Favoritos f WHERE f.usuario.nombre = :nombreUsuario)")
-    List<Anime> findNotInFavoritosByUsuario(@Param("nombreUsuario") String nombreUsuario);
+    public List<Anime> findByNombreContaining(EntityManager em, String nombre) {
+        TypedQuery<Anime> query = em.createQuery(
+                "SELECT a FROM Anime a WHERE a.nombre LIKE :nombre", Anime.class);
+        query.setParameter("nombre", "%" + nombre + "%");
+        return query.getResultList();
+    }
+
+    public List<Anime> findNotInFavoritosByUsuario(EntityManager em, String nombreUsuario) {
+        return em.createQuery(
+                "SELECT a FROM Anime a WHERE a.idAnime NOT IN "
+                + "(SELECT f.anime.idAnime FROM Favoritos f WHERE f.usuario.nombre = :nombreUsuario)",
+                Anime.class)
+                .setParameter("nombreUsuario", nombreUsuario)
+                .getResultList();
+    }
+
+    public Anime save(EntityManager em, Anime anime) {
+        var tx = em.getTransaction();
+        try {
+            tx.begin();
+            Anime saved = em.merge(anime);
+            tx.commit();
+            return saved;
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            throw e;
+        }
+    }
+
+    public Anime findById(EntityManager em, Integer id) {
+        return em.find(Anime.class, id);
+    }
+
+    public void deleteById(EntityManager em, Integer id) {
+        var tx = em.getTransaction();
+        try {
+            tx.begin();
+            Anime a = em.find(Anime.class, id);
+            if (a != null) {
+                em.remove(a);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            throw e;
+        }
+    }
+
+    public Anime update(EntityManager em, Integer id, Anime anime) {
+        var tx = em.getTransaction();
+        try {
+            tx.begin();
+            anime.setIdAnime(id);
+            Anime updated = em.merge(anime);
+            tx.commit();
+            return updated;
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            throw e;
+        }
+    }
 }

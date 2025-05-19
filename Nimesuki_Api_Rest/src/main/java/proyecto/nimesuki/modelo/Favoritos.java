@@ -34,6 +34,7 @@ public class Favoritos implements Serializable {
     @Column
     private Integer valoracion;
 
+    @Column(name = "cap_actual")
     private Integer capActual;
 
     public Favoritos(FavoritosId id, Anime anime, Usuario usuario, Integer valoracion, Integer capActual) {

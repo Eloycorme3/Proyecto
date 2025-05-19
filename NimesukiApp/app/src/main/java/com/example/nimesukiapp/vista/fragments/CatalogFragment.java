@@ -92,7 +92,7 @@ public class CatalogFragment extends Fragment {
     }
 
     private void cargarAnimes() {
-        ServicioREST servicioREST = new ServicioREST();
+        ServicioREST servicioREST = new ServicioREST(requireContext());
         new Thread(() -> servicioREST.obtenerAnimes(new ServicioREST.OnAnimesObtenidosListener() {
             @Override
             public void onSuccess(final ArrayList<Anime> animes) {
@@ -117,7 +117,7 @@ public class CatalogFragment extends Fragment {
     }
 
     private void buscarAnimes(String textoBusqueda) {
-        ServicioREST servicioREST = new ServicioREST();
+        ServicioREST servicioREST = new ServicioREST(requireContext());
         new Thread(() -> servicioREST.obtenerAnimesPorNombre(textoBusqueda, new ServicioREST.OnAnimesObtenidosPorNombreListener() {
             @Override
             public void onSuccess(final ArrayList<Anime> animesPorNombre) {

@@ -106,7 +106,7 @@ public class CatalogFavoritesFragment extends Fragment {
     }
 
     private void cargarAnimesFavoritos() {
-        ServicioREST servicioREST = new ServicioREST();
+        ServicioREST servicioREST = new ServicioREST(requireContext());
         new Thread(() -> servicioREST.obtenerFavoritosPorUsuario(nombreUsuarioLogueado, new ServicioREST.OnAnimesFavoritosObtenidosListener() {
             @Override
             public void onSuccess(final ArrayList<Favoritos> animesFavoritos) {
@@ -132,7 +132,7 @@ public class CatalogFavoritesFragment extends Fragment {
     }
 
     private void buscarAnimesFavoritos(String textoBusqueda) {
-        ServicioREST servicioREST = new ServicioREST();
+        ServicioREST servicioREST = new ServicioREST(requireContext());
         new Thread(() -> servicioREST.obtenerFavoritosPorNombre(nombreUsuarioLogueado, textoBusqueda, new ServicioREST.OnAnimesFavoritosObtenidosPorNombreListener() {
             @Override
             public void onSuccess(final ArrayList<Favoritos> favoritosPorNombre) {

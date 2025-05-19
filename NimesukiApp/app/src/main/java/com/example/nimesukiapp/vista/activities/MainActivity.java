@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
         setContentView(R.layout.activity_main);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView_main);
-
+        nombreUsuarioLogueado = null;
         if (prefs.contains("nombreUsuario")) {
             if (prefs.contains("oscuro")) {
                 boolean modoOscuro = prefs.getBoolean("oscuro", false);

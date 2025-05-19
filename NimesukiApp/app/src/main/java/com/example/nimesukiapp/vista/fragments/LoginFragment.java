@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,8 @@ import com.google.gson.Gson;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -107,8 +110,6 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        servicioREST = new ServicioREST();
-
         btnOpciones = rootView.findViewById(R.id.options_button);
 
         btnOpciones.setOnClickListener(v -> {
@@ -152,6 +153,7 @@ public class LoginFragment extends Fragment {
                 return;
             }
 
+            servicioREST = new ServicioREST(requireContext());
             new Thread(() -> servicioREST.obtenerUsuarioPorNombre(nombreUsuario, new ServicioREST.OnUsuarioObtenidoListener() {
                 @Override
                 public void onSuccess(Usuario usuario) {
@@ -247,6 +249,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void loginUsuario(String username, String password) {
+        servicioREST = new ServicioREST(requireContext());
         new Thread(() -> servicioREST.obtenerUsuarioPorNombre(username, new ServicioREST.OnUsuarioObtenidoListener() {
             @Override
             public void onSuccess(Usuario usuario) {

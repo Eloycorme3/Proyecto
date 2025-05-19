@@ -109,7 +109,7 @@ public class AnimeRandomView extends AppCompatActivity {
     }
 
     private Anime obtenerAnimeRandom(String nombreUsuario) throws IOException {
-        ServicioREST servicioREST = new ServicioREST();
+        ServicioREST servicioREST = new ServicioREST(getBaseContext());
         return servicioREST.obtenerAnimeNoFavorito(nombreUsuario);
     }
 

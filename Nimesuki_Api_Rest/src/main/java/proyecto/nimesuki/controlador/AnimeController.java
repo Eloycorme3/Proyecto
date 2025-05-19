@@ -7,8 +7,6 @@ package proyecto.nimesuki.controlador;
 import java.util.List;
 import java.util.Random;
 import proyecto.nimesuki.modelo.Anime;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import proyecto.nimesuki.repositorio.AnimeRepository;
+import proyecto.nimesuki.servicio.AnimeService;
 
 /**
  *
@@ -28,19 +27,31 @@ import proyecto.nimesuki.repositorio.AnimeRepository;
 @RequestMapping("/animes")
 public class AnimeController {
 
-    @Autowired
-    private AnimeRepository animeRepository;
+    private final AnimeService animeService;
+
+    public AnimeController(AnimeService animeService) {
+        this.animeService = animeService;
+    }
 
     @GetMapping
-    public List<Anime> getAll() {
-        return animeRepository.findAll();
+    public List<Anime> getAll(
+            @RequestParam String ip,
+            @RequestParam String user,
+            @RequestParam String pass
+    ) {
+        return animeService.findAll(ip, user, pass);
     }
 
     @GetMapping("/{nombre}")
-    public ResponseEntity<List<Anime>> getByAnime(@PathVariable String nombre) {
+    public ResponseEntity<List<Anime>> getByAnime(
+            @RequestParam String ip,
+            @RequestParam String user,
+            @RequestParam String pass,
+            @PathVariable String nombre
+    ) {
         if (nombre != null) {
-            List<Anime> animesFiltrados = animeRepository.findByNombreContaining(nombre);
-            return ResponseEntity.ok(animesFiltrados);
+            List<Anime> animes = animeService.findByNombreContaining(ip, user, pass, nombre);
+            return ResponseEntity.ok(animes);
         } else {
             return ResponseEntity.badRequest().build();
         }
@@ -48,35 +59,52 @@ public class AnimeController {
 
     @GetMapping("/no-favoritos/{nombreUsuario}")
     public ResponseEntity<Anime> getRandomAnimeNotInFavoritos(
-            @PathVariable String nombreUsuario) {
-
-        List<Anime> animes = animeRepository.findNotInFavoritosByUsuario(nombreUsuario);
-
+            @RequestParam String ip,
+            @RequestParam String user,
+            @RequestParam String pass,
+            @PathVariable String nombreUsuario
+    ) {
+        List<Anime> animes = animeService.findNotInFavoritosByUsuario(ip, user, pass, nombreUsuario);
         if (animes.isEmpty()) {
             return ResponseEntity.ok().body(null);
         }
-
         Anime randomAnime = animes.get(new Random().nextInt(animes.size()));
         return ResponseEntity.ok(randomAnime);
     }
 
     @PostMapping
-    public Anime create(@RequestBody Anime anime) {
-        return animeRepository.save(anime);
+    public Anime create(
+            @RequestParam String ip,
+            @RequestParam String user,
+            @RequestParam String pass,
+            @RequestBody Anime anime
+    ) {
+        return animeService.save(ip, user, pass, anime);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Anime> update(@PathVariable Integer id, @RequestBody Anime anime) {
-        return animeRepository.findById(id)
-                .map(a -> {
-                    anime.setIdAnime(id);
-                    return ResponseEntity.ok(animeRepository.save(anime));
-                })
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Anime> update(
+            @RequestParam String ip,
+            @RequestParam String user,
+            @RequestParam String pass,
+            @PathVariable Integer id,
+            @RequestBody Anime anime
+    ) {
+        Anime a = animeService.findById(ip, user, pass, id);
+        if (a != null) {
+            return ResponseEntity.ok(animeService.update(ip, user, pass, id, anime));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
-        animeRepository.deleteById(id);
+    public void delete(
+            @RequestParam String ip,
+            @RequestParam String user,
+            @RequestParam String pass,
+            @PathVariable Integer id
+    ) {
+        animeService.delete(ip, user, pass, id);
     }
 }
