@@ -29,6 +29,7 @@ import vista.GestorNombreAnime;
 import vista.GestorUsuario;
 import vista.GestorYConsultas;
 import vista.Login;
+import vista.ReportAdmin;
 
 /**
  *
@@ -44,12 +45,15 @@ public class controladorPrincipal {
     public static GestorUsuario gestorUsuario = new GestorUsuario();
     public static GestorYConsultas consultas = new GestorYConsultas();
     public static Login login = new Login();
+    public static ReportAdmin reportAdmin = new ReportAdmin();
     static DefaultComboBoxModel modeloComboUsuariosFavoritos = new DefaultComboBoxModel();
     static DefaultComboBoxModel modeloComboAnimesFavoritos = new DefaultComboBoxModel();
     static SpinnerNumberModel modeloSpinnerValoracion = new SpinnerNumberModel();
     static SpinnerNumberModel modeloSpinnerCapActual = new SpinnerNumberModel();
     static SpinnerNumberModel modeloSpinnerCapTotales = new SpinnerNumberModel();
     static SpinnerNumberModel modeloSpinnerAnhoSalida = new SpinnerNumberModel();
+    static SpinnerNumberModel modeloSpinnerAnhoInicio = new SpinnerNumberModel();
+    static SpinnerNumberModel modeloSpinnerAnhoFin = new SpinnerNumberModel();
     public static String nombreUsuarioLogeado = "";
     public static String nombreUsuarioAdmin = "";
     public static String nombreAnimeGestor = "";
@@ -68,12 +72,18 @@ public class controladorPrincipal {
         consultas.getSpCapActual().setModel(modeloSpinnerCapActual);
         consultas.getSpCapTotales().setModel(modeloSpinnerCapTotales);
         consultas.getSpAnhoSalida().setModel(modeloSpinnerAnhoSalida);
+        reportAdmin.getSpAnhoInicioParametro().setModel(modeloSpinnerAnhoInicio);
+        reportAdmin.getSpAnhoFinParametro().setModel(modeloSpinnerAnhoFin);
         modeloSpinnerValoracion.setMinimum(0);
         modeloSpinnerValoracion.setMaximum(5);
         modeloSpinnerCapActual.setMinimum(0);
         modeloSpinnerCapTotales.setMinimum(0);
         modeloSpinnerAnhoSalida.setMinimum(1960);
         modeloSpinnerAnhoSalida.setMaximum(LocalDate.now().getYear());//En el futuro cambiarlo para animes que saldrán más adelante
+        modeloSpinnerAnhoInicio.setMinimum(1960);
+        modeloSpinnerAnhoInicio.setMaximum(LocalDate.now().getYear());
+        modeloSpinnerAnhoFin.setMinimum(1960);
+        modeloSpinnerAnhoFin.setMaximum(LocalDate.now().getYear());
     }
 
     public static void iniciarSession() {
@@ -139,6 +149,18 @@ public class controladorPrincipal {
         consultas.getSpCapTotales().setValue(0);
         consultas.getSpValoracion().setValue(0);
         consultas.getSpCapActual().setValue(0);
+    }
+    
+    public static void iniciarReportAdmin() {
+        reiniciarReportAdmin();
+        reportAdmin.setVisible(true);
+        reportAdmin.setLocationRelativeTo(null);
+    }
+    
+    public static void reiniciarReportAdmin() {
+        reportAdmin.getSpAnhoInicioParametro().setValue(1960);
+        reportAdmin.getSpAnhoFinParametro().setValue(1960);
+        reportAdmin.getTxtNombreParametro().setText("");
     }
 
     public static void iniciarModAdmin(Frame parent) {

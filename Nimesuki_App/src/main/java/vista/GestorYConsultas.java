@@ -90,6 +90,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
         menuBar = new javax.swing.JMenuBar();
         menuOpciones = new javax.swing.JMenu();
         menuItemSalir = new javax.swing.JMenuItem();
+        menuItemReport = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -584,6 +585,14 @@ public class GestorYConsultas extends javax.swing.JFrame {
         });
         menuOpciones.add(menuItemSalir);
 
+        menuItemReport.setText("Report");
+        menuItemReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemReportActionPerformed(evt);
+            }
+        });
+        menuOpciones.add(menuItemReport);
+
         menuBar.add(menuOpciones);
 
         setJMenuBar(menuBar);
@@ -729,6 +738,12 @@ public class GestorYConsultas extends javax.swing.JFrame {
         // TODO add your handling code here:
         controladorPrincipal.iniciarModAnime(this);
     }//GEN-LAST:event_btnCambiarNombreAnimeActionPerformed
+
+    private void menuItemReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemReportActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        controladorPrincipal.iniciarReportAdmin();
+    }//GEN-LAST:event_menuItemReportActionPerformed
 
     public JButton getBtnCambiarNombreAnime() {
         return btnCambiarNombreAnime;
@@ -975,6 +990,7 @@ public class GestorYConsultas extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem menuItemReport;
     private javax.swing.JMenuItem menuItemSalir;
     private javax.swing.JMenu menuOpciones;
     private javax.swing.JPanel panel;
