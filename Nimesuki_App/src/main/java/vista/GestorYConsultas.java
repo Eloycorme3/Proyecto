@@ -29,7 +29,6 @@ public class GestorYConsultas extends javax.swing.JFrame {
      */
     public GestorYConsultas() {
         initComponents();
-        controladorPrincipal.iniciarSession();
     }
 
     /**

@@ -15,6 +15,7 @@ vista\ReportAdmin.class
 modelo\dao\Dao.class
 modelo\dao\UsuarioDAO.class
 reports\ReportService.class
+config\ConfigManager.class
 vista\GestorYConsultas$9.class
 Nimesuki.class
 reports\SavePdfChooser.class
@@ -22,6 +23,7 @@ vista\GestorAdmin.class
 vista\GestorNombreAnime$2.class
 vista\GestorAdmin$4.class
 vista\GestorUsuario$6.class
+vista\ConfigDialog$1.class
 vista\Login.class
 vista\GestorYConsultas$20.class
 vista\GestorNombreAnime$3.class
@@ -30,6 +32,7 @@ vista\GestorYConsultas$3.class
 reports\SavePdfChooser$1.class
 vista\GestorYConsultas$15.class
 modelo\dao\FavoritosDAO.class
+vista\ConfigDialog.class
 vista\GestorAdmin$3.class
 vista\GestorYConsultas$18.class
 vista\GestorYConsultas$23.class
@@ -38,6 +41,7 @@ vista\GestorUsuario$7.class
 vista\GestorYConsultas$16.class
 modelo\dao\AnimeDAO.class
 vista\GestorAdmin$6.class
+vista\ConfigDialog$2.class
 vista\Login$3.class
 reports\Report.class
 vista\GestorYConsultas.class
@@ -64,6 +68,7 @@ vista\GestorAdmin$5.class
 vista\GestorNombreAnime$1.class
 controlador\controladorPrincipal.class
 vista\GestorUsuario$4.class
+vista\Login$4.class
 modelo\vo\FavoritosPK_.class
 vista\GestorUsuario.class
 vista\GestorYConsultas$13.class

@@ -19,7 +19,6 @@ public class ReportAdmin extends javax.swing.JFrame {
      */
     public ReportAdmin() {
         initComponents();
-        controladorPrincipal.iniciarSession();
     }
 
     /**

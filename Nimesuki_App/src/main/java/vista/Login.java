@@ -4,9 +4,12 @@
  */
 package vista;
 
+import config.ConfigManager;
 import controlador.controladorPrincipal;
+import java.io.IOException;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import modelo.vo.Usuario;
@@ -22,7 +25,6 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
-        controladorPrincipal.iniciarSession();
         this.getRootPane().setDefaultButton(btnLogin);
     }
 
@@ -44,6 +46,9 @@ public class Login extends javax.swing.JFrame {
         lblNombre = new javax.swing.JLabel();
         cbVerPasswordLogin = new javax.swing.JCheckBox();
         lblLogin = new javax.swing.JLabel();
+        menuBar = new javax.swing.JMenuBar();
+        menuOpciones = new javax.swing.JMenu();
+        menuItemConfig = new javax.swing.JCheckBoxMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -122,6 +127,21 @@ public class Login extends javax.swing.JFrame {
 
         getContentPane().add(panel, java.awt.BorderLayout.CENTER);
 
+        menuOpciones.setText("Opciones");
+
+        menuItemConfig.setSelected(true);
+        menuItemConfig.setText("Configuración");
+        menuItemConfig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemConfigActionPerformed(evt);
+            }
+        });
+        menuOpciones.add(menuItemConfig);
+
+        menuBar.add(menuOpciones);
+
+        setJMenuBar(menuBar);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -154,10 +174,17 @@ public class Login extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        if (!controladorPrincipal.buscarEloy()) {
+        /*if (!controladorPrincipal.buscarEloy()) {
             controladorPrincipal.iniciarDatos();
-        }
+        }*/
     }//GEN-LAST:event_formWindowOpened
+
+    private void menuItemConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemConfigActionPerformed
+        // TODO add your handling code here:
+        ConfigDialog configDialog = new ConfigDialog(null, true);
+        configDialog.setLocationRelativeTo(null);
+        configDialog.setVisible(true);
+    }//GEN-LAST:event_menuItemConfigActionPerformed
 
     public JTextField getTxtNombreLogin() {
         return txtNombreLogin;
@@ -213,6 +240,9 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel lblLogin;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblPassword;
+    private javax.swing.JMenuBar menuBar;
+    private javax.swing.JCheckBoxMenuItem menuItemConfig;
+    private javax.swing.JMenu menuOpciones;
     private javax.swing.JPanel panel;
     private javax.swing.JTextField txtNombreLogin;
     private javax.swing.JPasswordField txtPasswordLogin;

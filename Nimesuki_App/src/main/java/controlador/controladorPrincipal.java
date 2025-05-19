@@ -86,6 +86,10 @@ public class controladorPrincipal {
         modeloSpinnerAnhoFin.setMaximum(LocalDate.now().getYear());
     }
 
+    public static void buildConnection(String ip, String user, String pass) throws Exception {
+        HibernateUtil.buildSessionFactory(ip, user, pass);
+    }
+
     public static void iniciarSession() {
         session = HibernateUtil.getSessionFactory().openSession();
         //crear los objetos DAO    
@@ -150,13 +154,13 @@ public class controladorPrincipal {
         consultas.getSpValoracion().setValue(0);
         consultas.getSpCapActual().setValue(0);
     }
-    
+
     public static void iniciarReportAdmin() {
         reiniciarReportAdmin();
         reportAdmin.setVisible(true);
         reportAdmin.setLocationRelativeTo(null);
     }
-    
+
     public static void reiniciarReportAdmin() {
         reportAdmin.getSpAnhoInicioParametro().setValue(1960);
         reportAdmin.getSpAnhoFinParametro().setValue(1960);
@@ -193,20 +197,27 @@ public class controladorPrincipal {
                 JOptionPane.showMessageDialog(null, "Faltan datos");
             } else {
                 try {
-                    String nombre = login.getTxtNombreLogin().getText();
-                    u = usuDAO.buscarUsuarioPorNombre(session, nombre);
-                    if (u != null) {
-                        if (BCrypt.checkpw(contrasenha, u.getContrasenha())) {
-                            nombreUsuarioLogeado = nombre;
+                    if (usuDAO != null) {
+                        String nombre = login.getTxtNombreLogin().getText();
+                        u = usuDAO.buscarUsuarioPorNombre(session, nombre);
+                        if (u != null) {
+                            if (BCrypt.checkpw(contrasenha, u.getContrasenha())) {
+                                nombreUsuarioLogeado = nombre;
+                            } else {
+                                login.getLblLogin().setText("Login incorrecto");
+                                u = null;
+                            }
                         } else {
                             login.getLblLogin().setText("Login incorrecto");
-                            u = null;
                         }
                     } else {
-                        login.getLblLogin().setText("Login incorrecto");
+                        JOptionPane.showMessageDialog(null, "Configuración no encontrada.");
                     }
                 } catch (Exception e) {
-                    Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, "Error: ", e);
+                    JOptionPane.showMessageDialog(null,
+                            "Error al conectar con la base de datos o buscar usuario",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    u = null;
                 }
             }
         }
@@ -465,7 +476,7 @@ public class controladorPrincipal {
         }
     }
 
-    public static boolean buscarEloy() {
+    /*public static boolean buscarEloy() {
         boolean encontrado = false;
         try {
             Usuario u;
@@ -479,9 +490,9 @@ public class controladorPrincipal {
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, "Error: ", e);
         }
         return encontrado;
-    }
+    }*/
 
-    public static void iniciarDatos() {
+ /*public static void iniciarDatos() {
         try {
             HibernateUtil.beginTx(session);
             String contrasenha = "123";
@@ -495,8 +506,7 @@ public class controladorPrincipal {
             HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, "Error: ", e);
         }
-    }
-
+    }*/
     private static void vaciarTxtUsuarioFavoritos() {
         consultas.getTxtIdUsuario().setText("");
         consultas.getTxtPasswordFavoritos().setText("");

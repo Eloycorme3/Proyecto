@@ -20,7 +20,6 @@ public class GestorUsuario extends javax.swing.JFrame {
      */
     public GestorUsuario() {
         initComponents();
-        controladorPrincipal.iniciarSession();
     }
 
     /**
