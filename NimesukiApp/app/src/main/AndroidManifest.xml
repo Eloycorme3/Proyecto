@@ -1,33 +1,44 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
-        android:enableOnBackInvokedCallback="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_nimesuki"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_nimesuki_round"
-        android:screenOrientation="portrait"
         android:supportsRtl="true"
-        android:theme="@style/Theme.NimesukiApp" >
+        android:theme="@style/Theme.NimesukiApp">
         <activity
             android:name=".vista.activities.SplashActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.NimesukiApp">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".vista.activities.MainActivity" android:theme="@style/Theme.NimesukiApp"
-            android:launchMode="singleTop">
-        </activity>
-        <activity android:name=".vista.activities.AnimeRandomView" android:theme="@style/Theme.NimesukiApp"/>
-        <activity android:name=".vista.activities.ListaAnimesFavoritosActivity" android:theme="@style/Theme.NimesukiApp"/>
-        <activity android:name=".vista.activities.VistaPerfil" android:theme="@style/Theme.NimesukiApp"/>
+            android:name=".vista.activities.MainActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.NimesukiApp"></activity>
+        <activity
+            android:name=".vista.activities.AnimeRandomView"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.NimesukiApp" />
+        <activity
+            android:name=".vista.activities.ListaAnimesFavoritosActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.NimesukiApp" />
+        <activity
+            android:name=".vista.activities.VistaPerfil"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.NimesukiApp" />
     </application>
 </manifest>

@@ -5,6 +5,7 @@
     <color name="pastelPrimary">#4E8071</color>
     <color name="pastelSecondary">#C57B3A</color>
     <color name="pastelAccent">#B65C6C</color>
+    <color name="pastelRipple">#CC7A8A</color>
     <color name="pastelBackground">#2C2C2C</color>
     <color name="pastelGray">#555555</color>
     <color name="pastelInputBackground">#333333</color>

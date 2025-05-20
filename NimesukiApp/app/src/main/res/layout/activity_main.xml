@@ -15,12 +15,6 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/pastelBackground"
-        app:itemIconTint="@color/selector_icon"
-        app:itemTextColor="@color/selector_text"
-        app:menu="@menu/bottom_nav_menu"
-        app:labelVisibilityMode="labeled" />
+        style="@style/NoRippleBottomNav"
+        app:menu="@menu/bottom_nav_menu" />
 </RelativeLayout>

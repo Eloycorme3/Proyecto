@@ -82,7 +82,6 @@ public class CatalogFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
     }
 
     @Override

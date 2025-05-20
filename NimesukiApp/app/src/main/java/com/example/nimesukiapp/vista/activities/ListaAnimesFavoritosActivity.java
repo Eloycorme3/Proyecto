@@ -40,7 +40,6 @@ public class ListaAnimesFavoritosActivity extends AppCompatActivity implements C
                 getSupportFragmentManager().beginTransaction()
                        .replace(R.id.fragment_container_favoritos, new CatalogFavoritesFragment())
                        .commit();
-                bottomNavigationView.setSelectedItemId(R.id.nav_favorites);
                 bottomNavigationView.setVisibility(VISIBLE);
             } else {
                 getSupportFragmentManager().beginTransaction()

@@ -40,7 +40,6 @@ public class AnimeRandomView extends AppCompatActivity {
 
         if (nombreUsuarioLogueado != null) {
             obtenerYMostrarAnimeRandom();
-            bottomNavigationView.setSelectedItemId(R.id.nav_random);
             bottomNavigationView.setVisibility(VISIBLE);
         } else {
             getSupportFragmentManager().beginTransaction()
@@ -111,6 +110,13 @@ public class AnimeRandomView extends AppCompatActivity {
     private Anime obtenerAnimeRandom(String nombreUsuario) throws IOException {
         ServicioREST servicioREST = new ServicioREST(getBaseContext());
         return servicioREST.obtenerAnimeNoFavorito(nombreUsuario);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        bottomNavigationView.setSelectedItemId(R.id.nav_random);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

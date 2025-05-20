@@ -15,4 +15,16 @@
     <style name="Theme.NimesukiApp" parent="Base.Theme.NimesukiApp">
     </style>
 
+    <style name="NoRippleBottomNav" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemRippleColor">@android:color/transparent</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="itemIconTint">@color/selector_icon</item>
+        <item name="itemTextColor">@color/selector_text</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">75dp</item>
+        <item name="labelVisibilityMode">labeled</item>
+        <item name="itemPaddingBottom">20dp</item>
+    </style>
+
 </resources>

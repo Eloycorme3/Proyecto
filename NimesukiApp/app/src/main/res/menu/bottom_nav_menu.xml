@@ -11,7 +11,7 @@
     <item
         android:id="@+id/nav_random"
         android:icon="@drawable/ic_random"
-        android:title="@string/radom" />
+        android:title="@string/random" />
     <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/ic_profile"

@@ -2,24 +2,19 @@ package com.example.nimesukiapp.vista.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.example.nimesukiapp.R;
+import com.example.nimesukiapp.models.FavoritosCacheManager;
 import com.example.nimesukiapp.models.vo.Anime;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
@@ -28,11 +23,14 @@ import java.util.ArrayList;
 
 public class AnimeAdapter extends ArrayAdapter<Anime> {
     Context contexto;
+    FavoritosCacheManager cacheManager;
+    ArrayList<String> favoritosCache;
     private String imageVersion = "?v=2";
 
     public AnimeAdapter(Context context, ArrayList<Anime> animes) {
         super(context, 0, animes);
         contexto = context;
+        cacheManager = new FavoritosCacheManager(contexto);
     }
 
     @Override
@@ -44,11 +42,9 @@ public class AnimeAdapter extends ArrayAdapter<Anime> {
         Anime anime = getItem(position);
 
         MaterialTextView nombre = convertView.findViewById(R.id.anime_name);
-
         nombre.setText(anime.getNombre());
 
         ShapeableImageView imagen = convertView.findViewById(R.id.anime_image);
-
         Glide.with(contexto)
                 .load(anime.getImagen() + imageVersion)
                 .format(DecodeFormat.PREFER_RGB_565)
@@ -57,9 +53,12 @@ public class AnimeAdapter extends ArrayAdapter<Anime> {
                 .error(R.drawable.ic_profile)
                 .into(imagen);
 
-
         ImageButton favoriteButton = convertView.findViewById(R.id.favorite_button);
 
+        favoritosCache = cacheManager.cargarFavoritos();
+
+        boolean esFavorito = favoritosCache.contains(anime.getNombre());
+        favoriteButton.setSelected(esFavorito);
 
         favoriteButton.setOnClickListener(v -> {
             boolean currentlySelected = favoriteButton.isSelected();
@@ -69,20 +68,23 @@ public class AnimeAdapter extends ArrayAdapter<Anime> {
 
             new Thread(() -> {
                 boolean success = false;
-
                 try {
                     if (newState) {
-                        // Insertar en favoritos
+                        // TODO: Llamar método REST para añadir favorito
+                        favoritosCache.add(anime.getNombre());
                     } else {
-                        // Eliminar de favoritos
+                        // TODO: Llamar método REST para eliminar favorito
+                        favoritosCache.remove(anime.getNombre());
                     }
+
+                    cacheManager.guardarFavoritos(favoritosCache);
+
                     success = true;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
                 boolean finalSuccess = success;
-
                 ((Activity) contexto).runOnUiThread(() -> {
                     if (finalSuccess) {
                         favoriteButton.setSelected(newState);
@@ -91,8 +93,6 @@ public class AnimeAdapter extends ArrayAdapter<Anime> {
                 });
             }).start();
         });
-
-
 
         return convertView;
     }

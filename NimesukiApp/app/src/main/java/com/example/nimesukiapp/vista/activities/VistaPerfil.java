@@ -37,7 +37,6 @@ public class VistaPerfil extends AppCompatActivity {
                         .replace(R.id.fragment_container_perfil, new ProfileFragment())
                         .commit();
 
-                bottomNavigationView.setSelectedItemId(R.id.nav_profile);
                 bottomNavigationView.setVisibility(VISIBLE);
             } else {
                 getSupportFragmentManager().beginTransaction()
@@ -78,6 +77,13 @@ public class VistaPerfil extends AppCompatActivity {
             return false;
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        bottomNavigationView.setSelectedItemId(R.id.nav_profile);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
