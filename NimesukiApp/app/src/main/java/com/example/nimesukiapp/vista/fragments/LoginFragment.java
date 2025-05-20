@@ -161,42 +161,41 @@ public class LoginFragment extends Fragment {
                         requireActivity().runOnUiThread(() ->
                                 Toast.makeText(requireContext(), getString(R.string.user_exists), Toast.LENGTH_SHORT).show()
                         );
-                    } else {
-                        String hashedPassword = BCrypt.hashpw(contrasena, BCrypt.gensalt());
-                        Usuario u = new Usuario(nombreUsuario, hashedPassword);
-                        servicioREST.registrarUsuario(u, new Callback() {
-                            @Override
-                            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                                requireActivity().runOnUiThread(() ->
-                                        Toast.makeText(requireContext(), getString(R.string.network_error), Toast.LENGTH_SHORT).show()
-                                );
-                            }
-
-                            @Override
-                            public void onResponse(@NonNull Call call, @NonNull Response response) {
-                                if (response.isSuccessful()) {
-                                    Toast.makeText(requireContext(), getString(R.string.registered_successfully), Toast.LENGTH_SHORT).show();
-                                    SharedPreferences prefs = requireActivity().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
-                                    prefs.edit().putString("nombreUsuario", nombreUsuario).apply();
-
-                                    requireActivity().getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.fragment_container_main, new CatalogFragment())
-                                            .commit();
-                                } else {
-                                    requireActivity().runOnUiThread(() ->
-                                            Toast.makeText(requireContext(), getString(R.string.register_error), Toast.LENGTH_SHORT).show()
-                                    );
-                                }
-                            }
-                        });
                     }
                 }
 
                 @Override
                 public void onError(Exception e) {
-                    requireActivity().runOnUiThread(() ->
-                            Toast.makeText(getContext(), getString(R.string.get_user_error), Toast.LENGTH_SHORT).show()
-                    );
+                    String hashedPassword = BCrypt.hashpw(contrasena, BCrypt.gensalt());
+                    Usuario u = new Usuario(nombreUsuario, hashedPassword);
+                    servicioREST.registrarUsuario(u, new Callback() {
+                        @Override
+                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                            requireActivity().runOnUiThread(() ->
+                                    Toast.makeText(requireContext(), getString(R.string.network_error), Toast.LENGTH_SHORT).show()
+                            );
+                        }
+
+                        @Override
+                        public void onResponse(@NonNull Call call, @NonNull Response response) {
+                            if (response.isSuccessful()) {
+                                requireActivity().runOnUiThread(() ->
+                                        Toast.makeText(requireContext(), getString(R.string.registered_successfully), Toast.LENGTH_SHORT).show()
+                                );
+
+                                SharedPreferences prefs = requireActivity().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
+                                prefs.edit().putString("nombreUsuario", nombreUsuario).apply();
+
+                                requireActivity().getSupportFragmentManager().beginTransaction()
+                                        .replace(R.id.fragment_container_main, new CatalogFragment())
+                                        .commit();
+                            } else {
+                                requireActivity().runOnUiThread(() ->
+                                        Toast.makeText(requireContext(), getString(R.string.register_error), Toast.LENGTH_SHORT).show()
+                                );
+                            }
+                        }
+                    });
                 }
             })).start();
         });

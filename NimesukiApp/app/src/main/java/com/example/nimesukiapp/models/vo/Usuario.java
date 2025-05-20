@@ -4,22 +4,20 @@ import java.io.Serializable;
 
 public class Usuario implements Serializable {
 
-    private int idUsuario;
+    private Integer idUsuario;
     private String nombre;
     private String contrasenha;
-    private String tipo;
+    private TipoUsuario tipo = TipoUsuario.USER;
 
-    public Usuario(int idUsuario, String nombre, String contrasenha) {
-        this.idUsuario = idUsuario;
-        this.nombre = nombre;
-        this.contrasenha = contrasenha;
-        this.tipo = "USER";
+    public enum TipoUsuario {
+        ADMIN, USER
     }
 
-    public Usuario (String nombre, String contrasenha) {
+    public Usuario(String nombre, String contrasenha) {
+        this.idUsuario = null;
         this.nombre = nombre;
         this.contrasenha = contrasenha;
-        this.tipo = "USER";
+        this.tipo = TipoUsuario.USER;
     }
 
     public int getIdUsuario() {
@@ -46,11 +44,11 @@ public class Usuario implements Serializable {
         this.contrasenha = contrasenha;
     }
 
-    public String getTipo() {
+    public TipoUsuario getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(TipoUsuario tipo) {
         this.tipo = tipo;
     }
 }

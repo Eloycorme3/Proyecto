@@ -30,9 +30,9 @@ public class UsuarioRepository {
         var tx = em.getTransaction();
         try {
             tx.begin();
-            Usuario merged = em.merge(usuario);
+            em.persist(usuario);
             tx.commit();
-            return merged;
+            return usuario;
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();

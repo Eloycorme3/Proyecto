@@ -1,22 +1,30 @@
 package com.example.nimesukiapp.vista.fragments;
 
+import android.graphics.Typeface;
+import android.graphics.text.LineBreaker;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.text.Layout;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
@@ -90,9 +98,7 @@ public class AnimeDetailFragment extends Fragment {
             textCategorias.setText(getString(R.string.categories) + ": " + anime.getCategorias());
             textCapitulos.setText(getString(R.string.episodes) + ": " + anime.getCapTotales());
 
-            String descripcion = anime.getDescripcion();
-            makeTextViewExpandable(textDescripcion, descripcion, 3);
-
+            setupExpandableTextSimple(textDescripcion, anime.getDescripcion(), 140);
 
             Glide.with(requireContext())
                     .load(anime.getImagen() + imageVersion)
@@ -101,7 +107,6 @@ public class AnimeDetailFragment extends Fragment {
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .centerCrop()
                     .into(imageViewAnime);
-
         }
 
 
@@ -113,48 +118,85 @@ public class AnimeDetailFragment extends Fragment {
         });
     }
 
-    public void makeTextViewExpandable(MaterialTextView textView, String descripcion, int maxLines) {
-        textView.setMaxLines(maxLines);
-        textView.setEllipsize(TextUtils.TruncateAt.END);
 
-        ViewTreeObserver vto = textView.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+    private void setupExpandableTextSimple(MaterialTextView textView, String fullText, int maxChars) {
+        String mostrar = " Mostrar";
+        String ocultar = " Ocultar";
+        String puntos = "...";
+
+        textView.setMaxLines(Integer.MAX_VALUE);
+
+        Runnable updateText = new Runnable() {
             @Override
-            public void onGlobalLayout() {
-                textView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            public void run() {
+                if (isExpanded) {
+                    String displayText = fullText + ocultar;
+                    SpannableString spannable = new SpannableString(displayText);
 
-                if (textView.getLineCount() <= maxLines) {
-                    textView.setText(descripcion);
-                    return;
+                    int start = fullText.length() + 1;  // sin espacio delante
+                    int end = displayText.length();
+
+                    ClickableSpan clickableSpan = new ClickableSpan() {
+                        @Override
+                        public void onClick(@NonNull View widget) {
+                            isExpanded = false;
+                            run();
+                        }
+
+                        @Override
+                        public void updateDrawState(@NonNull TextPaint ds) {
+                            super.updateDrawState(ds);
+                            ds.setColor(ContextCompat.getColor(textView.getContext(), R.color.pastelPrimary));
+                            ds.setUnderlineText(true);
+                            ds.setFakeBoldText(true);
+                        }
+                    };
+
+                    spannable.setSpan(clickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    spannable.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                    textView.setText(spannable);
+                    textView.setMaxLines(Integer.MAX_VALUE);
+                    textView.setMovementMethod(LinkMovementMethod.getInstance());
+                } else {
+                    int cutOff = maxChars - (mostrar.length() + puntos.length());
+                    if (cutOff < 0) cutOff = maxChars;
+
+                    String truncated = fullText.length() > cutOff ? fullText.substring(0, cutOff) : fullText;
+
+                    String displayText = truncated + puntos + mostrar;
+                    SpannableString spannable = new SpannableString(displayText);
+
+                    int start = displayText.length() - mostrar.length() + 1;  // sin espacio delante
+                    int end = displayText.length();
+
+                    ClickableSpan clickableSpan = new ClickableSpan() {
+                        @Override
+                        public void onClick(@NonNull View widget) {
+                            isExpanded = true;
+                            run();
+                        }
+
+                        @Override
+                        public void updateDrawState(@NonNull TextPaint ds) {
+                            super.updateDrawState(ds);
+                            ds.setColor(ContextCompat.getColor(textView.getContext(), R.color.pastelPrimary));
+                            ds.setUnderlineText(true);
+                            ds.setFakeBoldText(true);
+                        }
+                    };
+
+                    spannable.setSpan(clickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    spannable.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                    textView.setText(spannable);
+                    textView.setMaxLines(maxChars);
+                    textView.setMovementMethod(LinkMovementMethod.getInstance());
                 }
-
-                int lineEndIndex = textView.getLayout().getLineEnd(maxLines - 1);
-                String truncatedText = descripcion.substring(0, lineEndIndex).trim();
-
-                SpannableString spannableCollapsed = new SpannableString(truncatedText + "..." + getString(R.string.read_more));
-                ClickableSpan expandSpan = new ClickableSpan() {
-                    @Override
-                    public void onClick(@NonNull View widget) {
-                        SpannableString spannableExpanded = new SpannableString(descripcion + getString(R.string.read_less));
-                        ClickableSpan collapseSpan = new ClickableSpan() {
-                            @Override
-                            public void onClick(@NonNull View widget) {
-                                textView.setText(spannableCollapsed);
-                                textView.setMovementMethod(LinkMovementMethod.getInstance());
-                            }
-                        };
-                        spannableExpanded.setSpan(collapseSpan, descripcion.length(),
-                                descripcion.length() + getString(R.string.read_less).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        textView.setText(spannableExpanded);
-                        textView.setMovementMethod(LinkMovementMethod.getInstance());
-                    }
-                };
-                spannableCollapsed.setSpan(expandSpan, truncatedText.length() + 3,
-                        truncatedText.length() + 3 + getString(R.string.read_more).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                textView.setText(spannableCollapsed);
-                textView.setMovementMethod(LinkMovementMethod.getInstance());
             }
-        });
+        };
+
+        updateText.run();
     }
+
 }

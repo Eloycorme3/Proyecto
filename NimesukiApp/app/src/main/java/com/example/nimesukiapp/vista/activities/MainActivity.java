@@ -291,7 +291,6 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
         });
     }
 
-
     public void guardarUsuarioEnPreferencias(Usuario usuario) {
         SharedPreferences prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
