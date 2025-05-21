@@ -4,12 +4,9 @@
  */
 package vista;
 
-import config.ConfigManager;
 import controlador.controladorPrincipal;
-import java.io.IOException;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import modelo.vo.Usuario;

@@ -7,7 +7,7 @@ import modelo.vo.Anime;
 import modelo.vo.FavoritosPK;
 import modelo.vo.Usuario;
 
-@Generated(value="org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor", date="2025-05-19T17:55:49", comments="EclipseLink-2.7.12.v20230209-rNA")
+@Generated(value="org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor", date="2025-05-21T14:44:10", comments="EclipseLink-2.7.12.v20230209-rNA")
 @StaticMetamodel(Favoritos.class)
 public class Favoritos_ { 
 

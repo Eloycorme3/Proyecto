@@ -10,7 +10,7 @@ import javax.swing.JTextField;
 
 /**
  *
- * @author Formacion3
+ * @author eloy.castro
  */
 public class ReportAdmin extends javax.swing.JFrame {
 

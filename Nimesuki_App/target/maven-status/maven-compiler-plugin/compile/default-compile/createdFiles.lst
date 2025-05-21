@@ -15,6 +15,7 @@ vista\ReportAdmin.class
 modelo\dao\Dao.class
 modelo\dao\UsuarioDAO.class
 reports\ReportService.class
+vista\ConfigDialog$3.class
 config\ConfigManager.class
 vista\GestorYConsultas$9.class
 Nimesuki.class

@@ -27,7 +27,7 @@ public class SavePdfChooser {
             public void approveSelection() {
                 File f = getSelectedFile();
                 if (f.exists() && getDialogType() == SAVE_DIALOG) {
-                    int result = JOptionPane.showConfirmDialog(this, "The file exists, overwrite?", "Existing file", JOptionPane.YES_NO_CANCEL_OPTION);
+                    int result = JOptionPane.showConfirmDialog(this, "El fichero ya existe, ¿quieres sobrescribirlo?", "Fichero existente", JOptionPane.YES_NO_CANCEL_OPTION);
                     if (result != JOptionPane.YES_OPTION) {
                         return;
                     }

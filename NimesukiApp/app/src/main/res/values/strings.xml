@@ -11,8 +11,8 @@
     <string name="login">Iniciar sesión</string>
     <string name="register">Registrarse</string>
     <string name="search_anime">Buscar anime</string>
-    <string name="read_more">Leer más</string>
-    <string name="read_less">Leer menos</string>
+    <string name="read_more">Mostrar</string>
+    <string name="read_less">Ocultar</string>
     <string name="release_year">Año de salida</string>
     <string name="categories">Categorías</string>
     <string name="episodes">Capítulos</string>

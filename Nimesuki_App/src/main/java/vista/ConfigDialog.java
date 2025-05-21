@@ -11,15 +11,18 @@ import java.io.IOException;
 import java.util.Properties;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.SwingWorker;
 
 /**
  *
- * @author Formacion3
+ * @author eloy.castro
  */
 public class ConfigDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form ConfigDialog
+     * @param parent
+     * @param modal
      */
     public ConfigDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -140,12 +143,29 @@ public class ConfigDialog extends javax.swing.JDialog {
         String pass = txtPasswordConfig.getText().trim();
 
         if (ip.isEmpty() || user.isEmpty() || pass.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Faltan Datos", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Faltan Datos", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        guardarConfigEnArchivo(ip, user, pass);
-        this.dispose();
+        txtIpConfig.setEnabled(false);
+        txtUserConfig.setEnabled(false);
+        txtPasswordConfig.setEnabled(false);
+        btnCancelarConfig.setEnabled(false);
+        btnGuardarConfig.setEnabled(false);
+        SwingWorker<Void, Void> worker = new SwingWorker<>() {
+            @Override
+            protected Void doInBackground() {
+                guardarConfigEnArchivo(ip, user, pass);
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                dispose();
+            }
+        };
+
+        worker.execute();
     }//GEN-LAST:event_btnGuardarConfigActionPerformed
 
     private void guardarConfigEnArchivo(String ip, String user, String pass) {
@@ -160,12 +180,12 @@ public class ConfigDialog extends javax.swing.JDialog {
                 props.store(fos, "Configuración conexión");
             }
 
-            JOptionPane.showMessageDialog(this, "Configuración guardada correctamente.");
+            JOptionPane.showMessageDialog(null, "Configuración guardada correctamente.");
             controladorPrincipal.iniciarSession();
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al conectar con la base de datos, sesión cerrada.",
+            JOptionPane.showMessageDialog(null,
+                    "Error al conectar con la base de datos.",
                     "Error de conexión", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -179,7 +199,7 @@ public class ConfigDialog extends javax.swing.JDialog {
                 txtPasswordConfig.setText(datos[2]);
             }
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar configuración previa: " + e.getMessage(),
+            JOptionPane.showMessageDialog(null, "Error al cargar configuración previa: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }

@@ -4,7 +4,6 @@
  */
 package controlador.factory;
 
-import javax.swing.JOptionPane;
 import modelo.dao.AnimeDAO;
 import modelo.dao.FavoritosDAO;
 import modelo.dao.UsuarioDAO;
