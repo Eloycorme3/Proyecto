@@ -20,7 +20,8 @@ public class FavoritosRepository {
     }
 
     public List<Favoritos> findByUsuarioNombre(EntityManager em, String nombreUsuario) {
-        return em.createQuery("SELECT f FROM Favoritos f WHERE f.usuario.nombre = :nombre", Favoritos.class)
+        return em.createQuery(
+                "SELECT f FROM Favoritos f WHERE f.usuario.nombre = :nombre", Favoritos.class)
                 .setParameter("nombre", nombreUsuario)
                 .getResultList();
     }
@@ -37,9 +38,24 @@ public class FavoritosRepository {
         var tx = em.getTransaction();
         try {
             tx.begin();
-            Favoritos saved = em.merge(favorito);
+            em.persist(favorito);
             tx.commit();
-            return saved;
+            return favorito;
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            throw e;
+        }
+    }
+
+    public Favoritos update(EntityManager em, Favoritos favorito) {
+        var tx = em.getTransaction();
+        try {
+            tx.begin();
+            Favoritos merged = em.merge(favorito);
+            tx.commit();
+            return merged;
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();

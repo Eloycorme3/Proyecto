@@ -99,7 +99,9 @@ public class AnimeRandomFragment extends Fragment {
 
     public void actualizarAnime(Anime nuevoAnime) {
         this.anime = nuevoAnime;
-        actualizarVistaAnime(nuevoAnime);
+        if (isAdded()) {
+            actualizarVistaAnime(nuevoAnime);
+        }
     }
 
     private void actualizarVistaAnime(Anime anime) {

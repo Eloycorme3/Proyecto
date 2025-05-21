@@ -74,10 +74,9 @@ public class UsuarioController {
             @PathVariable Integer id,
             @RequestBody Usuario usuario
     ) {
-        Usuario encontrado = usuarioService.findById(ip, user, pass, id);
-        if (encontrado != null) {
-            Usuario actualizado = usuarioService.update(ip, user, pass, id, usuario);
-            return ResponseEntity.ok(actualizado);
+        Usuario u = usuarioService.findById(ip, user, pass, id);
+        if (u != null) {
+            return ResponseEntity.ok(usuarioService.update(ip, user, pass, id, usuario));
         } else {
             return ResponseEntity.badRequest().build();
         }

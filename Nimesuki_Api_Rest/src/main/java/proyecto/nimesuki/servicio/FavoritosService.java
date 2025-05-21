@@ -87,7 +87,7 @@ public class FavoritosService {
     public Favoritos update(String ip, String user, String pass, Favoritos favorito) {
         EntityManager em = createEM(ip, user, pass);
         try {
-            return repo.save(em, favorito);
+            return repo.update(em, favorito);
         } finally {
             if (em.isOpen()) {
                 em.close();

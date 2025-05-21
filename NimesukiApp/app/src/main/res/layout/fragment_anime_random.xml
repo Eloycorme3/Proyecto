@@ -52,8 +52,8 @@
                 style="@style/TextAppearance.Material3.HeadlineSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/pastelGray"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="16dp"
+                android:textColor="@color/pastelGray" />
 
             <LinearLayout
                 android:layout_width="match_parent"

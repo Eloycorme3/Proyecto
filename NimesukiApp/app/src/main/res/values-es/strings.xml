@@ -45,4 +45,8 @@
     <string name="hint_nombre">Nombre</string>
     <string name="hint_contrasena">Contraseña</string>
     <string name="hint_direccion_ip">Dirección IP</string>
+    <string name="create_favourite_anime_error">Error añadiendo el anime a favoritos</string>
+    <string name="create_favourite_anime_successfully">Anime añadido a favoritos</string>
+    <string name="delete_favourite_anime_error">Error al eliminar el anime de favoritos</string>
+    <string name="delete_favourite_anime_successfully">Anime eliminado de favoritos</string>
 </resources>

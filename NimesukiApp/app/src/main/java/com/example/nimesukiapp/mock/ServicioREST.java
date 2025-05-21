@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 
 import com.example.nimesukiapp.models.vo.Anime;
 import com.example.nimesukiapp.models.vo.Favoritos;
+import com.example.nimesukiapp.models.vo.FavoritosId;
 import com.example.nimesukiapp.models.vo.Usuario;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -262,6 +263,62 @@ public class ServicioREST {
         });
         return listaFavoritos;
     }
+
+    public void crearFavorito(Favoritos favorito, Callback callback) {
+        OkHttpClient client = new OkHttpClient();
+        Gson gson = new Gson();
+        String json = gson.toJson(favorito);
+
+        RequestBody body = RequestBody.create(
+                json,
+                MediaType.parse("application/json")
+        );
+
+        Request request = new Request.Builder()
+                .url(baseUrl() + "/favoritos" + authParams())
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(callback);
+    }
+
+    public void modificarFavorito(Favoritos favorito, Callback callback) {
+        OkHttpClient client = new OkHttpClient();
+        Gson gson = new Gson();
+        String json = gson.toJson(favorito);
+
+        RequestBody body = RequestBody.create(
+                json,
+                MediaType.parse("application/json")
+        );
+
+        Request request = new Request.Builder()
+                .url(baseUrl() + "/favoritos" + authParams())
+                .put(body)
+                .build();
+
+        client.newCall(request).enqueue(callback);
+    }
+
+    public void eliminarFavorito(FavoritosId id, Callback callback) {
+        OkHttpClient client = new OkHttpClient();
+        Gson gson = new Gson();
+        String json = gson.toJson(id);
+
+        RequestBody body = RequestBody.create(
+                json,
+                MediaType.parse("application/json")
+        );
+
+        Request request = new Request.Builder()
+                .url(baseUrl() + "/favoritos" + authParams())
+                .delete(body)
+                .build();
+
+        client.newCall(request).enqueue(callback);
+    }
+
+
 
     public interface OnUsuarioObtenidoListener {
         void onSuccess(Usuario usuario);

@@ -39,9 +39,9 @@ public class AnimeRepository {
         var tx = em.getTransaction();
         try {
             tx.begin();
-            Anime saved = em.merge(anime);
+            em.persist(anime);
             tx.commit();
-            return saved;
+            return anime;
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
