@@ -93,13 +93,15 @@ public class ListaAnimesView extends AppCompatActivity implements ListaAnimesFra
 
             @Override
             public void onSuccess(Usuario usuario) {
-                setUserParameters();
+                runOnUiThread(() -> {
+                    setUserParameters();
+                });
             }
 
             @Override
             public void onError(Exception e) {
-                setNoUserParameters();
                 runOnUiThread(() -> {
+                    setNoUserParameters();
                     Toast.makeText(getBaseContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
                 });
             }

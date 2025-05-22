@@ -30,7 +30,6 @@ public class ServicioREST {
 
     private SharedPreferences prefs;
     private String localhost = "127.0.0.1";
-
     private String nombreBD;
     private String contrasenhaBD;
     private String ip;

@@ -63,7 +63,6 @@ public class AnimeRandomView extends AppCompatActivity {
                 Intent intent = new Intent(this, ListaAnimesView.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
-                startActivity(intent);
                 overridePendingTransition(0, 0);
                 return true;
             } else if (itemId == R.id.nav_favorites) {
