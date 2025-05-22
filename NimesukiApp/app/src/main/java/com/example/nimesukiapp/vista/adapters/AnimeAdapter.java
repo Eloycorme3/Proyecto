@@ -20,12 +20,11 @@ import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.mock.ServicioREST;
-import com.example.nimesukiapp.models.FavoritosCacheManager;
+import com.example.nimesukiapp.models.FavoritosManager;
 import com.example.nimesukiapp.models.vo.Anime;
 import com.example.nimesukiapp.models.vo.Favoritos;
 import com.example.nimesukiapp.models.vo.FavoritosId;
 import com.example.nimesukiapp.models.vo.Usuario;
-import com.example.nimesukiapp.vista.fragments.CatalogFragment;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.gson.Gson;
@@ -39,15 +38,15 @@ import okhttp3.Response;
 
 public class AnimeAdapter extends ArrayAdapter<Anime> {
     Context contexto;
-    FavoritosCacheManager cacheManager;
+    FavoritosManager cacheManager;
     ArrayList<String> favoritosCache;
     private SharedPreferences prefs;
-    private String imageVersion = "?v=2";
+    private String imageVersion = "?v=3";
 
     public AnimeAdapter(Context context, ArrayList<Anime> animes) {
         super(context, 0, animes);
         contexto = context;
-        cacheManager = new FavoritosCacheManager(contexto);
+        cacheManager = new FavoritosManager(contexto);
         prefs = contexto.getSharedPreferences("MisPreferencias", MODE_PRIVATE);
     }
 

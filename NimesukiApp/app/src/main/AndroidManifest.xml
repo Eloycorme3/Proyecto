@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".vista.activities.MainActivity"
+            android:name=".vista.activities.ListaAnimesView"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NimesukiApp"></activity>
@@ -33,11 +33,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NimesukiApp" />
         <activity
-            android:name=".vista.activities.ListaAnimesFavoritosActivity"
+            android:name=".vista.activities.ListaAnimesFavoritosView"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NimesukiApp" />
         <activity
-            android:name=".vista.activities.VistaPerfil"
+            android:name=".vista.activities.PerfilView"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NimesukiApp" />
     </application>

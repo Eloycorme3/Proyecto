@@ -3,12 +3,10 @@ package com.example.nimesukiapp.vista.fragments;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -16,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import android.os.LocaleList;
 import android.view.LayoutInflater;
@@ -27,8 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.example.nimesukiapp.R;
-import com.example.nimesukiapp.vista.activities.MainActivity;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.nimesukiapp.vista.activities.ListaAnimesView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
@@ -65,7 +61,7 @@ public class ProfileFragment extends Fragment {
 
         prefs = requireContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
 
-        String nombreGuardado = prefs.getString("nombreUsuario", "");
+        String nombreGuardado = prefs.getString("nombreUsuario", null);
         boolean temaOscuro = prefs.getBoolean("oscuro", false);
 
         switchTema.setChecked(temaOscuro);
@@ -142,7 +138,7 @@ public class ProfileFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 prefs.edit().clear().apply();
 
-                                Intent intent = new Intent(requireActivity(), MainActivity.class);
+                                Intent intent = new Intent(requireActivity(), ListaAnimesView.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
 

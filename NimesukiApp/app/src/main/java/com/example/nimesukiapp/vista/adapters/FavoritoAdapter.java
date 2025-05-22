@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class FavoritoAdapter extends ArrayAdapter<Favoritos> {
     Context contexto;
-    private String imageVersion = "?v=2";
+    private String imageVersion = "?v=3";
 
     public FavoritoAdapter(Context context, ArrayList<Favoritos> favoritos) {
         super(context, 0, favoritos);

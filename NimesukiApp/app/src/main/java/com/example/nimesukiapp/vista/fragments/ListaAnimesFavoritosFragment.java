@@ -19,7 +19,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.nimesukiapp.R;
-import com.example.nimesukiapp.models.vo.Anime;
 import com.example.nimesukiapp.vista.adapters.FavoritoAdapter;
 import com.example.nimesukiapp.mock.ServicioREST;
 import com.example.nimesukiapp.models.vo.Favoritos;
@@ -27,7 +26,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 
-public class CatalogFavoritesFragment extends Fragment {
+public class ListaAnimesFavoritosFragment extends Fragment {
     private ListView listView;
     private TextInputEditText searchEditText;
     private ArrayList<Favoritos> listaAnimesFavoritos = new ArrayList<>();
@@ -36,14 +35,14 @@ public class CatalogFavoritesFragment extends Fragment {
     private String nombreUsuarioLogueado = "";
     private SharedPreferences prefs;
 
-    public CatalogFavoritesFragment() {
+    public ListaAnimesFavoritosFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View vistaFrag = inflater.inflate(R.layout.fragment_catalog_favorites, container, false);
-        listView = vistaFrag.findViewById(R.id.animes_favoritos_listview);
-        searchEditText = vistaFrag.findViewById(R.id.search_edit_text_favorites);
+        View view = inflater.inflate(R.layout.fragment_catalog_favorites, container, false);
+        listView = view.findViewById(R.id.animes_favoritos_listview);
+        searchEditText = view.findViewById(R.id.search_edit_text_favorites);
 
         prefs = getContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
@@ -72,13 +71,13 @@ public class CatalogFavoritesFragment extends Fragment {
             return false;
         });
 
-        return vistaFrag;
+        return view;
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof CatalogFavoritesFragment.OnAnimeFavoriteSelectedListener) {
+        if (context instanceof ListaAnimesFavoritosFragment.OnAnimeFavoriteSelectedListener) {
             listener = (OnAnimeFavoriteSelectedListener) context;
         } else {
             throw new ClassCastException(context.toString() + " debe implementar OnAnimeFavoriteSelectedListener");

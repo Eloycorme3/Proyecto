@@ -3,9 +3,7 @@ package com.example.nimesukiapp.vista.fragments;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,18 +11,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.example.nimesukiapp.R;
-import com.example.nimesukiapp.vista.activities.MainActivity;
 import com.example.nimesukiapp.mock.ServicioREST;
 import com.example.nimesukiapp.models.vo.Usuario;
 import com.google.android.material.button.MaterialButton;
@@ -32,32 +26,28 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.shape.ShapeAppearanceModel;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.theme.overlay.MaterialThemeOverlay;
-import com.google.gson.Gson;
 
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
 public class LoginFragment extends Fragment {
-
     private TextInputEditText usernameEditText, passwordEditText;
     private MaterialButton loginButton, registerButton;
     private ImageButton toggleVisibilityButton, btnOpciones;
     private ServicioREST servicioREST;
     private SharedPreferences prefs;
     private OnLoginSuccessListener loginSuccessListener;
+    private OnRegisterSuccessListener registerSuccessListener;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
 
         prefs = getContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
 
@@ -69,7 +59,7 @@ public class LoginFragment extends Fragment {
             editor.apply();
         }
 
-        ShapeableImageView imageView = rootView.findViewById(R.id.login_image);
+        ShapeableImageView imageView = view.findViewById(R.id.login_image);
 
         float radius = TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
@@ -85,11 +75,11 @@ public class LoginFragment extends Fragment {
         imageView.setShapeAppearanceModel(shapeModel);
 
 
-        usernameEditText = rootView.findViewById(R.id.username_input);
-        passwordEditText = rootView.findViewById(R.id.password_input);
-        loginButton = rootView.findViewById(R.id.login_button);
-        registerButton = rootView.findViewById(R.id.register_button);
-        toggleVisibilityButton = rootView.findViewById(R.id.password_toggle_button);
+        usernameEditText = view.findViewById(R.id.username_input);
+        passwordEditText = view.findViewById(R.id.password_input);
+        loginButton = view.findViewById(R.id.login_button);
+        registerButton = view.findViewById(R.id.register_button);
+        toggleVisibilityButton = view.findViewById(R.id.password_toggle_button);
 
         toggleVisibilityButton.setOnClickListener(new View.OnClickListener() {
             boolean isPasswordVisible = false;
@@ -110,7 +100,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        btnOpciones = rootView.findViewById(R.id.options_button);
+        btnOpciones = view.findViewById(R.id.options_button);
 
         btnOpciones.setOnClickListener(v -> {
             mostrarDialogoConfiguracion();
@@ -179,16 +169,24 @@ public class LoginFragment extends Fragment {
                         @Override
                         public void onResponse(@NonNull Call call, @NonNull Response response) {
                             if (response.isSuccessful()) {
-                                requireActivity().runOnUiThread(() ->
-                                        Toast.makeText(requireContext(), getString(R.string.registered_successfully), Toast.LENGTH_SHORT).show()
-                                );
+                                new Thread(() -> servicioREST.obtenerUsuarioPorNombre(nombreUsuario, new ServicioREST.OnUsuarioObtenidoListener() {
+                                    @Override
+                                    public void onSuccess(Usuario usuario) {
+                                        if (usuario != null) {
+                                            requireActivity().runOnUiThread(() ->
+                                                    Toast.makeText(requireContext(), getString(R.string.registered_successfully), Toast.LENGTH_SHORT).show()
+                                            );
+                                            registerSuccessListener.onRegisterSuccess(usuario);
+                                        }
+                                    }
 
-                                SharedPreferences prefs = requireActivity().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
-                                prefs.edit().putString("nombreUsuario", nombreUsuario).apply();
-
-                                requireActivity().getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.fragment_container_main, new CatalogFragment())
-                                        .commit();
+                                    @Override
+                                    public void onError(Exception e) {
+                                        requireActivity().runOnUiThread(() ->
+                                                Toast.makeText(requireContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show()
+                                        );
+                                    }
+                                })).start();
                             } else {
                                 requireActivity().runOnUiThread(() ->
                                         Toast.makeText(requireContext(), getString(R.string.register_error), Toast.LENGTH_SHORT).show()
@@ -199,7 +197,8 @@ public class LoginFragment extends Fragment {
                 }
             })).start();
         });
-        return rootView;
+
+        return view;
     }
 
     private void mostrarDialogoConfiguracion() {
@@ -237,6 +236,10 @@ public class LoginFragment extends Fragment {
         void onLoginSuccess(Usuario usuario);
     }
 
+    public interface OnRegisterSuccessListener {
+        void onRegisterSuccess(Usuario usuario);
+    }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -244,6 +247,12 @@ public class LoginFragment extends Fragment {
             loginSuccessListener = (OnLoginSuccessListener) context;
         } else {
             loginSuccessListener = null;
+        }
+
+        if (context instanceof OnRegisterSuccessListener) {
+            registerSuccessListener = (OnRegisterSuccessListener) context;
+        } else {
+            registerSuccessListener = null;
         }
     }
 
@@ -257,12 +266,12 @@ public class LoginFragment extends Fragment {
                         loginSuccessListener.onLoginSuccess(usuario);
                     } else {
                         requireActivity().runOnUiThread(() ->
-                                Toast.makeText(getContext(), "Contraseña incorrecta", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(getContext(), getString(R.string.incorrect_password), Toast.LENGTH_SHORT).show()
                         );
                     }
                 } else {
                     requireActivity().runOnUiThread(() ->
-                            Toast.makeText(getContext(), "Usuario no encontrado", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(getContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show()
                     );
                 }
             }
@@ -270,7 +279,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onError(Exception e) {
                 requireActivity().runOnUiThread(() ->
-                        Toast.makeText(getContext(), "Error al obtener el usuario", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(getContext(), getString(R.string.get_user_error), Toast.LENGTH_SHORT).show()
                 );
             }
         })).start();

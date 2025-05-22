@@ -49,4 +49,5 @@
     <string name="create_favourite_anime_successfully">Anime engadido a favoritos</string>
     <string name="delete_favourite_anime_error">Erro ao eliminar o anime de favoritos</string>
     <string name="delete_favourite_anime_successfully">Anime eliminado de favoritos</string>
+    <string name="error_init_favorites">Erro ao inicializar os favoritos</string>
 </resources>

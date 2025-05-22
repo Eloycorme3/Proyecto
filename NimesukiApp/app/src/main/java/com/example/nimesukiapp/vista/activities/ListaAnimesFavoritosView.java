@@ -15,12 +15,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.vista.fragments.AnimeFavoritoDetailFragment;
-import com.example.nimesukiapp.vista.fragments.CatalogFavoritesFragment;
+import com.example.nimesukiapp.vista.fragments.ListaAnimesFavoritosFragment;
 import com.example.nimesukiapp.vista.fragments.LoginFragment;
 import com.example.nimesukiapp.models.vo.Favoritos;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class ListaAnimesFavoritosActivity extends AppCompatActivity implements CatalogFavoritesFragment.OnAnimeFavoriteSelectedListener {
+public class ListaAnimesFavoritosView extends AppCompatActivity implements ListaAnimesFavoritosFragment.OnAnimeFavoriteSelectedListener {
     private String nombreUsuarioLogueado = "";
     private BottomNavigationView bottomNavigationView;
     private SharedPreferences prefs;
@@ -38,7 +38,7 @@ public class ListaAnimesFavoritosActivity extends AppCompatActivity implements C
 
             if (nombreUsuarioLogueado != null) {
                 getSupportFragmentManager().beginTransaction()
-                       .replace(R.id.fragment_container_favoritos, new CatalogFavoritesFragment())
+                       .replace(R.id.fragment_container_favoritos, new ListaAnimesFavoritosFragment())
                        .commit();
                 bottomNavigationView.setVisibility(VISIBLE);
             } else {
@@ -53,25 +53,24 @@ public class ListaAnimesFavoritosActivity extends AppCompatActivity implements C
             int itemId = item.getItemId();
 
             if (itemId == R.id.nav_catalog) {
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, ListaAnimesView.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                ActivityOptions options = ActivityOptions
-                        .makeCustomAnimation(this, R.anim.slide_in_left, R.anim.slide_out_right);
-                startActivity(intent, options.toBundle());
+                startActivity(intent);
+                overridePendingTransition(0, 0);
                 return true;
             } else if (itemId == R.id.nav_favorites) {
                 return true;
             } else if (itemId == R.id.nav_random) {
                 Intent intent = new Intent(this, AnimeRandomView.class);
                 ActivityOptions options = ActivityOptions
-                        .makeCustomAnimation(this, R.anim.slide_in_right, R.anim.slide_out_left);
+                        .makeCustomAnimation(this, 0, 0);
                 startActivity(intent, options.toBundle());
                 finish();
                 return true;
             } else if (itemId == R.id.nav_profile) {
-                Intent intent = new Intent(this, VistaPerfil.class);
+                Intent intent = new Intent(this, PerfilView.class);
                 ActivityOptions options = ActivityOptions
-                        .makeCustomAnimation(this, R.anim.slide_in_right, R.anim.slide_out_left);
+                        .makeCustomAnimation(this, 0, 0);
                 startActivity(intent, options.toBundle());
                 finish();
                 return true;

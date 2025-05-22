@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 
 import com.example.nimesukiapp.R;
 
@@ -26,7 +25,7 @@ public class SplashActivity extends AppCompatActivity {
                     .alpha(0f)
                     .setDuration(800)
                     .withEndAction(() -> {
-                        Intent intent = new Intent(this, MainActivity.class);
+                        Intent intent = new Intent(this, ListaAnimesView.class);
                         startActivity(intent);
                         overridePendingTransition(0, 0);
                         finish();

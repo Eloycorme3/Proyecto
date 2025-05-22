@@ -211,12 +211,10 @@ public class controladorPrincipal {
                             login.getLblLogin().setText("Login incorrecto");
                         }
                     } else {
-                        JOptionPane.showMessageDialog(null, "Configuración no encontrada.");
+                        JOptionPane.showMessageDialog(null, "Configuración no encontrada.", "Advertencia", JOptionPane.WARNING_MESSAGE);
                     }
                 } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null,
-                            "Error al conectar con la base de datos o buscar usuario",
-                            "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos o buscar usuario", "Error", JOptionPane.ERROR_MESSAGE);
                     u = null;
                 }
             }
@@ -262,6 +260,7 @@ public class controladorPrincipal {
         } catch (Exception e) {
             HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -301,6 +300,7 @@ public class controladorPrincipal {
         } catch (Exception e) {
             HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -332,6 +332,7 @@ public class controladorPrincipal {
         } catch (Exception e) {
             HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -368,6 +369,7 @@ public class controladorPrincipal {
         } catch (Exception e) {
             HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -409,6 +411,7 @@ public class controladorPrincipal {
         } catch (Exception e) {
             HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -450,6 +453,7 @@ public class controladorPrincipal {
         } catch (Exception e) {
             HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -465,6 +469,7 @@ public class controladorPrincipal {
             aniDAO.cargarCombo(session, modeloComboAnimesFavoritos);
         } catch (Exception e) {
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -473,6 +478,7 @@ public class controladorPrincipal {
             usuDAO.cargarCombo(session, modeloComboUsuariosFavoritos);
         } catch (Exception e) {
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -482,6 +488,7 @@ public class controladorPrincipal {
             cargarComboAnimes();
         } catch (Exception e) {
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -497,6 +504,7 @@ public class controladorPrincipal {
             }
         } catch (Exception e) {
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, "Error: ", e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
         return encontrado;
     }*/
@@ -514,6 +522,7 @@ public class controladorPrincipal {
         } catch (Exception e) {
             HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, "Error: ", e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }*/
     private static void vaciarTxtUsuarioFavoritos() {
@@ -559,6 +568,7 @@ public class controladorPrincipal {
             consultas.getBtnBajaUsuario().setEnabled(true);
         } catch (Exception e) {
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -604,6 +614,7 @@ public class controladorPrincipal {
         } catch (Exception e) {
             HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -652,6 +663,7 @@ public class controladorPrincipal {
         } catch (Exception e) {
             HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -683,8 +695,8 @@ public class controladorPrincipal {
             JOptionPane.showMessageDialog(null, "Error numérico", "Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             HibernateUtil.rollbackTx(session);
-            JOptionPane.showMessageDialog(null, "Error al añadir a favoritos.", "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -716,6 +728,7 @@ public class controladorPrincipal {
         } catch (Exception e) {
             HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -740,6 +753,7 @@ public class controladorPrincipal {
         } catch (Exception e) {
             HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -773,6 +787,7 @@ public class controladorPrincipal {
             }
         } catch (Exception e) {
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -823,6 +838,7 @@ public class controladorPrincipal {
             consultas.getBtnBajaAnime().setEnabled(true);
         } catch (Exception e) {
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -848,9 +864,11 @@ public class controladorPrincipal {
         } catch (NumberFormatException e) {
             HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error numérico", "Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -885,9 +903,11 @@ public class controladorPrincipal {
         } catch (NumberFormatException e) {
             HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error numérico", "Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -910,9 +930,11 @@ public class controladorPrincipal {
         } catch (NumberFormatException e) {
             HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error numérico", "Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -948,6 +970,7 @@ public class controladorPrincipal {
         } catch (Exception e) {
             HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

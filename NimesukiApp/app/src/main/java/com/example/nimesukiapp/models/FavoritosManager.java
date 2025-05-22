@@ -2,23 +2,21 @@ package com.example.nimesukiapp.models;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
-import com.example.nimesukiapp.models.vo.Favoritos;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class FavoritosCacheManager {
+public class FavoritosManager {
     private static final String PREFS_NAME = "MisPreferencias";
     private static final String KEY_FAVORITOS = "favoritos_cache";
 
     private SharedPreferences prefs;
     private Gson gson;
 
-    public FavoritosCacheManager(Context context) {
+    public FavoritosManager(Context context) {
         prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         gson = new Gson();
     }

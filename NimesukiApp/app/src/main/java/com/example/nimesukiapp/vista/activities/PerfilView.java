@@ -17,7 +17,7 @@ import com.example.nimesukiapp.vista.fragments.LoginFragment;
 import com.example.nimesukiapp.vista.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class VistaPerfil extends AppCompatActivity {
+public class PerfilView extends AppCompatActivity {
     private String nombreUsuarioLogueado = "";
     private BottomNavigationView bottomNavigationView;
 
@@ -50,23 +50,22 @@ public class VistaPerfil extends AppCompatActivity {
             int itemId = item.getItemId();
 
             if (itemId == R.id.nav_catalog) {
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, ListaAnimesView.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                ActivityOptions options = ActivityOptions
-                        .makeCustomAnimation(this, R.anim.slide_in_left, R.anim.slide_out_right);
-                startActivity(intent, options.toBundle());
+                startActivity(intent);
+                overridePendingTransition(0, 0);
                 return true;
             } else if (itemId == R.id.nav_favorites) {
-                Intent intent = new Intent(this, ListaAnimesFavoritosActivity.class);
+                Intent intent = new Intent(this, ListaAnimesFavoritosView.class);
                 ActivityOptions options = ActivityOptions
-                        .makeCustomAnimation(this, R.anim.slide_in_left, R.anim.slide_out_right);
+                        .makeCustomAnimation(this, 0, 0);
                 startActivity(intent, options.toBundle());
                 finish();
                 return true;
             } else if (itemId == R.id.nav_random) {
                 Intent intent = new Intent(this, AnimeRandomView.class);
                 ActivityOptions options = ActivityOptions
-                        .makeCustomAnimation(this, R.anim.slide_in_left, R.anim.slide_out_right);
+                        .makeCustomAnimation(this, 0, 0);
                 startActivity(intent, options.toBundle());
                 finish();
                 return true;

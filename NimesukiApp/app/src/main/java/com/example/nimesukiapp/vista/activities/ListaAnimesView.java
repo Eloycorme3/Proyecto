@@ -19,16 +19,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.mock.ServicioREST;
-import com.example.nimesukiapp.models.FavoritosCacheManager;
+import com.example.nimesukiapp.models.FavoritosManager;
 import com.example.nimesukiapp.models.vo.Favoritos;
 import com.example.nimesukiapp.models.vo.Usuario;
 import com.example.nimesukiapp.vista.fragments.AnimeDetailFragment;
 import com.example.nimesukiapp.vista.fragments.AnimeFavoritoDetailFragment;
-import com.example.nimesukiapp.vista.fragments.CatalogFragment;
+import com.example.nimesukiapp.vista.fragments.ListaAnimesFragment;
 import com.example.nimesukiapp.vista.fragments.LoginFragment;
 import com.example.nimesukiapp.models.vo.Anime;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -37,68 +36,26 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements CatalogFragment.OnAnimeSelectedListener, LoginFragment.OnLoginSuccessListener {
+public class ListaAnimesView extends AppCompatActivity implements ListaAnimesFragment.OnAnimeSelectedListener, LoginFragment.OnLoginSuccessListener, LoginFragment.OnRegisterSuccessListener {
     private String nombreUsuarioLogueado = "";
     private BottomNavigationView bottomNavigationView;
     private SharedPreferences prefs;
-    private FavoritosCacheManager cacheManager;
+    private FavoritosManager cacheManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
-        cacheManager = new FavoritosCacheManager(getBaseContext());
+        cacheManager = new FavoritosManager(getBaseContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView_main);
         nombreUsuarioLogueado = null;
         if (prefs.contains("nombreUsuario")) {
-            if (prefs.contains("oscuro")) {
-                boolean modoOscuro = prefs.getBoolean("oscuro", false);
-                setNightMode(modoOscuro);
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-            }
-            String idioma = prefs.getString("idioma", "es");
-            cambiarIdioma(idioma);
-            nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
+            String nombre = prefs.getString("nombreUsuario", null);
+            comprobarUsuario(nombre);
         } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-
-            Locale defaultLocale;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                defaultLocale = Resources.getSystem().getConfiguration().getLocales().get(0);
-            } else {
-                defaultLocale = Resources.getSystem().getConfiguration().locale;
-            }
-
-            Locale.setDefault(defaultLocale);
-            Configuration config = getResources().getConfiguration();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                config.setLocales(new LocaleList(defaultLocale));
-            } else {
-                config.setLocale(defaultLocale);
-            }
-
-            getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-        }
-
-        if (nombreUsuarioLogueado != null && !nombreUsuarioLogueado.isEmpty()) {
-            bottomNavigationView.setVisibility(VISIBLE);
-        } else {
-            bottomNavigationView.setVisibility(INVISIBLE);
-        }
-
-        if (savedInstanceState == null) {
-            if (nombreUsuarioLogueado != null && !nombreUsuarioLogueado.isEmpty()) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container_main, new CatalogFragment())
-                        .commit();
-            } else {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container_main, new LoginFragment())
-                        .commit();
-            }
+            setNoUserParameters();
         }
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -107,27 +64,93 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
             if (itemId == R.id.nav_catalog) {
                 return true;
             } else if (itemId == R.id.nav_favorites) {
-                Intent intent = new Intent(MainActivity.this, ListaAnimesFavoritosActivity.class);
+                Intent intent = new Intent(this, ListaAnimesFavoritosView.class);
                 ActivityOptions options = ActivityOptions
-                        .makeCustomAnimation(this, R.anim.slide_in_right, R.anim.slide_out_left);
+                        .makeCustomAnimation(this, 0, 0);
                 startActivity(intent, options.toBundle());
                 return true;
             } else if (itemId == R.id.nav_random) {
-                Intent intent = new Intent(MainActivity.this, AnimeRandomView.class);
+                Intent intent = new Intent(this, AnimeRandomView.class);
                 ActivityOptions options = ActivityOptions
-                        .makeCustomAnimation(this, R.anim.slide_in_right, R.anim.slide_out_left);
+                        .makeCustomAnimation(this, 0, 0);
                 startActivity(intent, options.toBundle());
                 return true;
             } else if (itemId == R.id.nav_profile) {
-                Intent intent = new Intent(MainActivity.this, VistaPerfil.class);
+                Intent intent = new Intent(this, PerfilView.class);
                 ActivityOptions options = ActivityOptions
-                        .makeCustomAnimation(this, R.anim.slide_in_right, R.anim.slide_out_left);
+                        .makeCustomAnimation(this, 0, 0);
                 startActivity(intent, options.toBundle());
                 return true;
             }
 
             return false;
         });
+    }
+
+    private void comprobarUsuario(String nombre) {
+        ServicioREST servicioREST = new ServicioREST(getBaseContext());
+        runOnUiThread(() -> servicioREST.obtenerUsuarioPorNombre(nombre, new ServicioREST.OnUsuarioObtenidoListener() {
+
+            @Override
+            public void onSuccess(Usuario usuario) {
+                setUserParameters();
+            }
+
+            @Override
+            public void onError(Exception e) {
+                setNoUserParameters();
+                runOnUiThread(() -> {
+                    Toast.makeText(getBaseContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
+                });
+            }
+        }));
+    }
+
+    private void setNoUserParameters() {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+
+        Locale defaultLocale;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            defaultLocale = Resources.getSystem().getConfiguration().getLocales().get(0);
+        } else {
+            defaultLocale = Resources.getSystem().getConfiguration().locale;
+        }
+
+        Locale.setDefault(defaultLocale);
+        Configuration config = getResources().getConfiguration();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            config.setLocales(new LocaleList(defaultLocale));
+        } else {
+            config.setLocale(defaultLocale);
+        }
+
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+
+        bottomNavigationView.setVisibility(INVISIBLE);
+
+        prefs.edit().clear().apply();
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container_main, new LoginFragment())
+                .commit();
+    }
+
+    private void setUserParameters() {
+        if (prefs.contains("oscuro")) {
+            boolean modoOscuro = prefs.getBoolean("oscuro", false);
+            setNightMode(modoOscuro);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        }
+        String idioma = prefs.getString("idioma", "es");
+        cambiarIdioma(idioma);
+        nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
+
+        bottomNavigationView.setVisibility(VISIBLE);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container_main, new ListaAnimesFragment())
+                .commit();
     }
 
     private void iniciarlizarCache() {
@@ -149,14 +172,14 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
                 getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(0, 0)
-                        .replace(R.id.fragment_container_main, new CatalogFragment())
+                        .replace(R.id.fragment_container_main, new ListaAnimesFragment())
                         .addToBackStack(null)
                         .commit();
             }
 
             @Override
             public void onError(Exception e) {
-                runOnUiThread(() -> Toast.makeText(getBaseContext(), "Error al inicializar los favoritos.", Toast.LENGTH_LONG).show());
+                runOnUiThread(() -> Toast.makeText(getBaseContext(), getString(R.string.error_init_favorites), Toast.LENGTH_LONG).show());
             }
 
         })).start();
@@ -281,11 +304,24 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
             boolean favoritosCargados = prefs.getBoolean("favoritosCargados", false);
             if (favoritosCargados) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container_main, new CatalogFragment())
+                        .replace(R.id.fragment_container_main, new ListaAnimesFragment())
                         .commit();
             } else {
                 iniciarlizarCache();
             }
+
+            bottomNavigationView.setVisibility(View.VISIBLE);
+        });
+    }
+
+    @Override
+    public void onRegisterSuccess(Usuario usuario) {
+        runOnUiThread(() -> {
+            guardarUsuarioEnPreferencias(usuario);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container_main, new ListaAnimesFragment())
+                    .commit();
 
             bottomNavigationView.setVisibility(View.VISIBLE);
         });
@@ -302,5 +338,4 @@ public class MainActivity extends AppCompatActivity implements CatalogFragment.O
 
         nombreUsuarioLogueado = usuario.getNombre();
     }
-
 }

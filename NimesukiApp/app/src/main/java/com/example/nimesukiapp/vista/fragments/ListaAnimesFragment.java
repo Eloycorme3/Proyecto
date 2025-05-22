@@ -20,24 +20,23 @@ import com.example.nimesukiapp.mock.ServicioREST;
 import com.example.nimesukiapp.models.vo.Anime;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
-public class CatalogFragment extends Fragment {
+public class ListaAnimesFragment extends Fragment {
     private ListView listView;
     private TextInputEditText searchEditText;
     private ArrayList<Anime> listaAnimes = new ArrayList<>();
     private OnAnimeSelectedListener listener;
     AnimeAdapter adapter;
 
-    public CatalogFragment() {
+    public ListaAnimesFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View vistaFrag = inflater.inflate(R.layout.fragment_catalog, container, false);
-        listView = vistaFrag.findViewById(R.id.anime_listview);
-        searchEditText = vistaFrag.findViewById(R.id.search_edit_text);
+        View view = inflater.inflate(R.layout.fragment_catalog, container, false);
+        listView = view.findViewById(R.id.anime_listview);
+        searchEditText = view.findViewById(R.id.search_edit_text);
 
         cargarAnimes();
 
@@ -65,7 +64,7 @@ public class CatalogFragment extends Fragment {
             return false;
         });
 
-        return vistaFrag;
+        return view;
     }
 
     @Override
@@ -82,6 +81,9 @@ public class CatalogFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (searchEditText.getText() != null && !searchEditText.getText().toString().isEmpty()) {
+            buscarAnimes(searchEditText.getText().toString());
+        }
     }
 
     @Override

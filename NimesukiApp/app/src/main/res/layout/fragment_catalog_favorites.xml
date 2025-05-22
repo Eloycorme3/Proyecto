@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/pastelBackground"
-    tools:context=".vista.fragments.CatalogFragment">
+    tools:context=".vista.fragments.ListaAnimesFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"

@@ -1,16 +1,22 @@
 package com.example.nimesukiapp.vista.fragments;
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -25,11 +31,10 @@ import com.google.android.material.textview.MaterialTextView;
  * create an instance of this fragment.
  */
 public class AnimeRandomFragment extends Fragment {
-
     private ImageView imageViewAnime;
     private MaterialTextView textNombre, textDescripcion, textLeerMas,
             textAnho, textCategorias, textCapitulos;
-    private String imageVersion = "?v=2";
+    private String imageVersion = "?v=3";
 
     private boolean isExpanded = false;
     private Anime anime;
@@ -67,7 +72,6 @@ public class AnimeRandomFragment extends Fragment {
         if (getArguments() != null) {
             anime = (Anime) getArguments().getSerializable("anime");
         }
-
         imageViewAnime = view.findViewById(R.id.imageViewAnimeRandom);
         textNombre = view.findViewById(R.id.textNombreRandom);
         textDescripcion = view.findViewById(R.id.textDescripcionRandom);
@@ -80,7 +84,11 @@ public class AnimeRandomFragment extends Fragment {
         collapsingToolbar.setTitle("");
 
         if (anime != null) {
-            actualizarVistaAnime(anime);
+            try {
+                actualizarVistaAnime(anime);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         textLeerMas.setOnClickListener(v -> {
@@ -97,14 +105,14 @@ public class AnimeRandomFragment extends Fragment {
         });
     }
 
-    public void actualizarAnime(Anime nuevoAnime) {
+    public void actualizarAnime(Anime nuevoAnime) throws InterruptedException {
         this.anime = nuevoAnime;
         if (isAdded()) {
-            actualizarVistaAnime(nuevoAnime);
+            actualizarVistaAnime(anime);
         }
     }
 
-    private void actualizarVistaAnime(Anime anime) {
+    private void actualizarVistaAnime(Anime anime) throws InterruptedException {
         if (anime != null) {
             textNombre.setText(anime.getNombre());
             textDescripcion.setText(anime.getDescripcion());

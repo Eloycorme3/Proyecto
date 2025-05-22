@@ -41,7 +41,7 @@ public class AnimeDetailFragment extends Fragment {
     private MaterialTextView textNombre, textDescripcion,
             textAnho, textCategorias, textCapitulos;
     private MaterialToolbar toolbar;
-    private String imageVersion = "?v=2";
+    private String imageVersion = "?v=3";
     private boolean isExpanded = false;
     private Anime anime;
 

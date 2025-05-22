@@ -33,7 +33,7 @@ public class AnimeFavoritoDetailFragment extends Fragment {
     private MaterialTextView textNombreFav, textDescripcionFav, textLeerMasFav,
             textAnhoFav, textCategoriasFav, textCapitulosFav;
     private MaterialToolbar toolbar;
-    private String imageVersionFav = "?v=2";
+    private String imageVersionFav = "?v=3";
     private boolean isExpanded = false;
     private Favoritos animeFav;
 

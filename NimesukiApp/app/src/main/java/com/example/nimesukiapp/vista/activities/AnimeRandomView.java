@@ -1,5 +1,6 @@
 package com.example.nimesukiapp.vista.activities;
 
+import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
@@ -7,8 +8,11 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,13 +31,17 @@ public class AnimeRandomView extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private AnimeRandomFragment animeRandomFragment;
     private SharedPreferences prefs;
+    private ProgressBar loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_random);
+        loading = findViewById(R.id.progressBarLoading);
 
+        mostrarProgress(true);
         bottomNavigationView = findViewById(R.id.bottomNavigationView_random);
+
 
         prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
@@ -52,17 +60,16 @@ public class AnimeRandomView extends AppCompatActivity {
             int itemId = item.getItemId();
 
             if (itemId == R.id.nav_catalog) {
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, ListaAnimesView.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
-                ActivityOptions options = ActivityOptions
-                        .makeCustomAnimation(this, R.anim.slide_in_left, R.anim.slide_out_right);
-                startActivity(intent, options.toBundle());
+                startActivity(intent);
+                overridePendingTransition(0, 0);
                 return true;
             } else if (itemId == R.id.nav_favorites) {
-                Intent intent = new Intent(this, ListaAnimesFavoritosActivity.class);
+                Intent intent = new Intent(this, ListaAnimesFavoritosView.class);
                 ActivityOptions options = ActivityOptions
-                        .makeCustomAnimation(this, R.anim.slide_in_left, R.anim.slide_out_right);
+                        .makeCustomAnimation(this, 0, 0);
                 startActivity(intent, options.toBundle());
                 finish();
                 return true;
@@ -70,9 +77,9 @@ public class AnimeRandomView extends AppCompatActivity {
                 obtenerYMostrarAnimeRandom();
                 return true;
             } else if (itemId == R.id.nav_profile) {
-                Intent intent = new Intent(this, VistaPerfil.class);
+                Intent intent = new Intent(this, PerfilView.class);
                 ActivityOptions options = ActivityOptions
-                        .makeCustomAnimation(this, R.anim.slide_in_right, R.anim.slide_out_left);
+                        .makeCustomAnimation(this, 0, 0);
                 startActivity(intent, options.toBundle());
                 finish();
                 return true;
@@ -80,6 +87,11 @@ public class AnimeRandomView extends AppCompatActivity {
 
             return false;
         });
+    }
+
+    private void mostrarProgress(boolean mostrar) {
+        loading.setVisibility(mostrar ? VISIBLE : GONE);
+        findViewById(R.id.fragment_container_random).setVisibility(mostrar ? INVISIBLE : VISIBLE);
     }
 
     private void obtenerYMostrarAnimeRandom() {
@@ -94,17 +106,38 @@ public class AnimeRandomView extends AppCompatActivity {
 
                     if (animeRandomFragment == null) {
                         animeRandomFragment = AnimeRandomFragment.newInstance(animeAleatorio);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragment_container_random, animeRandomFragment)
-                                .commit();
+                        enableBottomBar(false);
+                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.fragment_container_random, animeRandomFragment)
+                                    .commit();
+                            mostrarProgress(false);
+                            enableBottomBar(true);
+                        }, (1000));
                     } else {
-                        animeRandomFragment.actualizarAnime(animeAleatorio);
+                        mostrarProgress(true);
+                        enableBottomBar(false);
+                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                            try {
+                                animeRandomFragment.actualizarAnime(animeAleatorio);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                            mostrarProgress(false);
+                            enableBottomBar(true);
+                        }, (1000));
                     }
                 });
             } catch (IOException e) {
                 Toast.makeText(this, getString(R.string.load_anime_error), Toast.LENGTH_LONG).show();
             }
         }).start();
+    }
+
+    private void enableBottomBar(boolean enable){
+        for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
+            bottomNavigationView.getMenu().getItem(i).setEnabled(enable);
+        }
     }
 
     private Anime obtenerAnimeRandom(String nombreUsuario) throws IOException {
