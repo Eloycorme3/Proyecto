@@ -8,13 +8,14 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container_perfil"
+        android:name="com.example.nimesukiapp.vista.fragments.ProfileFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.example.nimesukiapp.vista.fragments.ProfileFragment"
         android:layout_above="@id/bottomNavigationView_perfil" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView_perfil"
         style="@style/NoRippleBottomNav"
         app:menu="@menu/bottom_nav_menu" />
+
 </RelativeLayout>

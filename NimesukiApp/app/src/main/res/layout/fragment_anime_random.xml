@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/pastelBackground"
     tools:context=".vista.fragments.AnimeRandomFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.Material3.Toolbar.Surface">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbarRandom"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:collapsedTitleTextAppearance="@style/TextAppearance.Material3.TitleMedium"
             app:contentScrim="@color/pastelPrimary"
-            app:titleEnabled="true"
-            app:expandedTitleMarginStart="24dp"
             app:expandedTitleMarginBottom="24dp"
-            app:collapsedTitleTextAppearance="@style/TextAppearance.Material3.TitleMedium">
+            app:expandedTitleMarginStart="24dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:titleEnabled="true">
 
             <ImageView
                 android:id="@+id/imageViewAnimeRandom"
@@ -37,15 +37,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:padding="24dp">
+        android:padding="24dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:paddingBottom="32dp">
+            android:orientation="vertical">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textNombreRandom"
@@ -58,29 +57,17 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textDescripcionRandom"
                     style="@style/TextAppearance.Material3.BodyMedium"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:maxLines="5"
                     android:ellipsize="end"
                     android:textColor="@color/pastelGray" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/textLeerMasRandom"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/read_more"
-                    android:textColor="@color/pastelAccent"
-                    android:textStyle="bold"
-                    android:paddingStart="8dp"
-                    android:clickable="true"
-                    android:focusable="true" />
             </LinearLayout>
 
             <com.google.android.material.textview.MaterialTextView

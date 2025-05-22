@@ -47,7 +47,7 @@ public class ListaAnimesView extends AppCompatActivity implements ListaAnimesFra
         prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         cacheManager = new FavoritosManager(getBaseContext());
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_lista);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView_main);
         nombreUsuarioLogueado = null;

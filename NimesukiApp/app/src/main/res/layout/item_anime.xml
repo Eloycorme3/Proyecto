@@ -12,8 +12,8 @@
         android:id="@+id/layout_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:descendantFocusability="blocksDescendants"
+        android:orientation="horizontal"
         android:padding="8dp">
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -43,7 +43,7 @@
             android:layout_height="match_parent"
             android:background="?selectableItemBackgroundBorderless"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_favorite_selector"/>
+            android:src="@drawable/ic_favorite_selector" />
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

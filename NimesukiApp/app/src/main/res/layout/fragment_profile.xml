@@ -84,8 +84,8 @@
             app:boxStrokeColor="@color/pastelPrimary"
             app:boxStrokeWidth="0dp"
             app:endIconDrawable="@drawable/password_icon"
-            app:endIconTint="@color/pastelAccent"
             app:endIconMode="password_toggle"
+            app:endIconTint="@color/pastelAccent"
             app:hintTextColor="@color/pastelPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -114,8 +114,8 @@
             app:boxStrokeWidth="0dp"
             app:endIconDrawable="@drawable/password_icon"
             app:endIconMode="password_toggle"
-            app:hintTextColor="@color/pastelPrimary"
             app:endIconTint="@color/pastelAccent"
+            app:hintTextColor="@color/pastelPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layoutActualPass">
@@ -201,16 +201,16 @@
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:background="@drawable/spinner_background"
-                android:padding="12dp"
-                android:dropDownVerticalOffset="0dp" />
+                android:dropDownVerticalOffset="0dp"
+                android:padding="12dp" />
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonCerrarSesion"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="@string/logout"
             android:layout_marginTop="32dp"
+            android:text="@string/logout"
             android:textColor="@color/white"
             app:backgroundTint="@color/pastelSecondary"
             app:cornerRadius="16dp"

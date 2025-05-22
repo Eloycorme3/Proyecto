@@ -36,7 +36,6 @@ import com.google.android.material.textview.MaterialTextView;
  * create an instance of this fragment.
  */
 public class AnimeDetailFragment extends Fragment {
-
     private ImageView imageViewAnime;
     private MaterialTextView textNombre, textDescripcion,
             textAnho, textCategorias, textCapitulos;
@@ -112,7 +111,6 @@ public class AnimeDetailFragment extends Fragment {
             }
         });
     }
-
 
     private void setupExpandableText(MaterialTextView textView, String descripcion, int maxLines) {
         String mostrar = getString(R.string.read_more);
@@ -213,7 +211,5 @@ public class AnimeDetailFragment extends Fragment {
             }
         });
     }
-
-
 
 }

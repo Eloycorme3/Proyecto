@@ -11,42 +11,43 @@
         android:id="@+id/textInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:boxCornerRadiusTopStart="50dp"
-        app:boxCornerRadiusTopEnd="50dp"
-        app:boxCornerRadiusBottomStart="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="20dp"
         app:boxCornerRadiusBottomEnd="50dp"
+        app:boxCornerRadiusBottomStart="50dp"
+        app:boxCornerRadiusTopEnd="50dp"
+        app:boxCornerRadiusTopStart="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/search_edit_text_favorites"
-            android:layout_width="370dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="8dp"
             android:drawableTint="@color/pastelGray"
             android:hint="@string/search_anime"
-            android:drawablePadding="8dp"
             android:inputType="text"
             android:textColor="@color/pastelGray"
-            android:textColorHint="@color/pastelGray" />
+            android:textColorHint="@color/pastelGray"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <ListView
         android:id="@+id/animes_favoritos_listview"
-        android:layout_width="0dp"
+        android:layout_width="370dp"
         android:layout_height="0dp"
-        android:divider="@color/pastelGray"
-        android:dividerHeight="1dp"
-        android:padding="8dp"
+        android:layout_marginTop="20dp"
         android:clipToPadding="false"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="8dp"
+        android:padding="8dp"
         android:scrollbars="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
