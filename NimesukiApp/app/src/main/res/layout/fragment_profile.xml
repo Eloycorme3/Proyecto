@@ -201,7 +201,7 @@
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:background="@drawable/spinner_background"
-                android:dropDownVerticalOffset="0dp"
+                android:dropDownVerticalOffset="40dp"
                 android:padding="12dp" />
         </LinearLayout>
 
