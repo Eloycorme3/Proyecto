@@ -1,6 +1,9 @@
 package com.example.nimesukiapp.vista.fragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +31,7 @@ public class ListaAnimesFragment extends Fragment {
     private ArrayList<Anime> listaAnimes = new ArrayList<>();
     private OnAnimeSelectedListener listener;
     AnimeAdapter adapter;
+    SharedPreferences prefs;
 
     public ListaAnimesFragment() {
     }
@@ -35,6 +39,7 @@ public class ListaAnimesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_catalog, container, false);
+        prefs = requireContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         listView = view.findViewById(R.id.anime_listview);
         searchEditText = view.findViewById(R.id.search_edit_text);
 
@@ -83,6 +88,11 @@ public class ListaAnimesFragment extends Fragment {
         super.onResume();
         if (searchEditText.getText() != null && !searchEditText.getText().toString().isEmpty()) {
             buscarAnimes(searchEditText.getText().toString());
+        }
+
+        if (prefs.getBoolean("cambio", false)) {
+            adapter.notifyDataSetChanged();
+            prefs.edit().putBoolean("cambio", false).apply();
         }
     }
 

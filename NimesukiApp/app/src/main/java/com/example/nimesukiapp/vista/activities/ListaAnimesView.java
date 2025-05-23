@@ -3,6 +3,8 @@ package com.example.nimesukiapp.vista.activities;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,7 +12,9 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.LocaleList;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -51,11 +55,72 @@ public class ListaAnimesView extends AppCompatActivity implements ListaAnimesFra
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView_main);
         nombreUsuarioLogueado = null;
+
         if (prefs.contains("nombreUsuario")) {
-            String nombre = prefs.getString("nombreUsuario", null);
-            comprobarUsuario(nombre);
-        } else {
-            setNoUserParameters();
+            nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
+        }
+
+        if (savedInstanceState == null) {
+            boolean reinicio = getIntent().getBooleanExtra("reinicio", false);
+            if (!reinicio) {
+                if (prefs.contains("idioma")) {
+                    String idioma = prefs.getString("idioma", "es");
+                    cambiarIdioma(idioma);
+                } else {
+                    Locale defaultLocale;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        defaultLocale = Resources.getSystem().getConfiguration().getLocales().get(0);
+                    } else {
+                        defaultLocale = Resources.getSystem().getConfiguration().locale;
+                    }
+
+                    Locale.setDefault(defaultLocale);
+                    Configuration config = getResources().getConfiguration();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        config.setLocales(new LocaleList(defaultLocale));
+                    } else {
+                        config.setLocale(defaultLocale);
+                    }
+
+                    getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+                }
+
+                bottomNavigationView.setVisibility(VISIBLE);
+                if (isActivityActive() && savedInstanceState == null) {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container_main, new ListaAnimesFragment())
+                            .commit();
+                }
+            } else {
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
+                prefs.edit().clear().apply();
+                boolean error = getIntent().getBooleanExtra("error", false);
+                if (error) {
+                    Toast.makeText(this, getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
+                }
+
+                bottomNavigationView.setVisibility(INVISIBLE);
+                Locale defaultLocale;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    defaultLocale = Resources.getSystem().getConfiguration().getLocales().get(0);
+                } else {
+                    defaultLocale = Resources.getSystem().getConfiguration().locale;
+                }
+
+                Locale.setDefault(defaultLocale);
+                Configuration config = getResources().getConfiguration();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    config.setLocales(new LocaleList(defaultLocale));
+                } else {
+                    config.setLocale(defaultLocale);
+                }
+
+                getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container_main, new LoginFragment())
+                        .commit();
+            }
         }
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -87,72 +152,8 @@ public class ListaAnimesView extends AppCompatActivity implements ListaAnimesFra
         });
     }
 
-    private void comprobarUsuario(String nombre) {
-        ServicioREST servicioREST = new ServicioREST(getBaseContext());
-        runOnUiThread(() -> servicioREST.obtenerUsuarioPorNombre(nombre, new ServicioREST.OnUsuarioObtenidoListener() {
-
-            @Override
-            public void onSuccess(Usuario usuario) {
-                runOnUiThread(() -> {
-                    setUserParameters();
-                });
-            }
-
-            @Override
-            public void onError(Exception e) {
-                runOnUiThread(() -> {
-                    setNoUserParameters();
-                    Toast.makeText(getBaseContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
-                });
-            }
-        }));
-    }
-
-    private void setNoUserParameters() {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-
-        Locale defaultLocale;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            defaultLocale = Resources.getSystem().getConfiguration().getLocales().get(0);
-        } else {
-            defaultLocale = Resources.getSystem().getConfiguration().locale;
-        }
-
-        Locale.setDefault(defaultLocale);
-        Configuration config = getResources().getConfiguration();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            config.setLocales(new LocaleList(defaultLocale));
-        } else {
-            config.setLocale(defaultLocale);
-        }
-
-        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-
-        bottomNavigationView.setVisibility(INVISIBLE);
-
-        prefs.edit().clear().apply();
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container_main, new LoginFragment())
-                .commit();
-    }
-
-    private void setUserParameters() {
-        if (prefs.contains("oscuro")) {
-            boolean modoOscuro = prefs.getBoolean("oscuro", false);
-            setNightMode(modoOscuro);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-        }
-        String idioma = prefs.getString("idioma", "es");
-        cambiarIdioma(idioma);
-        nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
-
-        bottomNavigationView.setVisibility(VISIBLE);
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container_main, new ListaAnimesFragment())
-                .commit();
+    private boolean isActivityActive() {
+        return !isFinishing() && !isDestroyed();
     }
 
     private void iniciarlizarCache() {
@@ -204,18 +205,6 @@ public class ListaAnimesView extends AppCompatActivity implements ListaAnimesFra
             }
 
             getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-
-            recreate();
-        }
-    }
-
-    private void setNightMode(boolean isNightMode) {
-        int currentNightMode = AppCompatDelegate.getDefaultNightMode();
-
-        int nightMode = isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;
-
-        if (currentNightMode != nightMode) {
-            AppCompatDelegate.setDefaultNightMode(nightMode);
         }
     }
 

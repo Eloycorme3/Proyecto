@@ -41,7 +41,7 @@
             android:id="@+id/favorite_button"
             android:layout_width="30dp"
             android:layout_height="match_parent"
-            android:background="?selectableItemBackgroundBorderless"
+            android:background="@null"
             android:scaleType="centerInside"
             android:src="@drawable/ic_favorite_selector" />
     </LinearLayout>

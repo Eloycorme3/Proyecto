@@ -2,12 +2,15 @@ package com.example.nimesukiapp.vista.fragments;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import android.text.method.PasswordTransformationMethod;

@@ -3,6 +3,7 @@
     <style name="Base.Theme.NimesukiApp" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowBackground">@color/pastelBackground</item>
         <item name="colorPrimary">@color/pastelPrimary</item>
         <item name="colorSecondary">@color/pastelSecondary</item>
         <item name="colorAccent">@color/pastelAccent</item>

@@ -2,6 +2,8 @@ package com.example.nimesukiapp.vista.fragments;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -136,15 +138,15 @@ public class ProfileFragment extends Fragment {
                         .setPositiveButton(getString(R.string.accept), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                prefs.edit().clear().apply();
-
                                 Intent intent = new Intent(requireActivity(), ListaAnimesView.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                intent.putExtra("reinicio", true);
                                 startActivity(intent);
 
                                 requireActivity().overridePendingTransition(0, 0);
 
                                 requireActivity().finish();
+                                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
                             }
                         })
                         .setNegativeButton(getString(R.string.cancel), null)
