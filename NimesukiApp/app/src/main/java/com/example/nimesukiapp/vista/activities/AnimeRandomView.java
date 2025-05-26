@@ -21,7 +21,7 @@ import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.vista.fragments.AnimeRandomFragment;
 import com.example.nimesukiapp.vista.fragments.LoginFragment;
 import com.example.nimesukiapp.mock.ServicioREST;
-import com.example.nimesukiapp.models.vo.Anime;
+import com.example.nimesukiapp.model.vo.Anime;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;

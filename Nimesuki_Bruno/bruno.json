@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Nimesuki_Bruno",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

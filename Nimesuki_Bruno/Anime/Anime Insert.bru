@@ -1,0 +1,28 @@
+meta {
+  name: Anime Insert
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8088/animes?ip=localhost&user=root&pass=root
+  body: json
+  auth: inherit
+}
+
+params:query {
+  ip: localhost
+  user: root
+  pass: root
+}
+
+body:json {
+  {
+    "nombre": "Frieren: Beyond Journey's End",
+    "categorias": "Fantasía, Aventura, Drama, Slice of Life, Magia",
+    "anhoSalida": 2023,
+    "descripcion": "La maga elfa Frieren y sus compañeros han derrotado al Rey Demonio, y traído la paz al mundo. Pero el tiempo pasa, y Frieren ve como sus compañeros humanos van falleciendo mientras ella sigue igual debido a su longevidad élfica. ¿Cómo entender la vida y la muerte que le rodea cuando ella tiene una esperanza de vida tan larga? Con los funerales de sus antiguos compañeros, Frieren decide cumplir los últimos deseos de sus compañeros y así empieza un nuevo viaje, y una nueva aventura...",
+    "imagen": "https://raw.githubusercontent.com/Eloycorme3/anime-imagenes/main/frieren.jpg",
+    "capTotales": 28
+  }
+}

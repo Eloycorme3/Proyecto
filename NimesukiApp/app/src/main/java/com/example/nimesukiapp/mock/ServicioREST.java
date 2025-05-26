@@ -6,10 +6,10 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.example.nimesukiapp.models.vo.Anime;
-import com.example.nimesukiapp.models.vo.Favoritos;
-import com.example.nimesukiapp.models.vo.FavoritosId;
-import com.example.nimesukiapp.models.vo.Usuario;
+import com.example.nimesukiapp.model.vo.Anime;
+import com.example.nimesukiapp.model.vo.Favoritos;
+import com.example.nimesukiapp.model.vo.FavoritosId;
+import com.example.nimesukiapp.model.vo.Usuario;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

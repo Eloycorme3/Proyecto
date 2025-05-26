@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.mock.ServicioREST;
-import com.example.nimesukiapp.models.vo.Usuario;
+import com.example.nimesukiapp.model.vo.Usuario;
 
 public class SplashActivity extends AppCompatActivity {
     private SharedPreferences prefs;

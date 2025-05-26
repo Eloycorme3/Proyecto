@@ -6,15 +6,17 @@ import static android.view.View.VISIBLE;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
 
 import android.app.ActivityOptions;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.LocaleList;
-import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,21 +25,25 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.mock.ServicioREST;
-import com.example.nimesukiapp.models.FavoritosManager;
-import com.example.nimesukiapp.models.vo.Favoritos;
-import com.example.nimesukiapp.models.vo.Usuario;
+import com.example.nimesukiapp.model.FavoritosManager;
+import com.example.nimesukiapp.model.vo.Favoritos;
+import com.example.nimesukiapp.model.vo.Usuario;
+import com.example.nimesukiapp.notification.WeeklyAnimeNotificationReceiver;
 import com.example.nimesukiapp.vista.fragments.AnimeDetailFragment;
 import com.example.nimesukiapp.vista.fragments.AnimeFavoritoDetailFragment;
 import com.example.nimesukiapp.vista.fragments.ListaAnimesFragment;
 import com.example.nimesukiapp.vista.fragments.LoginFragment;
-import com.example.nimesukiapp.models.vo.Anime;
+import com.example.nimesukiapp.model.vo.Anime;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Locale;
 
 public class ListaAnimesView extends AppCompatActivity implements ListaAnimesFragment.OnAnimeSelectedListener, LoginFragment.OnLoginSuccessListener, LoginFragment.OnRegisterSuccessListener {
@@ -52,6 +58,12 @@ public class ListaAnimesView extends AppCompatActivity implements ListaAnimesFra
         cacheManager = new FavoritosManager(getBaseContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista);
+
+
+        requestNotificationPermission();
+
+        scheduleWeeklyAnimeNotification(this);
+
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView_main);
         nombreUsuarioLogueado = null;
@@ -150,6 +162,50 @@ public class ListaAnimesView extends AppCompatActivity implements ListaAnimesFra
 
             return false;
         });
+    }
+
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.POST_NOTIFICATIONS},
+                        1001);
+            }
+        }
+    }
+
+
+    public static void scheduleWeeklyAnimeNotification(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences("MisPreferencias", MODE_PRIVATE);
+        boolean alreadyScheduled = prefs.getBoolean("alarm_scheduled", false);
+
+        if (alreadyScheduled) return;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        calendar.set(Calendar.HOUR_OF_DAY, 18);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+            calendar.add(Calendar.WEEK_OF_YEAR, 1);
+        }
+
+        Intent intent = new Intent(context, WeeklyAnimeNotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context, 1, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY * 7,
+                pendingIntent
+        );
+
+        prefs.edit().putBoolean("alarm_scheduled", true).apply();
     }
 
     private boolean isActivityActive() {

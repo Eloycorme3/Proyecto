@@ -20,7 +20,7 @@ import androidx.fragment.app.Fragment;
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.vista.adapters.AnimeAdapter;
 import com.example.nimesukiapp.mock.ServicioREST;
-import com.example.nimesukiapp.models.vo.Anime;
+import com.example.nimesukiapp.model.vo.Anime;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;

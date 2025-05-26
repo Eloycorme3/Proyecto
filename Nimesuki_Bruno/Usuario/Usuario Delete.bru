@@ -1,0 +1,17 @@
+meta {
+  name: Usuario Delete
+  type: http
+  seq: 5
+}
+
+delete {
+  url: http://localhost:8088/usuarios/23?ip=localhost&user=root&pass=root
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ip: localhost
+  user: root
+  pass: root
+}

@@ -1,0 +1,25 @@
+meta {
+  name: Usuario Insert
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8088/usuarios?ip=localhost&user=root&pass=root
+  body: json
+  auth: inherit
+}
+
+params:query {
+  ip: localhost
+  user: root
+  pass: root
+}
+
+body:json {
+  {
+      "nombre": "EloyBruno",
+      "contrasenha": "contrasenhaHasheada",
+      "tipo": "USER"
+    }
+}

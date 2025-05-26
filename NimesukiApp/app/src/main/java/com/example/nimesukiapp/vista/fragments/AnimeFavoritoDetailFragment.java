@@ -1,7 +1,6 @@
 package com.example.nimesukiapp.vista.fragments;
 
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,7 +12,6 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.StyleSpan;
@@ -27,7 +25,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.nimesukiapp.R;
-import com.example.nimesukiapp.models.vo.Favoritos;
+import com.example.nimesukiapp.model.vo.Favoritos;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textview.MaterialTextView;

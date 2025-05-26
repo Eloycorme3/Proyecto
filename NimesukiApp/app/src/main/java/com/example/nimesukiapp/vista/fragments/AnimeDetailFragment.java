@@ -25,7 +25,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.nimesukiapp.R;
-import com.example.nimesukiapp.models.vo.Anime;
+import com.example.nimesukiapp.model.vo.Anime;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textview.MaterialTextView;

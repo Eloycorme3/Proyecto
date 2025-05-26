@@ -21,7 +21,7 @@ import android.widget.Toast;
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.vista.adapters.FavoritoAdapter;
 import com.example.nimesukiapp.mock.ServicioREST;
-import com.example.nimesukiapp.models.vo.Favoritos;
+import com.example.nimesukiapp.model.vo.Favoritos;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;

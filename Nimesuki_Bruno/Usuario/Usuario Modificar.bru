@@ -1,0 +1,25 @@
+meta {
+  name: Usuario Modificar
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:8088/usuarios/8?ip=localhost&user=root&pass=root
+  body: json
+  auth: inherit
+}
+
+params:query {
+  ip: localhost
+  user: root
+  pass: root
+}
+
+body:json {
+  {
+      "nombre": "Maria2",
+      "contrasenha": "$2a$10$VCox3QljCRRMO6SYSUcN3OIqnpfMcYKnQexGxoLZ8eQtN0hw153gm",
+      "tipo": "ADMIN"
+    }
+}

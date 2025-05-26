@@ -1,4 +1,4 @@
-package com.example.nimesukiapp.models.vo;
+package com.example.nimesukiapp.model.vo;
 
 import java.io.Serializable;
 

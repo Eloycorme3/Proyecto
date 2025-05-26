@@ -4,7 +4,6 @@
  */
 package modelo.dao;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -40,17 +39,11 @@ public class FavoritosDAO {
     }
     
     public List<Favoritos> obtenerFavoritosPorUsuario(Session session, Usuario u) {
-        List<Favoritos> favoritos = new ArrayList<>();
-
         String namedQuery = "Favoritos.findByIdUsuarioFK";
         Query q = session.createNamedQuery(namedQuery);
         q.setParameter("idusuarioFK", u.getIdUsuario());
 
-        Iterator it = q.list().iterator();
-        while (it.hasNext()) {
-            Favoritos f = (Favoritos) it.next();
-            favoritos.add(f);
-        }
+        List<Favoritos> favoritos = (List<Favoritos>) q.list();
         
         return favoritos;
     }
@@ -102,6 +95,16 @@ public class FavoritosDAO {
             }
         }
     }
+
+    public List<Favoritos> buscarFavoritosPorAnime(Session session, Anime a) {
+        String query = "Favoritos.findByIdAnimeFK";
+        Query q = session.createNamedQuery(query);
+        q.setParameter("idanimeFK", a.getIdAnime());
+        
+        List<Favoritos> favoritos = (List<Favoritos>) q.list();
+        return favoritos;
+    }
+    
 
     
 }

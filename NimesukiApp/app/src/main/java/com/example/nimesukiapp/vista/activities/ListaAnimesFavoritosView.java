@@ -17,7 +17,7 @@ import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.vista.fragments.AnimeFavoritoDetailFragment;
 import com.example.nimesukiapp.vista.fragments.ListaAnimesFavoritosFragment;
 import com.example.nimesukiapp.vista.fragments.LoginFragment;
-import com.example.nimesukiapp.models.vo.Favoritos;
+import com.example.nimesukiapp.model.vo.Favoritos;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ListaAnimesFavoritosView extends AppCompatActivity implements ListaAnimesFavoritosFragment.OnAnimeFavoriteSelectedListener {

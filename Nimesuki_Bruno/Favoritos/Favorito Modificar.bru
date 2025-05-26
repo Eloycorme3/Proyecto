@@ -1,0 +1,43 @@
+meta {
+  name: Favorito Modificar
+  type: http
+  seq: 5
+}
+
+put {
+  url: http://localhost:8088/favoritos?ip=localhost&user=root&pass=root
+  body: json
+  auth: inherit
+}
+
+params:query {
+  ip: localhost
+  user: root
+  pass: root
+}
+
+body:json {
+  {
+      "id": {
+        "usuario": 20,
+        "anime": 11
+      },
+      "anime": {
+        "idAnime": 11,
+        "nombre": "One Piece",
+        "categorias": "Acción, Aventura, Shounen, Fantasía, Comedia, Superpoderes, Supervivencia, Drama, Artes marciales",
+        "anhoSalida": 1999,
+        "descripcion": "Monkey D. Luffy, un joven con el sueño de convertirse en el Rey de los Piratas, zarpa en busca del legendario tesoro conocido como el \"One Piece\". A lo largo de su viaje, Luffy recluta a varios compañeros con habilidades únicas, enfrentando peligrosos enemigos y descubriendo secretos ocultos en un mundo lleno de islas misteriosas, mares tempestuosos y aventuras emocionantes. La lealtad, la amistad y la determinación son los pilares que guiarán a Luffy en su misión por conquistar el Grand Line.",
+        "imagen": "https://raw.githubusercontent.com/Eloycorme3/anime-imagenes/main/one_piece.jpg",
+        "capTotales": 1126
+      },
+      "usuario": {
+        "idUsuario": 20,
+        "nombre": "Eloycorme3",
+        "contrasenha": "$2a$10$BBQGxP.NsFQiIKGEl9cspOyd02kgCyLyBJ00GowQA09GYVedvWIGS",
+        "tipo": "USER"
+      },
+      "valoracion": 5,
+      "capActual": 1126
+    }
+}

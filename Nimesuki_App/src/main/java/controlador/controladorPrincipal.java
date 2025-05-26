@@ -9,6 +9,7 @@ import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -921,8 +922,15 @@ public class controladorPrincipal {
             String nombreAnime = consultas.getTxtNombreAnime().getText().trim();
             Anime a = aniDAO.buscarAnimePorNombre(session, nombreAnime);
             if (a != null) {
+                List<Favoritos> favoritos = favDAO.buscarFavoritosPorAnime(session, a);
+                if (favoritos != null) {
+                    for (Favoritos favorito : favoritos) {
+                        favDAO.borrarFavorito(session, favorito);
+                    }
+                }
                 aniDAO.darBajaAnime(session, a);
                 JOptionPane.showMessageDialog(null, "Anime eliminado con éxito.");
+                cargarComboAnimes();
             } else {
                 JOptionPane.showMessageDialog(null, "Anime a eliminar no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
             }

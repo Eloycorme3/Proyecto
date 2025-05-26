@@ -1,4 +1,4 @@
-package com.example.nimesukiapp.models;
+package com.example.nimesukiapp.model;
 
 import androidx.room.Database;
 import androidx.room.Room;
@@ -6,12 +6,12 @@ import androidx.room.RoomDatabase;
 
 import android.content.Context;
 
-import com.example.nimesukiapp.models.dao.AnimeDAO;
-import com.example.nimesukiapp.models.dao.FavoritosDAO;
-import com.example.nimesukiapp.models.dao.UsuarioDAO;
-import com.example.nimesukiapp.models.entities.AnimeEntity;
-import com.example.nimesukiapp.models.entities.FavoritosEntity;
-import com.example.nimesukiapp.models.entities.UsuarioEntity;
+import com.example.nimesukiapp.model.dao.AnimeDAO;
+import com.example.nimesukiapp.model.dao.FavoritosDAO;
+import com.example.nimesukiapp.model.dao.UsuarioDAO;
+import com.example.nimesukiapp.model.entities.AnimeEntity;
+import com.example.nimesukiapp.model.entities.FavoritosEntity;
+import com.example.nimesukiapp.model.entities.UsuarioEntity;
 
 @Database(entities = {UsuarioEntity.class, AnimeEntity.class, FavoritosEntity.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {

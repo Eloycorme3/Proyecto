@@ -1,4 +1,4 @@
-package com.example.nimesukiapp.models;
+package com.example.nimesukiapp.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
