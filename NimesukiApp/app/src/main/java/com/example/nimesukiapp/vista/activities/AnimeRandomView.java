@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nimesukiapp.R;
+import com.example.nimesukiapp.vista.fragments.AnimeRandomEmptyFragment;
 import com.example.nimesukiapp.vista.fragments.AnimeRandomFragment;
 import com.example.nimesukiapp.vista.fragments.LoginFragment;
 import com.example.nimesukiapp.mock.ServicioREST;
@@ -41,7 +42,6 @@ public class AnimeRandomView extends AppCompatActivity {
 
         mostrarProgress(true);
         bottomNavigationView = findViewById(R.id.bottomNavigationView_random);
-
 
         prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
@@ -100,6 +100,16 @@ public class AnimeRandomView extends AppCompatActivity {
 
                 runOnUiThread(() -> {
                     if (isDestroyed() || getSupportFragmentManager().isStateSaved()) {
+                        return;
+                    }
+
+                    if (animeAleatorio == null) {
+                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.fragment_container_random, new AnimeRandomEmptyFragment())
+                                    .commit();
+                            mostrarProgress(false);
+                        }, (1000));
                         return;
                     }
 

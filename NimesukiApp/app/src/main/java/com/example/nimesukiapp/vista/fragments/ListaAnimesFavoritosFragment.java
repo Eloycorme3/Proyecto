@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 public class ListaAnimesFavoritosFragment extends Fragment {
     private ListView listView;
     private TextInputEditText searchEditText;
+    private LinearLayout emptyViewFavoritos;
     private ArrayList<Favoritos> listaAnimesFavoritos = new ArrayList<>();
     private OnAnimeFavoriteSelectedListener listener;
     FavoritoAdapter adapter;
@@ -70,6 +72,10 @@ public class ListaAnimesFavoritosFragment extends Fragment {
             }
             return false;
         });
+
+        emptyViewFavoritos = view.findViewById(R.id.empty_view_favorites);
+        listView.setEmptyView(emptyViewFavoritos);
+        emptyViewFavoritos.setVisibility(View.GONE);
 
         return view;
     }
@@ -113,9 +119,14 @@ public class ListaAnimesFavoritosFragment extends Fragment {
                     listaAnimesFavoritos.clear();
                     listaAnimesFavoritos.addAll(animesFavoritos);
 
-                    requireActivity().runOnUiThread(() ->
-                            adapter.notifyDataSetChanged()
-                    );
+                    requireActivity().runOnUiThread(() -> {
+                        adapter.notifyDataSetChanged();
+                        if (listaAnimesFavoritos.isEmpty()) {
+                            emptyViewFavoritos.setVisibility(View.VISIBLE);
+                        } else {
+                            emptyViewFavoritos.setVisibility(View.GONE);
+                        }
+                    });
                 }
             }
 

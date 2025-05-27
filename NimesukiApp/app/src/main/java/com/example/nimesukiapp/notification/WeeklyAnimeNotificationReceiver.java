@@ -37,7 +37,7 @@ public class WeeklyAnimeNotificationReceiver extends BroadcastReceiver {
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
-                .setSmallIcon(R.mipmap.ic_nimesuki_round)
+                .setSmallIcon(R.drawable.ic_nimesuki_splash_scaled)
                 .setContentTitle("¡A POR OTRA SEMANA DE NUEVOS EPISODIOS!")
                 .setContentText("¡No te pierdas tus animes favoritos esta semana!")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);

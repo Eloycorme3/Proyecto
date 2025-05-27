@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,12 +23,14 @@ import com.example.nimesukiapp.vista.adapters.AnimeAdapter;
 import com.example.nimesukiapp.mock.ServicioREST;
 import com.example.nimesukiapp.model.vo.Anime;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
 
 public class ListaAnimesFragment extends Fragment {
     private ListView listView;
     private TextInputEditText searchEditText;
+    private LinearLayout emptyView;
     private ArrayList<Anime> listaAnimes = new ArrayList<>();
     private OnAnimeSelectedListener listener;
     AnimeAdapter adapter;
@@ -61,13 +64,18 @@ public class ListaAnimesFragment extends Fragment {
         searchEditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
                 String textoBusqueda = searchEditText.getText().toString();
-                if (!textoBusqueda.isEmpty()) {
-                    buscarAnimes(textoBusqueda);
+                if (textoBusqueda.trim().isEmpty()) {
+                    textoBusqueda = " ";
                 }
+                buscarAnimes(textoBusqueda);
                 return true;
             }
             return false;
         });
+
+        emptyView = view.findViewById(R.id.empty_view);
+        listView.setEmptyView(emptyView);
+        emptyView.setVisibility(View.GONE);
 
         return view;
     }
@@ -110,9 +118,14 @@ public class ListaAnimesFragment extends Fragment {
                 if (isAdded()) {
                     listaAnimes.clear();
                     listaAnimes.addAll(animes);
-                    requireActivity().runOnUiThread(() ->
-                            adapter.notifyDataSetChanged()
-                    );
+                    requireActivity().runOnUiThread(() -> {
+                        adapter.notifyDataSetChanged();
+                        if (listaAnimes.isEmpty()) {
+                            emptyView.setVisibility(View.VISIBLE);
+                        } else {
+                            emptyView.setVisibility(View.GONE);
+                        }
+                    });
                 }
             }
 

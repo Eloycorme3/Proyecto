@@ -50,4 +50,6 @@
     <string name="delete_favourite_anime_error">Error al eliminar el anime de favorito</string>
     <string name="delete_favourite_anime_successfully">Anime eliminado de favoritos</string>
     <string name="error_init_favorites">Error al inicializar los favoritos</string>
+    <string name="no_results">No se encontraron animes</string>
+    <string name="no_more_animes">Te acabaste la lista... ¿repetimos capítulo?</string>
 </resources>

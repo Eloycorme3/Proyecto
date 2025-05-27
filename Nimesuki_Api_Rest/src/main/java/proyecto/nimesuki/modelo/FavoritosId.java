@@ -4,14 +4,15 @@
  */
 package proyecto.nimesuki.modelo;
 
-/**
- *
- * @author eloy.castro
- */
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
+
+/**
+ *
+ * @author eloy.castro
+ */
 
 @Embeddable
 public class FavoritosId implements Serializable {
