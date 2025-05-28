@@ -1,4 +1,4 @@
-package com.example.nimesukiapp.vista.fragments;
+package com.example.nimesukiapp.view.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

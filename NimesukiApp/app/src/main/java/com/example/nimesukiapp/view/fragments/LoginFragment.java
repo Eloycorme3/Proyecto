@@ -1,4 +1,4 @@
-package com.example.nimesukiapp.vista.fragments;
+package com.example.nimesukiapp.view.fragments;
 
 import static android.content.Context.MODE_PRIVATE;
 

@@ -1,4 +1,4 @@
-package com.example.nimesukiapp.vista.activities;
+package com.example.nimesukiapp.view.activities;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -11,16 +11,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.nimesukiapp.R;
-import com.example.nimesukiapp.vista.fragments.AnimeFavoritoDetailFragment;
-import com.example.nimesukiapp.vista.fragments.ListaAnimesFavoritosFragment;
-import com.example.nimesukiapp.vista.fragments.LoginFragment;
-import com.example.nimesukiapp.model.vo.Favoritos;
+import com.example.nimesukiapp.view.fragments.LoginFragment;
+import com.example.nimesukiapp.view.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class ListaAnimesFavoritosView extends AppCompatActivity implements ListaAnimesFavoritosFragment.OnAnimeFavoriteSelectedListener {
+public class PerfilView extends AppCompatActivity {
     private String nombreUsuarioLogueado = "";
     private BottomNavigationView bottomNavigationView;
     private SharedPreferences prefs;
@@ -28,9 +25,9 @@ public class ListaAnimesFavoritosView extends AppCompatActivity implements Lista
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lista_favoritos);
+        setContentView(R.layout.activity_perfil);
 
-        bottomNavigationView = findViewById(R.id.bottomNavigationView_favoritos);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView_perfil);
 
         if (savedInstanceState == null) {
             prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
@@ -38,12 +35,13 @@ public class ListaAnimesFavoritosView extends AppCompatActivity implements Lista
 
             if (nombreUsuarioLogueado != null) {
                 getSupportFragmentManager().beginTransaction()
-                       .replace(R.id.fragment_container_favoritos, new ListaAnimesFavoritosFragment())
-                       .commit();
+                        .replace(R.id.fragment_container_perfil, new ProfileFragment())
+                        .commit();
+
                 bottomNavigationView.setVisibility(VISIBLE);
             } else {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container_favoritos, new LoginFragment())
+                        .replace(R.id.fragment_container_perfil, new LoginFragment())
                         .commit();
                 bottomNavigationView.setVisibility(INVISIBLE);
             }
@@ -59,6 +57,11 @@ public class ListaAnimesFavoritosView extends AppCompatActivity implements Lista
                 overridePendingTransition(0, 0);
                 return true;
             } else if (itemId == R.id.nav_favorites) {
+                Intent intent = new Intent(this, ListaAnimesFavoritosView.class);
+                ActivityOptions options = ActivityOptions
+                        .makeCustomAnimation(this, 0, 0);
+                startActivity(intent, options.toBundle());
+                finish();
                 return true;
             } else if (itemId == R.id.nav_random) {
                 Intent intent = new Intent(this, AnimeRandomView.class);
@@ -68,46 +71,25 @@ public class ListaAnimesFavoritosView extends AppCompatActivity implements Lista
                 finish();
                 return true;
             } else if (itemId == R.id.nav_profile) {
-                Intent intent = new Intent(this, PerfilView.class);
-                ActivityOptions options = ActivityOptions
-                        .makeCustomAnimation(this, 0, 0);
-                startActivity(intent, options.toBundle());
-                finish();
                 return true;
             }
 
             return false;
         });
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        bottomNavigationView.setSelectedItemId(R.id.nav_favorites);
+        bottomNavigationView.setSelectedItemId(R.id.nav_profile);
+        nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.bottom_nav_menu, menu);
         return true;
-    }
-
-    @Override
-    public void onAnimeFavoritoSelected(Favoritos favorito) {
-        AnimeFavoritoDetailFragment animeFavoritoDetailFragment = AnimeFavoritoDetailFragment.newInstance(
-                favorito
-        );
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(
-                R.anim.fragment_enter,
-                R.anim.fragment_exit,
-                R.anim.fragment_pop_enter,
-                R.anim.fragment_pop_exit
-        ); //Animaciones
-        transaction.replace(R.id.fragment_container_favoritos, animeFavoritoDetailFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
     }
 }

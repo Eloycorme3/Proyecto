@@ -1,4 +1,4 @@
-package com.example.nimesukiapp.vista.activities;
+package com.example.nimesukiapp.view.activities;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -34,10 +34,10 @@ import com.example.nimesukiapp.model.FavoritosManager;
 import com.example.nimesukiapp.model.vo.Favoritos;
 import com.example.nimesukiapp.model.vo.Usuario;
 import com.example.nimesukiapp.notification.WeeklyAnimeNotificationReceiver;
-import com.example.nimesukiapp.vista.fragments.AnimeDetailFragment;
-import com.example.nimesukiapp.vista.fragments.AnimeFavoritoDetailFragment;
-import com.example.nimesukiapp.vista.fragments.ListaAnimesFragment;
-import com.example.nimesukiapp.vista.fragments.LoginFragment;
+import com.example.nimesukiapp.view.fragments.AnimeDetailFragment;
+import com.example.nimesukiapp.view.fragments.AnimeFavoritoDetailFragment;
+import com.example.nimesukiapp.view.fragments.ListaAnimesFragment;
+import com.example.nimesukiapp.view.fragments.LoginFragment;
 import com.example.nimesukiapp.model.vo.Anime;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
@@ -59,11 +59,9 @@ public class ListaAnimesView extends AppCompatActivity implements ListaAnimesFra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista);
 
-
         requestNotificationPermission();
 
         scheduleWeeklyAnimeNotification(this);
-
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView_main);
         nombreUsuarioLogueado = null;
@@ -183,8 +181,8 @@ public class ListaAnimesView extends AppCompatActivity implements ListaAnimesFra
         if (alreadyScheduled) return;
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
-        calendar.set(Calendar.HOUR_OF_DAY, 18);
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+        calendar.set(Calendar.HOUR_OF_DAY, 17);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
 
@@ -269,6 +267,7 @@ public class ListaAnimesView extends AppCompatActivity implements ListaAnimesFra
         super.onResume();
 
         bottomNavigationView.setSelectedItemId(R.id.nav_catalog);
+        nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -357,7 +356,7 @@ public class ListaAnimesView extends AppCompatActivity implements ListaAnimesFra
                 iniciarlizarCache();
             }
 
-            bottomNavigationView.setVisibility(View.VISIBLE);
+            bottomNavigationView.setVisibility(VISIBLE);
         });
     }
 
@@ -370,7 +369,7 @@ public class ListaAnimesView extends AppCompatActivity implements ListaAnimesFra
                     .replace(R.id.fragment_container_main, new ListaAnimesFragment())
                     .commit();
 
-            bottomNavigationView.setVisibility(View.VISIBLE);
+            bottomNavigationView.setVisibility(VISIBLE);
         });
     }
 

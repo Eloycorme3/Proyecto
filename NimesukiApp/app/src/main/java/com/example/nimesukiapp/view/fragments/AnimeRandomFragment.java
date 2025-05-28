@@ -1,4 +1,4 @@
-package com.example.nimesukiapp.vista.fragments;
+package com.example.nimesukiapp.view.fragments;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -22,35 +22,35 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.nimesukiapp.R;
-import com.example.nimesukiapp.model.vo.Favoritos;
+import com.example.nimesukiapp.model.vo.Anime;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textview.MaterialTextView;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AnimeFavoritoDetailFragment#newInstance} factory method to
+ * Use the {@link AnimeRandomFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AnimeFavoritoDetailFragment extends Fragment {
-    private ImageView imageViewAnimeFav;
-    private MaterialTextView textNombreFav, textDescripcionFav,
-            textAnhoFav, textCategoriasFav, textCapitulosFav;
-    private MaterialToolbar toolbar;
-    private String imageVersionFav = "?v=3";
+public class AnimeRandomFragment extends Fragment {
+    private ImageView imageViewAnimeRandom;
+    private MaterialTextView textNombreRandom, textDescripcionRandom,
+            textAnhoRandom, textCategoriasRandom, textCapitulosRandom;
+    private String imageVersionRandom = "?v=3";
     private boolean isExpanded = false;
-    private Favoritos animeFav;
+    private Anime animeRandom;
 
-    public AnimeFavoritoDetailFragment() {
+    public AnimeRandomFragment(Anime anime) {
+        this.animeRandom = anime;
     }
 
-    public static AnimeFavoritoDetailFragment newInstance(Favoritos animeFavorito) {
-        AnimeFavoritoDetailFragment fragment = new AnimeFavoritoDetailFragment();
+    public AnimeRandomFragment() {}
+
+    public static AnimeRandomFragment newInstance(Anime anime) {
+        AnimeRandomFragment fragment = new AnimeRandomFragment(anime);
         Bundle args = new Bundle();
-        args.putSerializable("animeFavorito", animeFavorito);
+        args.putSerializable("anime", anime);
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,7 +61,7 @@ public class AnimeFavoritoDetailFragment extends Fragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        return inflater.inflate(R.layout.fragment_anime_favorito_detail, container, false);
+        return inflater.inflate(R.layout.fragment_anime_random, container, false);
     }
 
     @Override
@@ -72,44 +72,51 @@ public class AnimeFavoritoDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (getArguments() != null) {
-            animeFav = (Favoritos) getArguments().getSerializable("animeFavorito");
+            animeRandom = (Anime) getArguments().getSerializable("anime");
         }
+        imageViewAnimeRandom = view.findViewById(R.id.imageViewAnimeRandom);
+        textNombreRandom = view.findViewById(R.id.textNombreRandom);
+        textDescripcionRandom = view.findViewById(R.id.textDescripcionRandom);
+        textAnhoRandom = view.findViewById(R.id.textAnhoRandom);
+        textCategoriasRandom = view.findViewById(R.id.textCategoriasRandom);
+        textCapitulosRandom = view.findViewById(R.id.textCapitulosRandom);
 
-        imageViewAnimeFav = view.findViewById(R.id.imageViewAnimeFav);
-        textNombreFav = view.findViewById(R.id.textNombreFav);
-        textDescripcionFav = view.findViewById(R.id.textDescripcionFav);
-        textAnhoFav = view.findViewById(R.id.textAnhoFav);
-        textCategoriasFav = view.findViewById(R.id.textCategoriasFav);
-        textCapitulosFav = view.findViewById(R.id.textCapitulosFav);
-        toolbar = view.findViewById(R.id.topAppBarFav);
+        CollapsingToolbarLayout collapsingToolbar = view.findViewById(R.id.collapsingToolbarRandom);
+        collapsingToolbar.setTitle("");
 
-        CollapsingToolbarLayout collapsingToolbarFav = view.findViewById(R.id.collapsingToolbarFav);
-        collapsingToolbarFav.setTitle("");
+        if (animeRandom != null) {
+            try {
+                actualizarVistaAnime(animeRandom);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
-        if (animeFav != null) {
-            textNombreFav.setText(animeFav.getAnime().getNombre());
-            textDescripcionFav.setText(animeFav.getAnime().getDescripcion());
-            textAnhoFav.setText(getString(R.string.release_year) + ": " + animeFav.getAnime().getAnhoSalida());
-            textCategoriasFav.setText(getString(R.string.categories) + ": " + animeFav.getAnime().getCategorias());
-            textCapitulosFav.setText(getString(R.string.episodes) + ": " + animeFav.getAnime().getCapTotales());
+    public void actualizarAnime(Anime nuevoAnime) throws InterruptedException {
+        this.animeRandom = nuevoAnime;
+        if (isAdded()) {
+            actualizarVistaAnime(animeRandom);
+        }
+    }
 
-            setupExpandableText(textDescripcionFav, animeFav.getAnime().getDescripcion(), 3);
+    private void actualizarVistaAnime(Anime anime) throws InterruptedException {
+        if (anime != null) {
+            textNombreRandom.setText(anime.getNombre());
+            textDescripcionRandom.setText(anime.getDescripcion());
+            textAnhoRandom.setText(getString(R.string.release_year) + ": " + anime.getAnhoSalida());
+            textCategoriasRandom.setText(getString(R.string.categories) + ": " + anime.getCategorias());
+            textCapitulosRandom.setText(getString(R.string.episodes) + ": " + anime.getCapTotales());
 
-            Glide.with(requireContext())
-                    .load(animeFav.getAnime().getImagen() + imageVersionFav)
-                    .format(DecodeFormat.PREFER_RGB_565)
+            setupExpandableText(textDescripcionRandom, anime.getDescripcion(), 3);
+
+            Glide.with(this)
+                    .load(anime.getImagen() + imageVersionRandom)
                     .placeholder(R.drawable.placeholder)
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .centerCrop()
-                    .into(imageViewAnimeFav);
+                    .into(imageViewAnimeRandom);
         }
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                requireActivity().getOnBackPressedDispatcher().onBackPressed();
-            }
-        });
     }
 
     private void setupExpandableText(MaterialTextView textView, String descripcion, int maxLines) {
@@ -211,5 +218,5 @@ public class AnimeFavoritoDetailFragment extends Fragment {
             }
         });
     }
-    
+
 }

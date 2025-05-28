@@ -1,6 +1,8 @@
-package com.example.nimesukiapp.vista.fragments;
+package com.example.nimesukiapp.view.fragments;
 
 import static android.content.Context.MODE_PRIVATE;
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +21,11 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.nimesukiapp.R;
-import com.example.nimesukiapp.vista.adapters.FavoritoAdapter;
+import com.example.nimesukiapp.view.adapters.FavoritoAdapter;
 import com.example.nimesukiapp.mock.ServicioREST;
 import com.example.nimesukiapp.model.vo.Favoritos;
 import com.google.android.material.textfield.TextInputEditText;
@@ -31,9 +36,10 @@ public class ListaAnimesFavoritosFragment extends Fragment {
     private ListView listView;
     private TextInputEditText searchEditText;
     private LinearLayout emptyViewFavoritos;
+    private ProgressBar loading;
     private ArrayList<Favoritos> listaAnimesFavoritos = new ArrayList<>();
     private OnAnimeFavoriteSelectedListener listener;
-    FavoritoAdapter adapter;
+    private FavoritoAdapter adapter;
     private String nombreUsuarioLogueado = "";
     private SharedPreferences prefs;
 
@@ -43,8 +49,11 @@ public class ListaAnimesFavoritosFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_catalog_favorites, container, false);
-        listView = view.findViewById(R.id.animes_favoritos_listview);
-        searchEditText = view.findViewById(R.id.search_edit_text_favorites);
+        listView = view.findViewById(R.id.listviewAnimesFavoritos);
+        searchEditText = view.findViewById(R.id.searchTextFavoritos);
+        loading = view.findViewById(R.id.progressBarLoadingFavoritos);
+
+        mostrarProgress(true);
 
         prefs = getContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
@@ -73,9 +82,9 @@ public class ListaAnimesFavoritosFragment extends Fragment {
             return false;
         });
 
-        emptyViewFavoritos = view.findViewById(R.id.empty_view_favorites);
+        emptyViewFavoritos = view.findViewById(R.id.emptyViewFavorites);
         listView.setEmptyView(emptyViewFavoritos);
-        emptyViewFavoritos.setVisibility(View.GONE);
+        emptyViewFavoritos.setVisibility(GONE);
 
         return view;
     }
@@ -94,20 +103,18 @@ public class ListaAnimesFavoritosFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        /*
-        try {
-            obtenerActor(1); //funciona
-            obtenerPelicula(1); //funciona
-            obtenerActoresPorPelicula(1); //funciona
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }*/
+        nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+    }
+
+    private void mostrarProgress(boolean mostrar) {
+        loading.setVisibility(mostrar ? VISIBLE : GONE);
+        listView.setVisibility(mostrar ? GONE : VISIBLE);
     }
 
     private void cargarAnimesFavoritos() {
@@ -119,14 +126,17 @@ public class ListaAnimesFavoritosFragment extends Fragment {
                     listaAnimesFavoritos.clear();
                     listaAnimesFavoritos.addAll(animesFavoritos);
 
-                    requireActivity().runOnUiThread(() -> {
-                        adapter.notifyDataSetChanged();
-                        if (listaAnimesFavoritos.isEmpty()) {
-                            emptyViewFavoritos.setVisibility(View.VISIBLE);
-                        } else {
-                            emptyViewFavoritos.setVisibility(View.GONE);
-                        }
-                    });
+                    requireActivity().runOnUiThread(() ->
+                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                mostrarProgress(false);
+                                adapter.notifyDataSetChanged();
+                                if (listaAnimesFavoritos.isEmpty()) {
+                                    emptyViewFavoritos.setVisibility(VISIBLE);
+                                } else {
+                                    emptyViewFavoritos.setVisibility(GONE);
+                                }
+                            }, 1000)
+                    );
                 }
             }
 
@@ -149,6 +159,7 @@ public class ListaAnimesFavoritosFragment extends Fragment {
                 if (isAdded()) {
                     listaAnimesFavoritos.clear();
                     listaAnimesFavoritos.addAll(favoritosPorNombre);
+
                     requireActivity().runOnUiThread(() ->
                             adapter.notifyDataSetChanged()
                     );

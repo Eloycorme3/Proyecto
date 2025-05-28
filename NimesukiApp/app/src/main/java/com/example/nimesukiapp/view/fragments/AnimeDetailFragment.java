@@ -1,4 +1,4 @@
-package com.example.nimesukiapp.vista.fragments;
+package com.example.nimesukiapp.view.fragments;
 
 import android.graphics.Typeface;
 import android.os.Bundle;

@@ -33,7 +33,7 @@
             android:exported="true" />
 
         <activity
-            android:name=".vista.activities.SplashActivity"
+            android:name=".view.activities.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NimesukiApp">
@@ -44,20 +44,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".vista.activities.ListaAnimesView"
+            android:name=".view.activities.ListaAnimesView"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NimesukiApp" />
         <activity
-            android:name=".vista.activities.AnimeRandomView"
+            android:name=".view.activities.AnimeRandomView"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NimesukiApp" />
         <activity
-            android:name=".vista.activities.ListaAnimesFavoritosView"
+            android:name=".view.activities.ListaAnimesFavoritosView"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NimesukiApp" />
         <activity
-            android:name=".vista.activities.PerfilView"
+            android:name=".view.activities.PerfilView"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NimesukiApp" />
     </application>

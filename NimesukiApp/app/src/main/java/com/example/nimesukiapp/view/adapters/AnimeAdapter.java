@@ -1,4 +1,4 @@
-package com.example.nimesukiapp.vista.adapters;
+package com.example.nimesukiapp.view.adapters;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -37,9 +37,9 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class AnimeAdapter extends ArrayAdapter<Anime> {
-    Context contexto;
-    FavoritosManager cacheManager;
-    ArrayList<String> favoritosCache;
+    private Context contexto;
+    private FavoritosManager cacheManager;
+    private ArrayList<String> favoritosCache;
     private SharedPreferences prefs;
     private String imageVersion = "?v=3";
 
@@ -65,9 +65,8 @@ public class AnimeAdapter extends ArrayAdapter<Anime> {
         Glide.with(contexto)
                 .load(anime.getImagen() + imageVersion)
                 .format(DecodeFormat.PREFER_RGB_565)
-                .placeholder(R.drawable.placeholder)
+                .placeholder(R.drawable.ic_image_not_suported)
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                .error(R.drawable.ic_profile)
                 .into(imagen);
 
         ImageButton favoriteButton = convertView.findViewById(R.id.favorite_button);

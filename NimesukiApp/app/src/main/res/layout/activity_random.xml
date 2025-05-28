@@ -9,13 +9,13 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container_random"
-        android:name="com.example.nimesukiapp.vista.fragments.ListaAnimesFragment"
+        android:name="com.example.nimesukiapp.view.fragments.ListaAnimesFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottomNavigationView_random" />
 
     <ProgressBar
-        android:id="@+id/progressBarLoading"
+        android:id="@+id/progressBarLoadingRandom"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="64dp"
         android:layout_height="64dp"

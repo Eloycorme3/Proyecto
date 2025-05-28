@@ -1,4 +1,4 @@
-package com.example.nimesukiapp.vista.activities;
+package com.example.nimesukiapp.view.activities;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
@@ -18,9 +18,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nimesukiapp.R;
-import com.example.nimesukiapp.vista.fragments.AnimeRandomEmptyFragment;
-import com.example.nimesukiapp.vista.fragments.AnimeRandomFragment;
-import com.example.nimesukiapp.vista.fragments.LoginFragment;
+import com.example.nimesukiapp.view.fragments.AnimeRandomEmptyFragment;
+import com.example.nimesukiapp.view.fragments.AnimeRandomFragment;
+import com.example.nimesukiapp.view.fragments.LoginFragment;
 import com.example.nimesukiapp.mock.ServicioREST;
 import com.example.nimesukiapp.model.vo.Anime;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -38,7 +38,7 @@ public class AnimeRandomView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_random);
-        loading = findViewById(R.id.progressBarLoading);
+        loading = findViewById(R.id.progressBarLoadingRandom);
 
         mostrarProgress(true);
         bottomNavigationView = findViewById(R.id.bottomNavigationView_random);
@@ -104,13 +104,15 @@ public class AnimeRandomView extends AppCompatActivity {
                     }
 
                     if (animeAleatorio == null) {
-                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                            getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.fragment_container_random, new AnimeRandomEmptyFragment())
-                                    .commit();
-                            mostrarProgress(false);
-                        }, (1000));
-                        return;
+                        if (!isFinishing()) {
+                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                getSupportFragmentManager().beginTransaction()
+                                        .replace(R.id.fragment_container_random, new AnimeRandomEmptyFragment())
+                                        .commit();
+                                mostrarProgress(false);
+                            }, (1000));
+                            return;
+                        }
                     }
 
                     if (animeRandomFragment == null) {
@@ -143,7 +145,7 @@ public class AnimeRandomView extends AppCompatActivity {
         }).start();
     }
 
-    private void enableBottomBar(boolean enable){
+    private void enableBottomBar(boolean enable) {
         for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
             bottomNavigationView.getMenu().getItem(i).setEnabled(enable);
         }
@@ -159,6 +161,7 @@ public class AnimeRandomView extends AppCompatActivity {
         super.onResume();
 
         bottomNavigationView.setSelectedItemId(R.id.nav_random);
+        nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

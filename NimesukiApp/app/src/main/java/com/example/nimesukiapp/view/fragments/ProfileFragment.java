@@ -1,4 +1,4 @@
-package com.example.nimesukiapp.vista.fragments;
+package com.example.nimesukiapp.view.fragments;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -26,7 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.example.nimesukiapp.R;
-import com.example.nimesukiapp.vista.activities.ListaAnimesView;
+import com.example.nimesukiapp.view.activities.ListaAnimesView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/pastelBackground"
     android:padding="24dp"
-    tools:context=".vista.fragments.LoginFragment">
+    tools:context=".view.fragments.LoginFragment">
 
     <ImageButton
         android:id="@+id/options_button"

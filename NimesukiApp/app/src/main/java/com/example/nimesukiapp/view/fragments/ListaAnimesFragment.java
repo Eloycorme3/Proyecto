@@ -1,10 +1,15 @@
-package com.example.nimesukiapp.vista.fragments;
+package com.example.nimesukiapp.view.fragments;
 
 import static android.content.Context.MODE_PRIVATE;
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +17,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,11 +25,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.nimesukiapp.R;
-import com.example.nimesukiapp.vista.adapters.AnimeAdapter;
+import com.example.nimesukiapp.view.adapters.AnimeAdapter;
 import com.example.nimesukiapp.mock.ServicioREST;
 import com.example.nimesukiapp.model.vo.Anime;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
 
@@ -31,10 +36,11 @@ public class ListaAnimesFragment extends Fragment {
     private ListView listView;
     private TextInputEditText searchEditText;
     private LinearLayout emptyView;
+    private ProgressBar loading;
     private ArrayList<Anime> listaAnimes = new ArrayList<>();
     private OnAnimeSelectedListener listener;
-    AnimeAdapter adapter;
-    SharedPreferences prefs;
+    private AnimeAdapter adapter;
+    private SharedPreferences prefs;
 
     public ListaAnimesFragment() {
     }
@@ -43,8 +49,11 @@ public class ListaAnimesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_catalog, container, false);
         prefs = requireContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
-        listView = view.findViewById(R.id.anime_listview);
-        searchEditText = view.findViewById(R.id.search_edit_text);
+        listView = view.findViewById(R.id.listviewFavoritos);
+        searchEditText = view.findViewById(R.id.searchAnimes);
+        loading = view.findViewById(R.id.progressBarLoading);
+
+        mostrarProgress(true);
 
         cargarAnimes();
 
@@ -73,9 +82,9 @@ public class ListaAnimesFragment extends Fragment {
             return false;
         });
 
-        emptyView = view.findViewById(R.id.empty_view);
+        emptyView = view.findViewById(R.id.emptyView);
         listView.setEmptyView(emptyView);
-        emptyView.setVisibility(View.GONE);
+        emptyView.setVisibility(GONE);
 
         return view;
     }
@@ -94,20 +103,58 @@ public class ListaAnimesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (searchEditText.getText() != null && !searchEditText.getText().toString().isEmpty()) {
-            buscarAnimes(searchEditText.getText().toString());
+        //sale la lista al volver
+        if (searchEditText.getText() != null) {
+            if (!searchEditText.getText().toString().isEmpty()) {
+                if (prefs.getBoolean("cambio", false)) {
+                    mostrarProgress(true);
+                } else {
+                    mostrarProgress(false);
+                }
+                buscarAnimes(searchEditText.getText().toString());
+            } else {
+                if (prefs.getBoolean("cambio", false)) {
+                    mostrarProgress(true);
+                } else {
+                    mostrarProgress(false);
+                }
+                buscarAnimes(" ");
+            }
+
         }
 
         if (prefs.getBoolean("cambio", false)) {
             adapter.notifyDataSetChanged();
             prefs.edit().putBoolean("cambio", false).apply();
+        } else {
+            mostrarProgress(false);
         }
+        /*if (prefs.getBoolean("cambio", false)) {
+            mostrarProgress(true);
+
+            if (searchEditText.getText() != null) {
+                if (!searchEditText.getText().toString().isEmpty()) {
+                    buscarAnimes(searchEditText.getText().toString());
+                } else {
+                    buscarAnimes(" ");
+                }
+            }
+
+            prefs.edit().putBoolean("cambio", false).apply();
+        } else {
+            mostrarProgress(false);
+        }*/
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+    }
+
+    private void mostrarProgress(boolean mostrar) {
+        loading.setVisibility(mostrar ? VISIBLE : GONE);
+        listView.setVisibility(mostrar ? GONE : VISIBLE);
     }
 
     private void cargarAnimes() {
@@ -119,12 +166,15 @@ public class ListaAnimesFragment extends Fragment {
                     listaAnimes.clear();
                     listaAnimes.addAll(animes);
                     requireActivity().runOnUiThread(() -> {
-                        adapter.notifyDataSetChanged();
-                        if (listaAnimes.isEmpty()) {
-                            emptyView.setVisibility(View.VISIBLE);
-                        } else {
-                            emptyView.setVisibility(View.GONE);
-                        }
+                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                            mostrarProgress(false);
+                            adapter.notifyDataSetChanged();
+                            if (listaAnimes.isEmpty()) {
+                                emptyView.setVisibility(VISIBLE);
+                            } else {
+                                emptyView.setVisibility(GONE);
+                            }
+                        }, 1000);
                     });
                 }
             }
@@ -149,7 +199,10 @@ public class ListaAnimesFragment extends Fragment {
                     listaAnimes.clear();
                     listaAnimes.addAll(animesPorNombre);
                     requireActivity().runOnUiThread(() ->
-                            adapter.notifyDataSetChanged()
+                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                mostrarProgress(false);
+                                adapter.notifyDataSetChanged();
+                            }, 1000)
                     );
                 }
             }
@@ -157,9 +210,10 @@ public class ListaAnimesFragment extends Fragment {
             @Override
             public void onError(Exception e) {
                 if (isAdded()) {
-                    requireActivity().runOnUiThread(() ->
-                            Toast.makeText(getContext(), getString(R.string.load_animes_error), Toast.LENGTH_LONG).show()
-                    );
+                    requireActivity().runOnUiThread(() -> {
+                        Toast.makeText(getContext(), getString(R.string.load_animes_error), Toast.LENGTH_LONG).show();
+                        mostrarProgress(false);
+                    });
                 }
             }
         })).start();

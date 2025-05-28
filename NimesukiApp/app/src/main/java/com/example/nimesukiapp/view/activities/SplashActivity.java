@@ -1,4 +1,6 @@
-package com.example.nimesukiapp.vista.activities;
+package com.example.nimesukiapp.view.activities;
+
+import static android.view.View.GONE;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -37,7 +39,7 @@ public class SplashActivity extends AppCompatActivity {
                 .alpha(0f)
                 .setDuration(800)
                 .withEndAction(() -> {
-                    splashLayout.setVisibility(View.GONE);
+                    splashLayout.setVisibility(GONE);
                     Intent intent = new Intent(this, ListaAnimesView.class);
                     intent.putExtra("reinicio", reinicio);
                     intent.putExtra("error", error);

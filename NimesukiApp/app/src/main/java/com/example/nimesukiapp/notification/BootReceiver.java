@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.example.nimesukiapp.vista.activities.ListaAnimesView;
+import com.example.nimesukiapp.view.activities.ListaAnimesView;
 
 public class BootReceiver extends BroadcastReceiver {
     @Override
