@@ -14,6 +14,10 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.LocaleList;
@@ -39,6 +43,7 @@ import com.example.nimesukiapp.view.fragments.AnimeFavoritoDetailFragment;
 import com.example.nimesukiapp.view.fragments.ListaAnimesFragment;
 import com.example.nimesukiapp.view.fragments.LoginFragment;
 import com.example.nimesukiapp.model.vo.Anime;
+import com.example.nimesukiapp.view.fragments.NoConnectionFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 
@@ -46,7 +51,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class ListaAnimesView extends AppCompatActivity implements ListaAnimesFragment.OnAnimeSelectedListener, LoginFragment.OnLoginSuccessListener, LoginFragment.OnRegisterSuccessListener {
+public class ListaAnimesView extends AppCompatActivity implements NoConnectionFragment.OnNetworkAvailableSuccessListener, ListaAnimesFragment.OnAnimeSelectedListener, LoginFragment.OnLoginSuccessListener, LoginFragment.OnRegisterSuccessListener {
     private String nombreUsuarioLogueado = "";
     private BottomNavigationView bottomNavigationView;
     private SharedPreferences prefs;
@@ -94,42 +99,81 @@ public class ListaAnimesView extends AppCompatActivity implements ListaAnimesFra
 
                     getResources().updateConfiguration(config, getResources().getDisplayMetrics());
                 }
-
-                bottomNavigationView.setVisibility(VISIBLE);
-                if (isActivityActive() && savedInstanceState == null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container_main, new ListaAnimesFragment())
-                            .commit();
+                if (isNetworkAvailable(getBaseContext())) {
+                    bottomNavigationView.setVisibility(VISIBLE);
+                    if (isActivityActive() && savedInstanceState == null) {
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragment_container_main, new ListaAnimesFragment())
+                                .commit();
+                    }
+                } else {
+                    bottomNavigationView.setVisibility(INVISIBLE);
+                    if (isActivityActive() && savedInstanceState == null) {
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragment_container_main, new NoConnectionFragment())
+                                .commit();
+                    }
                 }
             } else {
-                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
-                prefs.edit().clear().apply();
-                boolean error = getIntent().getBooleanExtra("error", false);
-                if (error) {
-                    Toast.makeText(this, getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
-                }
+                if (isNetworkAvailable(getBaseContext())) {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
+                    prefs.edit().clear().apply();
+                    boolean error = getIntent().getBooleanExtra("error", false);
+                    if (error) {
+                        Toast.makeText(this, getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
+                    }
 
-                bottomNavigationView.setVisibility(INVISIBLE);
-                Locale defaultLocale;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    defaultLocale = Resources.getSystem().getConfiguration().getLocales().get(0);
+                    bottomNavigationView.setVisibility(INVISIBLE);
+                    Locale defaultLocale;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        defaultLocale = Resources.getSystem().getConfiguration().getLocales().get(0);
+                    } else {
+                        defaultLocale = Resources.getSystem().getConfiguration().locale;
+                    }
+
+                    Locale.setDefault(defaultLocale);
+                    Configuration config = getResources().getConfiguration();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        config.setLocales(new LocaleList(defaultLocale));
+                    } else {
+                        config.setLocale(defaultLocale);
+                    }
+
+                    getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container_main, new LoginFragment())
+                            .commit();
                 } else {
-                    defaultLocale = Resources.getSystem().getConfiguration().locale;
+                    if (prefs.contains("idioma")) {
+                        String idioma = prefs.getString("idioma", "es");
+                        cambiarIdioma(idioma);
+                    } else {
+                        Locale defaultLocale;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            defaultLocale = Resources.getSystem().getConfiguration().getLocales().get(0);
+                        } else {
+                            defaultLocale = Resources.getSystem().getConfiguration().locale;
+                        }
+
+                        Locale.setDefault(defaultLocale);
+                        Configuration config = getResources().getConfiguration();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            config.setLocales(new LocaleList(defaultLocale));
+                        } else {
+                            config.setLocale(defaultLocale);
+                        }
+
+                        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+                    }
+
+                    bottomNavigationView.setVisibility(INVISIBLE);
+                    if (isActivityActive() && savedInstanceState == null) {
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragment_container_main, new NoConnectionFragment())
+                                .commit();
+                    }
                 }
-
-                Locale.setDefault(defaultLocale);
-                Configuration config = getResources().getConfiguration();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    config.setLocales(new LocaleList(defaultLocale));
-                } else {
-                    config.setLocale(defaultLocale);
-                }
-
-                getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container_main, new LoginFragment())
-                        .commit();
             }
         }
 
@@ -181,10 +225,11 @@ public class ListaAnimesView extends AppCompatActivity implements ListaAnimesFra
         if (alreadyScheduled) return;
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
-        calendar.set(Calendar.HOUR_OF_DAY, 17);
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+        calendar.set(Calendar.HOUR_OF_DAY, 19);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
 
         if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
             calendar.add(Calendar.WEEK_OF_YEAR, 1);
@@ -223,7 +268,6 @@ public class ListaAnimesView extends AppCompatActivity implements ListaAnimesFra
                 cacheManager.guardarFavoritos(nombres);
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putBoolean("favoritosCargados", true);
-                Log.d("FAVS", "Guardando favoritos: " + nombres);
                 editor.apply();
 
                 getSupportFragmentManager()
@@ -276,20 +320,40 @@ public class ListaAnimesView extends AppCompatActivity implements ListaAnimesFra
         return true;
     }
 
+    public boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager == null) return false;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            Network network = connectivityManager.getActiveNetwork();
+            if (network == null) return false;
+
+            NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(network);
+            return capabilities != null && (
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+            );
+        } else {
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        }
+    }
+
     @Override
     public void onAnimeSelected(Anime anime) {
         ServicioREST servicioREST = new ServicioREST(getBaseContext());
 
-        new Thread(() -> servicioREST.obtenerFavoritosPorNombre(
+        new Thread(() -> servicioREST.obtenerFavoritosPorId(
                 nombreUsuarioLogueado,
-                anime.getNombre(),
-                new ServicioREST.OnAnimesFavoritosObtenidosPorNombreListener() {
+                anime.getIdAnime(),
+                new ServicioREST.OnAnimesFavoritosObtenidosPorIdListener() {
+
                     @Override
-                    public void onSuccess(final ArrayList<Favoritos> animesFavoritos) {
+                    public void onSuccess(Favoritos f) {
                         runOnUiThread(() -> {
-                            if (!animesFavoritos.isEmpty()) {
-                                Favoritos favorito = animesFavoritos.get(0);
-                                AnimeFavoritoDetailFragment animeFavoritoDetailFragment = AnimeFavoritoDetailFragment.newInstance(favorito);
+                            if (f != null) {
+                                AnimeFavoritoDetailFragment animeFavoritoDetailFragment = AnimeFavoritoDetailFragment.newInstance(f);
 
                                 getSupportFragmentManager()
                                         .beginTransaction()
@@ -341,7 +405,6 @@ public class ListaAnimesView extends AppCompatActivity implements ListaAnimesFra
                 })).start();
     }
 
-
     @Override
     public void onLoginSuccess(Usuario usuario) {
         runOnUiThread(() -> {
@@ -383,5 +446,10 @@ public class ListaAnimesView extends AppCompatActivity implements ListaAnimesFra
         editor.apply();
 
         nombreUsuarioLogueado = usuario.getNombre();
+    }
+
+    @Override
+    public void onNetworkAvailableSuccess() {
+        bottomNavigationView.setVisibility(VISIBLE);
     }
 }

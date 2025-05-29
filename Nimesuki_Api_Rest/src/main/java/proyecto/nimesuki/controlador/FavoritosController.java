@@ -72,6 +72,22 @@ public class FavoritosController {
             return ResponseEntity.badRequest().build();
         }
     }
+    
+    @GetMapping("/search/{nombreUsuario}/{idAnime}")
+    public ResponseEntity<Favoritos> getByAnimeId(
+            @RequestParam String ip,
+            @RequestParam String user,
+            @RequestParam String pass,
+            @PathVariable String nombreUsuario,
+            @PathVariable Integer idAnime
+    ) {
+        if (idAnime != null && !nombreUsuario.isEmpty()) {
+            Favoritos f = favoritosService.findByAnimeId(ip, user, pass, nombreUsuario, idAnime);
+            return ResponseEntity.ok(f);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
     @PostMapping
     public Favoritos createFavorito(

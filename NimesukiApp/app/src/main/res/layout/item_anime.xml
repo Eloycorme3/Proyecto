@@ -9,7 +9,7 @@
     app:cardElevation="2dp">
 
     <LinearLayout
-        android:id="@+id/layout_item"
+        android:id="@+id/layoutItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:descendantFocusability="blocksDescendants"
@@ -17,14 +17,14 @@
         android:padding="8dp">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/anime_image"
+            android:id="@+id/animeImage"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.MediumComponent" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/anime_name"
+            android:id="@+id/animeName"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="12dp"
@@ -38,7 +38,7 @@
             android:textStyle="bold" />
 
         <ImageButton
-            android:id="@+id/favorite_button"
+            android:id="@+id/favoriteButton"
             android:layout_width="30dp"
             android:layout_height="match_parent"
             android:background="@null"

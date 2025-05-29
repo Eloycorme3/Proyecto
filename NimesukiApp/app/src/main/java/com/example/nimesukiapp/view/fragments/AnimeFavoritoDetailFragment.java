@@ -1,5 +1,8 @@
 package com.example.nimesukiapp.view.fragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
@@ -43,6 +46,7 @@ public class AnimeFavoritoDetailFragment extends Fragment {
     private String imageVersionFav = "?v=3";
     private boolean isExpanded = false;
     private Favoritos animeFav;
+    private SharedPreferences prefs;
 
     public AnimeFavoritoDetailFragment() {
     }
@@ -70,6 +74,8 @@ public class AnimeFavoritoDetailFragment extends Fragment {
             @Nullable Bundle savedInstanceState
     ) {
         super.onViewCreated(view, savedInstanceState);
+        prefs = getContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
+        prefs.edit().putBoolean("detalleFavoritos", true).apply();
 
         if (getArguments() != null) {
             animeFav = (Favoritos) getArguments().getSerializable("animeFavorito");

@@ -1,11 +1,11 @@
 meta {
-  name: Anime Delete
+  name: Anime Id
   type: http
-  seq: 7
+  seq: 4
 }
 
-delete {
-  url: http://localhost:8088/animes/24?ip=localhost&user=root&pass=root
+get {
+  url: http://localhost:8088/animes/search/23?ip=localhost&user=root&pass=root
   body: none
   auth: inherit
 }

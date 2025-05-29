@@ -33,6 +33,15 @@ public class FavoritosRepository {
                 .setParameter("anime", "%" + nombreAnime + "%")
                 .getResultList();
     }
+    
+    public Favoritos findByAnimeId(EntityManager em, String nombreUsuario, Integer id) {
+        return em.createQuery(
+                "SELECT f FROM Favoritos f WHERE f.usuario.nombre LIKE :nombreUsuario AND f.anime.idAnime = :id_anime", Favoritos.class)
+                .setParameter("nombreUsuario", nombreUsuario)
+                .setParameter("id_anime", id)
+                .getResultList()
+                .get(0);
+    }
 
     public Favoritos save(EntityManager em, Favoritos favorito) {
         var tx = em.getTransaction();

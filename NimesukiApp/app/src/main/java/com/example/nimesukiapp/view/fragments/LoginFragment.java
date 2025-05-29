@@ -59,7 +59,7 @@ public class LoginFragment extends Fragment {
             editor.apply();
         }
 
-        ShapeableImageView imageView = view.findViewById(R.id.login_image);
+        ShapeableImageView imageView = view.findViewById(R.id.loginImage);
 
         float radius = TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
@@ -75,11 +75,11 @@ public class LoginFragment extends Fragment {
         imageView.setShapeAppearanceModel(shapeModel);
 
 
-        usernameEditText = view.findViewById(R.id.username_input);
-        passwordEditText = view.findViewById(R.id.password_input);
-        loginButton = view.findViewById(R.id.login_button);
-        registerButton = view.findViewById(R.id.register_button);
-        toggleVisibilityButton = view.findViewById(R.id.password_toggle_button);
+        usernameEditText = view.findViewById(R.id.usernameInput);
+        passwordEditText = view.findViewById(R.id.passwordInput);
+        loginButton = view.findViewById(R.id.loginButton);
+        registerButton = view.findViewById(R.id.registerButton);
+        toggleVisibilityButton = view.findViewById(R.id.passwordToggleButton);
 
         toggleVisibilityButton.setOnClickListener(new View.OnClickListener() {
             boolean isPasswordVisible = false;
@@ -100,15 +100,15 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        btnOpciones = view.findViewById(R.id.options_button);
+        btnOpciones = view.findViewById(R.id.optionsButton);
 
         btnOpciones.setOnClickListener(v -> {
             mostrarDialogoConfiguracion();
         });
 
         loginButton.setOnClickListener(v -> {
-            String username = usernameEditText.getText().toString().trim();
-            String password = passwordEditText.getText().toString().trim();
+            String username = usernameEditText.getText().toString();
+            String password = passwordEditText.getText().toString();
             if (username.isEmpty() || password.isEmpty()) {
                 requireActivity().runOnUiThread(() ->
                         Toast.makeText(getContext(), getString(R.string.enter_user_and_password), Toast.LENGTH_SHORT).show()
@@ -119,8 +119,8 @@ public class LoginFragment extends Fragment {
         });
 
         registerButton.setOnClickListener(v -> {
-            String nombreUsuario = usernameEditText.getText().toString().trim();
-            String contrasena = passwordEditText.getText().toString().trim();
+            String nombreUsuario = usernameEditText.getText().toString();
+            String contrasena = passwordEditText.getText().toString();
 
             if (nombreUsuario.isEmpty() || contrasena.isEmpty()) {
                 requireActivity().runOnUiThread(() ->
@@ -205,9 +205,9 @@ public class LoginFragment extends Fragment {
         LayoutInflater inflater = LayoutInflater.from(requireContext());
         View view = inflater.inflate(R.layout.dialog_config, null);
 
-        TextInputEditText editNombre = view.findViewById(R.id.edit_nombre);
-        TextInputEditText editContrasena = view.findViewById(R.id.edit_contrasena);
-        TextInputEditText editIp = view.findViewById(R.id.edit_ip);
+        TextInputEditText editNombre = view.findViewById(R.id.editNombre);
+        TextInputEditText editContrasena = view.findViewById(R.id.editContrasenha);
+        TextInputEditText editIp = view.findViewById(R.id.editIp);
 
         editNombre.setText(prefs.getString("nombreBD", ""));
         editContrasena.setText(prefs.getString("contrasenhaBD", ""));

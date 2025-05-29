@@ -7,6 +7,10 @@ import static android.view.View.VISIBLE;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -53,9 +57,27 @@ public class ListaAnimesFragment extends Fragment {
         searchEditText = view.findViewById(R.id.searchAnimes);
         loading = view.findViewById(R.id.progressBarLoading);
 
-        mostrarProgress(true);
+        if (prefs.contains("detalle")) {
+            if (prefs.getBoolean("detalle", false)) {
+                prefs.edit().putBoolean("detalle", false).apply();
+            } else {
+                if (prefs.contains("detalleFavoritos")) {
+                    if (!prefs.getBoolean("detalleFavoritos", false)) {
+                        mostrarProgress(true);
 
-        cargarAnimes();
+                        cargarAnimes();
+                    }
+                } else {
+                    mostrarProgress(true);
+
+                    cargarAnimes();
+                }
+            }
+        } else {
+            mostrarProgress(true);
+
+            cargarAnimes();
+        }
 
         adapter = new AnimeAdapter(this.getContext(), listaAnimes);
         listView.setAdapter(adapter);
@@ -72,11 +94,13 @@ public class ListaAnimesFragment extends Fragment {
 
         searchEditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
+                mostrarProgress(true);
                 String textoBusqueda = searchEditText.getText().toString();
-                if (textoBusqueda.trim().isEmpty()) {
-                    textoBusqueda = " ";
+                if (textoBusqueda.isEmpty()) {
+                    cargarAnimes();
+                } else {
+                    buscarAnimes(textoBusqueda);
                 }
-                buscarAnimes(textoBusqueda);
                 return true;
             }
             return false;
@@ -103,47 +127,36 @@ public class ListaAnimesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //sale la lista al volver
-        if (searchEditText.getText() != null) {
-            if (!searchEditText.getText().toString().isEmpty()) {
-                if (prefs.getBoolean("cambio", false)) {
-                    mostrarProgress(true);
-                } else {
-                    mostrarProgress(false);
-                }
-                buscarAnimes(searchEditText.getText().toString());
-            } else {
-                if (prefs.getBoolean("cambio", false)) {
-                    mostrarProgress(true);
-                } else {
-                    mostrarProgress(false);
-                }
-                buscarAnimes(" ");
-            }
 
-        }
-
-        if (prefs.getBoolean("cambio", false)) {
-            adapter.notifyDataSetChanged();
-            prefs.edit().putBoolean("cambio", false).apply();
+        if (prefs.getBoolean("inicio", true)) {
+            prefs.edit().putBoolean("inicio", false).apply();
         } else {
-            mostrarProgress(false);
-        }
-        /*if (prefs.getBoolean("cambio", false)) {
-            mostrarProgress(true);
-
             if (searchEditText.getText() != null) {
                 if (!searchEditText.getText().toString().isEmpty()) {
+                    if (prefs.getBoolean("cambio", false)) {
+                        mostrarProgress(true);
+                        prefs.edit().putBoolean("cambio", false).apply();
+                    }
+                    if (prefs.getBoolean("detalleFavoritos", false)) {
+                        mostrarProgress(true);
+                        prefs.edit().putBoolean("detalleFavoritos", false).apply();
+                    }
+
                     buscarAnimes(searchEditText.getText().toString());
                 } else {
-                    buscarAnimes(" ");
+                    if (prefs.getBoolean("cambio", false)) {
+                        mostrarProgress(true);
+                        prefs.edit().putBoolean("cambio", false).apply();
+                    }
+                    if (prefs.getBoolean("detalleFavoritos", false)) {
+                        mostrarProgress(true);
+                        prefs.edit().putBoolean("detalleFavoritos", false).apply();
+                    }
+
+                    cargarAnimes();
                 }
             }
-
-            prefs.edit().putBoolean("cambio", false).apply();
-        } else {
-            mostrarProgress(false);
-        }*/
+        }
     }
 
     @Override
@@ -165,15 +178,16 @@ public class ListaAnimesFragment extends Fragment {
                 if (isAdded()) {
                     listaAnimes.clear();
                     listaAnimes.addAll(animes);
+
                     requireActivity().runOnUiThread(() -> {
+                        if (listaAnimes.isEmpty()) {
+                            emptyView.setVisibility(VISIBLE);
+                        } else {
+                            emptyView.setVisibility(GONE);
+                        }
                         new Handler(Looper.getMainLooper()).postDelayed(() -> {
                             mostrarProgress(false);
                             adapter.notifyDataSetChanged();
-                            if (listaAnimes.isEmpty()) {
-                                emptyView.setVisibility(VISIBLE);
-                            } else {
-                                emptyView.setVisibility(GONE);
-                            }
                         }, 1000);
                     });
                 }
@@ -198,12 +212,18 @@ public class ListaAnimesFragment extends Fragment {
                 if (isAdded()) {
                     listaAnimes.clear();
                     listaAnimes.addAll(animesPorNombre);
-                    requireActivity().runOnUiThread(() ->
-                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                                mostrarProgress(false);
-                                adapter.notifyDataSetChanged();
-                            }, 1000)
-                    );
+
+                    requireActivity().runOnUiThread(() -> {
+                        if (listaAnimes.isEmpty()) {
+                            emptyView.setVisibility(VISIBLE);
+                        } else {
+                            emptyView.setVisibility(GONE);
+                        }
+                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                            mostrarProgress(false);
+                            adapter.notifyDataSetChanged();
+                        }, 1000);
+                    });
                 }
             }
 

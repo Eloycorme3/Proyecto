@@ -6,7 +6,7 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import modelo.vo.Favoritos;
 
-@Generated(value="org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor", date="2025-05-26T13:13:40", comments="EclipseLink-2.7.12.v20230209-rNA")
+@Generated(value="org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor", date="2025-05-29T15:05:03", comments="EclipseLink-2.7.12.v20230209-rNA")
 @StaticMetamodel(Anime.class)
 public class Anime_ { 
 

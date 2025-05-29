@@ -15,7 +15,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container_favoritos"
-        android:name="com.example.nimesukiapp.view.fragments.ListaAnimesFragment"
+        android:name="com.example.nimesukiapp.view.fragments.ListaAnimesFavoritosFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottomNavigationView_favoritos" />

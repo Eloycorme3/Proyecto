@@ -49,14 +49,19 @@ public class ListaAnimesFavoritosFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_catalog_favorites, container, false);
+        prefs = requireContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
+        nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
         listView = view.findViewById(R.id.listviewAnimesFavoritos);
         searchEditText = view.findViewById(R.id.searchTextFavoritos);
         loading = view.findViewById(R.id.progressBarLoadingFavoritos);
 
-        mostrarProgress(true);
+        if (prefs.contains("detalleFavoritos")) {
+            if (prefs.getBoolean("detalleFavoritos", false)) {
+                prefs.edit().putBoolean("detalleFavoritos", false).apply();
+            }
+        }
 
-        prefs = getContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
-        nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
+        mostrarProgress(true);
 
         cargarAnimesFavoritos();
 
@@ -67,14 +72,18 @@ public class ListaAnimesFavoritosFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Favoritos animeFavoritoSelected = (Favoritos) parent.getItemAtPosition(position);
-                listener.onAnimeFavoritoSelected(animeFavoritoSelected);
+                if (listener != null) {
+                    listener.onAnimeFavoritoSelected(animeFavoritoSelected);
+                }
             }
         });
 
         searchEditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
                 String textoBusqueda = searchEditText.getText().toString();
-                if (!textoBusqueda.isEmpty()) {
+                if (textoBusqueda.isEmpty()) {
+                    cargarAnimesFavoritos();
+                } else {
                     buscarAnimesFavoritos(textoBusqueda);
                 }
                 return true;
@@ -104,6 +113,7 @@ public class ListaAnimesFavoritosFragment extends Fragment {
     public void onResume() {
         super.onResume();
         nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
+        listView.setVisibility(GONE);
     }
 
     @Override
@@ -126,26 +136,27 @@ public class ListaAnimesFavoritosFragment extends Fragment {
                     listaAnimesFavoritos.clear();
                     listaAnimesFavoritos.addAll(animesFavoritos);
 
-                    requireActivity().runOnUiThread(() ->
-                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                                mostrarProgress(false);
-                                adapter.notifyDataSetChanged();
-                                if (listaAnimesFavoritos.isEmpty()) {
-                                    emptyViewFavoritos.setVisibility(VISIBLE);
-                                } else {
-                                    emptyViewFavoritos.setVisibility(GONE);
-                                }
-                            }, 1000)
-                    );
+                    requireActivity().runOnUiThread(() -> {
+                        if (listaAnimesFavoritos.isEmpty()) {
+                            emptyViewFavoritos.setVisibility(VISIBLE);
+                        } else {
+                            emptyViewFavoritos.setVisibility(GONE);
+                        }
+                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                            mostrarProgress(false);
+                            adapter.notifyDataSetChanged();
+                        }, 1000);
+                    });
                 }
             }
 
             @Override
             public void onError(Exception e) {
                 if (isAdded()) {
-                    requireActivity().runOnUiThread(() ->
-                            Toast.makeText(getContext(), getString(R.string.load_favorite_anime_error), Toast.LENGTH_LONG).show()
-                    );
+                    requireActivity().runOnUiThread(() -> {
+                        Toast.makeText(getContext(), getString(R.string.load_favorite_anime_error), Toast.LENGTH_LONG).show();
+                        mostrarProgress(false);
+                    });
                 }
             }
         })).start();
@@ -160,9 +171,17 @@ public class ListaAnimesFavoritosFragment extends Fragment {
                     listaAnimesFavoritos.clear();
                     listaAnimesFavoritos.addAll(favoritosPorNombre);
 
-                    requireActivity().runOnUiThread(() ->
-                            adapter.notifyDataSetChanged()
-                    );
+                    requireActivity().runOnUiThread(() -> {
+                        if (listaAnimesFavoritos.isEmpty()) {
+                            emptyViewFavoritos.setVisibility(VISIBLE);
+                        } else {
+                            emptyViewFavoritos.setVisibility(GONE);
+                        }
+                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                            mostrarProgress(false);
+                            adapter.notifyDataSetChanged();
+                        }, 1000);
+                    });
                 }
             }
 

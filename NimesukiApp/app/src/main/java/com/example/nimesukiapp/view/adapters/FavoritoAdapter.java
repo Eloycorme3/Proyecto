@@ -56,10 +56,10 @@ public class FavoritoAdapter extends ArrayAdapter<Favoritos> {
 
         Favoritos favorito = getItem(position);
 
-        MaterialTextView nombre = convertView.findViewById(R.id.anime_name);
+        MaterialTextView nombre = convertView.findViewById(R.id.animeName);
         nombre.setText(favorito.getAnime().getNombre());
 
-        ShapeableImageView imagen = convertView.findViewById(R.id.anime_image);
+        ShapeableImageView imagen = convertView.findViewById(R.id.animeImage);
         Glide.with(contexto)
                 .load(favorito.getAnime().getImagen() + imageVersion)
                 .format(DecodeFormat.PREFER_RGB_565)
@@ -67,7 +67,7 @@ public class FavoritoAdapter extends ArrayAdapter<Favoritos> {
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(imagen);
 
-        ImageButton favoriteButton = convertView.findViewById(R.id.favorite_button);
+        ImageButton favoriteButton = convertView.findViewById(R.id.favoriteButton);
         favoriteButton.setSelected(true);
 
         favoriteButton.setOnClickListener(v -> {

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:id="@+id/contentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+
+        <ImageView
+            android:id="@+id/noConnectionImage"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_no_connection" />
+
+        <TextView
+            android:id="@+id/noConnectionText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/no_connection"
+            android:textColor="@color/pastelGray"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/retryButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/no_connection_retry" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBarLoadingConnection"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+</FrameLayout>

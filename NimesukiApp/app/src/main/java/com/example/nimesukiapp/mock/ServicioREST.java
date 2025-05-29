@@ -67,6 +67,40 @@ public class ServicioREST {
         client.newCall(request).enqueue(callback);
     }
 
+    public Anime obtenerAnimePorId(Integer id, OnAnimeObtenidoPorIdListener listener) {
+        final Anime[] a = {null};
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(baseUrl() + "/animes/search/" + id + authParams())
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.e("Error", "Error al realizar la solicitud", e);
+                listener.onError(e);
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful() && response.body() != null) {
+                    String responseData = response.body().string();
+                    Anime animeDevuelto;
+                    Gson gson = new Gson();
+                    animeDevuelto = gson.fromJson(responseData, new TypeToken<Anime>() {
+                    }.getType());
+                    a[0] = animeDevuelto;
+                    Log.d("OK", "Respuesta exitosa: " + responseData);
+                    listener.onSuccess(animeDevuelto);
+                } else {
+                    Log.e("KO", "Respuesta no exitosa: " + response.code());
+                    listener.onError(new IOException("Respuesta no exitosa: " + response.code()));
+                }
+            }
+        });
+        return a[0];
+    }
+
     public Anime obtenerAnimeNoFavorito(String nombreUsuario) throws IOException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -191,6 +225,40 @@ public class ServicioREST {
             }
         });
         return animesPorNombre;
+    }
+
+    public Favoritos obtenerFavoritosPorId(String nombreUsuario, Integer idAnime, OnAnimesFavoritosObtenidosPorIdListener listener) {
+        final Favoritos[] favoritoPorId = {null};
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(baseUrl() + "/favoritos/search/" + nombreUsuario + "/" + idAnime + authParams())
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.e("Error", "Error al realizar la solicitud", e);
+                listener.onError(e);
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful() && response.body() != null) {
+                    String responseData = response.body().string();
+                    Favoritos favoritoPorIdDevuelto = null;
+                    Gson gson = new Gson();
+                    favoritoPorIdDevuelto = gson.fromJson(responseData, new TypeToken<Favoritos>() {
+                    }.getType());
+                    favoritoPorId[0] = favoritoPorIdDevuelto;
+                    Log.d("OK", "Respuesta exitosa: " + responseData);
+                    listener.onSuccess(favoritoPorIdDevuelto);
+                } else {
+                    Log.e("KO", "Respuesta no exitosa: " + response.code());
+                    listener.onError(new IOException("Respuesta no exitosa: " + response.code()));
+                }
+            }
+        });
+        return favoritoPorId[0];
     }
 
     public ArrayList<Favoritos> obtenerFavoritosPorNombre(String nombreUsuario, String nombreAnime, OnAnimesFavoritosObtenidosPorNombreListener listener) {
@@ -318,7 +386,6 @@ public class ServicioREST {
     }
 
 
-
     public interface OnUsuarioObtenidoListener {
         void onSuccess(Usuario usuario);
 
@@ -349,5 +416,18 @@ public class ServicioREST {
 
         void onError(Exception e);
     }
+
+    public interface OnAnimeObtenidoPorIdListener {
+        void onSuccess(Anime a);
+
+        void onError(Exception e);
+    }
+
+    public interface OnAnimesFavoritosObtenidosPorIdListener {
+        void onSuccess(Favoritos f);
+
+        void onError(Exception e);
+    }
+
 
 }

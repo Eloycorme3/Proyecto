@@ -52,4 +52,6 @@
     <string name="error_init_favorites">Erro ao inicializar os favoritos</string>
     <string name="no_results">Non se atoparon animes</string>
     <string name="no_more_animes">Remataches a lista... repetimos capítulo?</string>
+    <string name="no_connection_retry">Reintentar</string>
+    <string name="no_connection">Sin conexión, volve a intentalo</string>
 </resources>

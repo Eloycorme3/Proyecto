@@ -56,6 +56,21 @@ public class AnimeController {
             return ResponseEntity.badRequest().build();
         }
     }
+    
+    @GetMapping("/search/{id}")
+    public ResponseEntity<Anime> getById(
+            @RequestParam String ip,
+            @RequestParam String user,
+            @RequestParam String pass,
+            @PathVariable Integer id
+    ) {
+        if (id != null) {
+            Anime anime = animeService.findById(ip, user, pass, id);
+            return ResponseEntity.ok(anime);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
     @GetMapping("/no-favoritos/{nombreUsuario}")
     public ResponseEntity<Anime> getRandomAnimeNotInFavoritos(

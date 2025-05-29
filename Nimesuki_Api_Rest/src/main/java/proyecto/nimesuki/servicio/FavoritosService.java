@@ -61,6 +61,17 @@ public class FavoritosService {
             }
         }
     }
+    
+    public Favoritos findByAnimeId(String ip, String user, String pass, String nombreUsuario, Integer id) {
+        EntityManager em = createEM(ip, user, pass);
+        try {
+            return repo.findByAnimeId(em, nombreUsuario, id);
+        } finally {
+            if (em.isOpen()) {
+                em.close();
+            }
+        }
+    }
 
     public Favoritos save(String ip, String user, String pass, Favoritos favorito) {
         EntityManager em = createEM(ip, user, pass);

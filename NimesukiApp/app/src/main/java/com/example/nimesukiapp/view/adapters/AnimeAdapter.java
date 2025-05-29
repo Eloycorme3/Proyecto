@@ -58,10 +58,10 @@ public class AnimeAdapter extends ArrayAdapter<Anime> {
 
         Anime anime = getItem(position);
 
-        MaterialTextView nombre = convertView.findViewById(R.id.anime_name);
+        MaterialTextView nombre = convertView.findViewById(R.id.animeName);
         nombre.setText(anime.getNombre());
 
-        ShapeableImageView imagen = convertView.findViewById(R.id.anime_image);
+        ShapeableImageView imagen = convertView.findViewById(R.id.animeImage);
         Glide.with(contexto)
                 .load(anime.getImagen() + imageVersion)
                 .format(DecodeFormat.PREFER_RGB_565)
@@ -69,7 +69,7 @@ public class AnimeAdapter extends ArrayAdapter<Anime> {
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(imagen);
 
-        ImageButton favoriteButton = convertView.findViewById(R.id.favorite_button);
+        ImageButton favoriteButton = convertView.findViewById(R.id.favoriteButton);
 
         favoritosCache = cacheManager.cargarFavoritos();
 
