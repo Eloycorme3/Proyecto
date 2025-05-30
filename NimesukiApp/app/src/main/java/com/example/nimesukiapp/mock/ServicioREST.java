@@ -1,11 +1,14 @@
 package com.example.nimesukiapp.mock;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.content.Context;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.model.vo.Anime;
 import com.example.nimesukiapp.model.vo.Favoritos;
 import com.example.nimesukiapp.model.vo.FavoritosId;
@@ -33,8 +36,10 @@ public class ServicioREST {
     private String nombreBD;
     private String contrasenhaBD;
     private String ip;
+    private Context contexto;
 
     public ServicioREST(Context context) {
+        contexto = context;
         prefs = context.getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
         nombreBD = prefs.getString("nombreBD", "");
         contrasenhaBD = prefs.getString("contrasenhaBD", "");
@@ -49,342 +54,451 @@ public class ServicioREST {
         return "?ip=" + ip + "&user=" + nombreBD + "&pass=" + contrasenhaBD;
     }
 
-    public void registrarUsuario(Usuario u, Callback callback) {
-        OkHttpClient client = new OkHttpClient();
-        Gson gson = new Gson();
-        String json = gson.toJson(u);
-
-        RequestBody body = RequestBody.create(
-                json,
-                MediaType.parse("application/json")
-        );
-
-        Request request = new Request.Builder()
-                .url(baseUrl() + "/usuarios" + authParams())
-                .post(body)
-                .build();
-
-        client.newCall(request).enqueue(callback);
-    }
-
-    public Anime obtenerAnimePorId(Integer id, OnAnimeObtenidoPorIdListener listener) {
-        final Anime[] a = {null};
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(baseUrl() + "/animes/search/" + id + authParams())
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e("Error", "Error al realizar la solicitud", e);
-                listener.onError(e);
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful() && response.body() != null) {
-                    String responseData = response.body().string();
-                    Anime animeDevuelto;
-                    Gson gson = new Gson();
-                    animeDevuelto = gson.fromJson(responseData, new TypeToken<Anime>() {
-                    }.getType());
-                    a[0] = animeDevuelto;
-                    Log.d("OK", "Respuesta exitosa: " + responseData);
-                    listener.onSuccess(animeDevuelto);
-                } else {
-                    Log.e("KO", "Respuesta no exitosa: " + response.code());
-                    listener.onError(new IOException("Respuesta no exitosa: " + response.code()));
-                }
-            }
-        });
-        return a[0];
-    }
-
-    public Anime obtenerAnimeNoFavorito(String nombreUsuario) throws IOException {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(baseUrl() + "/animes/no-favoritos/" + nombreUsuario + authParams())
-                .build();
-
-        Anime a = null;
-        try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-            String responseData = response.body().string();
-            if (response.isSuccessful() && response.body() != null) {
-                Gson gson = new Gson();
-                a = gson.fromJson(responseData, Anime.class);
-                Log.d("OK", "Respuesta exitosa: " + responseData);
-            } else {
-                Log.e("KO", "Respuesta no exitosa: " + response.code());
-            }
+    private boolean comprobar() {
+        if (prefs.getString("nombreBD", "") != "" && prefs.getString("contrasenhaBD", "") != "" && prefs.getString("ip", "") != "") {
+            return true;
         }
-        return a;
+        return false;
+    }
+
+    public void registrarUsuario(Usuario u, Callback callback) {
+        if (comprobar()) {
+            OkHttpClient client = new OkHttpClient();
+            Gson gson = new Gson();
+            String json = gson.toJson(u);
+
+            RequestBody body = RequestBody.create(
+                    json,
+                    MediaType.parse("application/json")
+            );
+
+            Request request = new Request.Builder()
+                    .url(baseUrl() + "/usuarios" + authParams())
+                    .post(body)
+                    .build();
+
+            client.newCall(request).enqueue(callback);
+        } else {
+            ((Activity) contexto).runOnUiThread(() ->
+                    Toast.makeText(contexto, R.string.unexpected_error, Toast.LENGTH_SHORT).show()
+            );
+        }
     }
 
     public void obtenerUsuarioPorNombre(String nombreUsuario, OnUsuarioObtenidoListener listener) {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(baseUrl() + "/usuarios/" + nombreUsuario + authParams())
-                .build();
+        if (comprobar()) {
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(baseUrl() + "/usuarios/" + nombreUsuario + authParams())
+                    .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e("Error", "Error al realizar la solicitud", e);
-                listener.onError(e);
-            }
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    Log.e("Error", "Error al realizar la solicitud", e);
+                    listener.onError(e);
+                }
 
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful() && response.body() != null) {
-                    String responseData = response.body().string();
-                    Gson gson = new Gson();
-                    Type listType = new TypeToken<List<Usuario>>() {
-                    }.getType();
-                    List<Usuario> usuarios = gson.fromJson(responseData, listType);
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful() && response.body() != null) {
+                        String responseData = response.body().string();
+                        Gson gson = new Gson();
+                        Type listType = new TypeToken<List<Usuario>>() {
+                        }.getType();
+                        List<Usuario> usuarios = gson.fromJson(responseData, listType);
 
-                    if (usuarios != null && !usuarios.isEmpty()) {
-                        listener.onSuccess(usuarios.get(0));
+                        if (usuarios != null && !usuarios.isEmpty()) {
+                            listener.onSuccess(usuarios.get(0));
+                        } else {
+                            listener.onError(new IOException("Respuesta no exitosa: " + response.code()));
+                        }
                     } else {
+                        Log.e("KO", "Respuesta no exitosa: " + response.code());
                         listener.onError(new IOException("Respuesta no exitosa: " + response.code()));
                     }
+                }
+            });
+        } else {
+            ((Activity) contexto).runOnUiThread(() ->
+                    Toast.makeText(contexto, R.string.unexpected_error, Toast.LENGTH_SHORT).show()
+            );
+        }
+    }
+
+    public void eliminarUsuario(Integer idUsuario, Callback callback) {
+        if (comprobar()) {
+            OkHttpClient client = new OkHttpClient();
+            Gson gson = new Gson();
+            String json = gson.toJson(idUsuario);
+
+            RequestBody body = RequestBody.create(
+                    json,
+                    MediaType.parse("application/json")
+            );
+
+            Request request = new Request.Builder()
+                    .url(baseUrl() + "/usuarios" + authParams())
+                    .delete(body)
+                    .build();
+
+            client.newCall(request).enqueue(callback);
+        } else {
+            ((Activity) contexto).runOnUiThread(() ->
+                    Toast.makeText(contexto, R.string.unexpected_error, Toast.LENGTH_SHORT).show()
+            );
+        }
+    }
+
+    public Anime obtenerAnimePorId(Integer id, OnAnimeObtenidoPorIdListener listener) {
+        if (comprobar()) {
+            final Anime[] a = {null};
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(baseUrl() + "/animes/search/" + id + authParams())
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    Log.e("Error", "Error al realizar la solicitud", e);
+                    listener.onError(e);
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful() && response.body() != null) {
+                        String responseData = response.body().string();
+                        Anime animeDevuelto;
+                        Gson gson = new Gson();
+                        animeDevuelto = gson.fromJson(responseData, new TypeToken<Anime>() {
+                        }.getType());
+                        a[0] = animeDevuelto;
+                        Log.d("OK", "Respuesta exitosa: " + responseData);
+                        listener.onSuccess(animeDevuelto);
+                    } else {
+                        Log.e("KO", "Respuesta no exitosa: " + response.code());
+                        listener.onError(new IOException("Respuesta no exitosa: " + response.code()));
+                    }
+                }
+            });
+            return a[0];
+        } else {
+            ((Activity) contexto).runOnUiThread(() ->
+                    Toast.makeText(contexto, R.string.unexpected_error, Toast.LENGTH_SHORT).show()
+            );
+            return null;
+        }
+    }
+
+    public Anime obtenerAnimeNoFavorito(String nombreUsuario) throws IOException {
+        if (comprobar()) {
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(baseUrl() + "/animes/no-favoritos/" + nombreUsuario + authParams())
+                    .build();
+
+            Anime a = null;
+            try (Response response = client.newCall(request).execute()) {
+                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                String responseData = response.body().string();
+                if (response.isSuccessful() && response.body() != null) {
+                    Gson gson = new Gson();
+                    a = gson.fromJson(responseData, Anime.class);
+                    Log.d("OK", "Respuesta exitosa: " + responseData);
                 } else {
                     Log.e("KO", "Respuesta no exitosa: " + response.code());
-                    listener.onError(new IOException("Respuesta no exitosa: " + response.code()));
                 }
             }
-        });
+            return a;
+        } else {
+            ((Activity) contexto).runOnUiThread(() ->
+                    Toast.makeText(contexto, R.string.unexpected_error, Toast.LENGTH_SHORT).show()
+            );
+            return null;
+        }
     }
 
     public ArrayList<Anime> obtenerAnimes(OnAnimesObtenidosListener listener) {
-        ArrayList<Anime> listaAnimes = new ArrayList<>();
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(baseUrl() + "/animes" + authParams())
-                .build();
+        if (comprobar()) {
+            ArrayList<Anime> listaAnimes = new ArrayList<>();
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(baseUrl() + "/animes" + authParams())
+                    .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e("Error", "Error al realizar la solicitud", e);
-                listener.onError(e);
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful() && response.body() != null) {
-                    listaAnimes.clear();
-                    String responseData = response.body().string();
-                    ArrayList<Anime> animesDevueltos;
-                    Gson gson = new Gson();
-                    animesDevueltos = gson.fromJson(responseData, new TypeToken<ArrayList<Anime>>() {
-                    }.getType());
-                    listaAnimes.addAll(animesDevueltos);
-                    Log.d("OK", "Respuesta exitosa: " + responseData);
-                    listener.onSuccess(animesDevueltos);
-                } else {
-                    Log.e("KO", "Respuesta no exitosa: " + response.code());
-                    listener.onError(new IOException("Respuesta no exitosa: " + response.code()));
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    Log.e("Error", "Error al realizar la solicitud", e);
+                    listener.onError(e);
                 }
-            }
-        });
-        return listaAnimes;
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful() && response.body() != null) {
+                        listaAnimes.clear();
+                        String responseData = response.body().string();
+                        ArrayList<Anime> animesDevueltos;
+                        Gson gson = new Gson();
+                        animesDevueltos = gson.fromJson(responseData, new TypeToken<ArrayList<Anime>>() {
+                        }.getType());
+                        listaAnimes.addAll(animesDevueltos);
+                        Log.d("OK", "Respuesta exitosa: " + responseData);
+                        listener.onSuccess(animesDevueltos);
+                    } else {
+                        Log.e("KO", "Respuesta no exitosa: " + response.code());
+                        listener.onError(new IOException("Respuesta no exitosa: " + response.code()));
+                    }
+                }
+            });
+            return listaAnimes;
+        } else {
+            ((Activity) contexto).runOnUiThread(() ->
+                    Toast.makeText(contexto, R.string.unexpected_error, Toast.LENGTH_SHORT).show()
+            );
+            return null;
+        }
     }
 
     public ArrayList<Anime> obtenerAnimesPorNombre(String nombre, OnAnimesObtenidosPorNombreListener listener) {
-        ArrayList<Anime> animesPorNombre = new ArrayList<>();
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(baseUrl() + "/animes/" + nombre + authParams())
-                .build();
+        if (comprobar()) {
+            ArrayList<Anime> animesPorNombre = new ArrayList<>();
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(baseUrl() + "/animes/" + nombre + authParams())
+                    .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e("Error", "Error al realizar la solicitud", e);
-                listener.onError(e);
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful() && response.body() != null) {
-                    animesPorNombre.clear();
-                    String responseData = response.body().string();
-                    ArrayList<Anime> animesPorNombreDevueltos;
-                    Gson gson = new Gson();
-                    animesPorNombreDevueltos = gson.fromJson(responseData, new TypeToken<ArrayList<Anime>>() {
-                    }.getType());
-                    animesPorNombre.addAll(animesPorNombreDevueltos);
-                    Log.d("OK", "Respuesta exitosa: " + responseData);
-                    listener.onSuccess(animesPorNombreDevueltos);
-                } else {
-                    Log.e("KO", "Respuesta no exitosa: " + response.code());
-                    listener.onError(new IOException("Respuesta no exitosa: " + response.code()));
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    Log.e("Error", "Error al realizar la solicitud", e);
+                    listener.onError(e);
                 }
-            }
-        });
-        return animesPorNombre;
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful() && response.body() != null) {
+                        animesPorNombre.clear();
+                        String responseData = response.body().string();
+                        ArrayList<Anime> animesPorNombreDevueltos;
+                        Gson gson = new Gson();
+                        animesPorNombreDevueltos = gson.fromJson(responseData, new TypeToken<ArrayList<Anime>>() {
+                        }.getType());
+                        animesPorNombre.addAll(animesPorNombreDevueltos);
+                        Log.d("OK", "Respuesta exitosa: " + responseData);
+                        listener.onSuccess(animesPorNombreDevueltos);
+                    } else {
+                        Log.e("KO", "Respuesta no exitosa: " + response.code());
+                        listener.onError(new IOException("Respuesta no exitosa: " + response.code()));
+                    }
+                }
+            });
+            return animesPorNombre;
+        } else {
+            ((Activity) contexto).runOnUiThread(() ->
+                    Toast.makeText(contexto, R.string.unexpected_error, Toast.LENGTH_SHORT).show()
+            );
+            return null;
+        }
     }
 
     public Favoritos obtenerFavoritosPorId(String nombreUsuario, Integer idAnime, OnAnimesFavoritosObtenidosPorIdListener listener) {
-        final Favoritos[] favoritoPorId = {null};
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(baseUrl() + "/favoritos/search/" + nombreUsuario + "/" + idAnime + authParams())
-                .build();
+        if (comprobar()) {
+            final Favoritos[] favoritoPorId = {null};
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(baseUrl() + "/favoritos/search/" + nombreUsuario + "/" + idAnime + authParams())
+                    .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e("Error", "Error al realizar la solicitud", e);
-                listener.onError(e);
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful() && response.body() != null) {
-                    String responseData = response.body().string();
-                    Favoritos favoritoPorIdDevuelto = null;
-                    Gson gson = new Gson();
-                    favoritoPorIdDevuelto = gson.fromJson(responseData, new TypeToken<Favoritos>() {
-                    }.getType());
-                    favoritoPorId[0] = favoritoPorIdDevuelto;
-                    Log.d("OK", "Respuesta exitosa: " + responseData);
-                    listener.onSuccess(favoritoPorIdDevuelto);
-                } else {
-                    Log.e("KO", "Respuesta no exitosa: " + response.code());
-                    listener.onError(new IOException("Respuesta no exitosa: " + response.code()));
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    Log.e("Error", "Error al realizar la solicitud", e);
+                    listener.onError(e);
                 }
-            }
-        });
-        return favoritoPorId[0];
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful() && response.body() != null) {
+                        String responseData = response.body().string();
+                        Favoritos favoritoPorIdDevuelto = null;
+                        Gson gson = new Gson();
+                        favoritoPorIdDevuelto = gson.fromJson(responseData, new TypeToken<Favoritos>() {
+                        }.getType());
+                        favoritoPorId[0] = favoritoPorIdDevuelto;
+                        Log.d("OK", "Respuesta exitosa: " + responseData);
+                        listener.onSuccess(favoritoPorIdDevuelto);
+                    } else {
+                        Log.e("KO", "Respuesta no exitosa: " + response.code());
+                        listener.onError(new IOException("Respuesta no exitosa: " + response.code()));
+                    }
+                }
+            });
+            return favoritoPorId[0];
+        } else {
+            ((Activity) contexto).runOnUiThread(() ->
+                    Toast.makeText(contexto, R.string.unexpected_error, Toast.LENGTH_SHORT).show()
+            );
+            return null;
+        }
     }
 
     public ArrayList<Favoritos> obtenerFavoritosPorNombre(String nombreUsuario, String nombreAnime, OnAnimesFavoritosObtenidosPorNombreListener listener) {
-        ArrayList<Favoritos> favoritosPorNombre = new ArrayList<>();
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(baseUrl() + "/favoritos/" + nombreUsuario + "/" + nombreAnime + authParams())
-                .build();
+        if (comprobar()) {
+            ArrayList<Favoritos> favoritosPorNombre = new ArrayList<>();
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(baseUrl() + "/favoritos/" + nombreUsuario + "/" + nombreAnime + authParams())
+                    .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e("Error", "Error al realizar la solicitud", e);
-                listener.onError(e);
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful() && response.body() != null) {
-                    favoritosPorNombre.clear();
-                    String responseData = response.body().string();
-                    ArrayList<Favoritos> favoritosPorNombreDevueltos;
-                    Gson gson = new Gson();
-                    favoritosPorNombreDevueltos = gson.fromJson(responseData, new TypeToken<ArrayList<Favoritos>>() {
-                    }.getType());
-                    favoritosPorNombre.addAll(favoritosPorNombreDevueltos);
-                    Log.d("OK", "Respuesta exitosa: " + responseData);
-                    listener.onSuccess(favoritosPorNombreDevueltos);
-                } else {
-                    Log.e("KO", "Respuesta no exitosa: " + response.code());
-                    listener.onError(new IOException("Respuesta no exitosa: " + response.code()));
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    Log.e("Error", "Error al realizar la solicitud", e);
+                    listener.onError(e);
                 }
-            }
-        });
-        return favoritosPorNombre;
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful() && response.body() != null) {
+                        favoritosPorNombre.clear();
+                        String responseData = response.body().string();
+                        ArrayList<Favoritos> favoritosPorNombreDevueltos;
+                        Gson gson = new Gson();
+                        favoritosPorNombreDevueltos = gson.fromJson(responseData, new TypeToken<ArrayList<Favoritos>>() {
+                        }.getType());
+                        favoritosPorNombre.addAll(favoritosPorNombreDevueltos);
+                        Log.d("OK", "Respuesta exitosa: " + responseData);
+                        listener.onSuccess(favoritosPorNombreDevueltos);
+                    } else {
+                        Log.e("KO", "Respuesta no exitosa: " + response.code());
+                        listener.onError(new IOException("Respuesta no exitosa: " + response.code()));
+                    }
+                }
+            });
+            return favoritosPorNombre;
+        } else {
+            ((Activity) contexto).runOnUiThread(() ->
+                    Toast.makeText(contexto, R.string.unexpected_error, Toast.LENGTH_SHORT).show()
+            );
+            return null;
+        }
     }
 
     public ArrayList<Favoritos> obtenerFavoritosPorUsuario(String nombreUsuario, OnAnimesFavoritosObtenidosListener listener) {
-        ArrayList<Favoritos> listaFavoritos = new ArrayList<>();
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(baseUrl() + "/favoritos/" + nombreUsuario + authParams())
-                .build();
+        if (comprobar()) {
+            ArrayList<Favoritos> listaFavoritos = new ArrayList<>();
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(baseUrl() + "/favoritos/" + nombreUsuario + authParams())
+                    .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e("Error", "Error al realizar la solicitud", e);
-                listener.onError(e);
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful() && response.body() != null) {
-                    listaFavoritos.clear();
-                    String responseData = response.body().string();
-                    ArrayList<Favoritos> favoritosDevueltos;
-                    Gson gson = new Gson();
-                    favoritosDevueltos = gson.fromJson(responseData, new TypeToken<ArrayList<Favoritos>>() {
-                    }.getType());
-                    listaFavoritos.addAll(favoritosDevueltos);
-                    Log.d("OK", "Respuesta exitosa: " + responseData);
-                    listener.onSuccess(favoritosDevueltos);
-                } else {
-                    Log.e("KO", "Respuesta no exitosa: " + response.code());
-                    listener.onError(new IOException("Respuesta no exitosa: " + response.code()));
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    Log.e("Error", "Error al realizar la solicitud", e);
+                    listener.onError(e);
                 }
-            }
-        });
-        return listaFavoritos;
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful() && response.body() != null) {
+                        listaFavoritos.clear();
+                        String responseData = response.body().string();
+                        ArrayList<Favoritos> favoritosDevueltos;
+                        Gson gson = new Gson();
+                        favoritosDevueltos = gson.fromJson(responseData, new TypeToken<ArrayList<Favoritos>>() {
+                        }.getType());
+                        listaFavoritos.addAll(favoritosDevueltos);
+                        Log.d("OK", "Respuesta exitosa: " + responseData);
+                        listener.onSuccess(favoritosDevueltos);
+                    } else {
+                        Log.e("KO", "Respuesta no exitosa: " + response.code());
+                        listener.onError(new IOException("Respuesta no exitosa: " + response.code()));
+                    }
+                }
+            });
+            return listaFavoritos;
+        } else {
+            ((Activity) contexto).runOnUiThread(() ->
+                    Toast.makeText(contexto, R.string.unexpected_error, Toast.LENGTH_SHORT).show()
+            );
+            return null;
+        }
     }
 
     public void crearFavorito(Favoritos favorito, Callback callback) {
-        OkHttpClient client = new OkHttpClient();
-        Gson gson = new Gson();
-        String json = gson.toJson(favorito);
+        if (comprobar()) {
+            OkHttpClient client = new OkHttpClient();
+            Gson gson = new Gson();
+            String json = gson.toJson(favorito);
 
-        RequestBody body = RequestBody.create(
-                json,
-                MediaType.parse("application/json")
-        );
+            RequestBody body = RequestBody.create(
+                    json,
+                    MediaType.parse("application/json")
+            );
 
-        Request request = new Request.Builder()
-                .url(baseUrl() + "/favoritos" + authParams())
-                .post(body)
-                .build();
+            Request request = new Request.Builder()
+                    .url(baseUrl() + "/favoritos" + authParams())
+                    .post(body)
+                    .build();
 
-        client.newCall(request).enqueue(callback);
+            client.newCall(request).enqueue(callback);
+        } else {
+            ((Activity) contexto).runOnUiThread(() ->
+                    Toast.makeText(contexto, R.string.unexpected_error, Toast.LENGTH_SHORT).show()
+            );
+        }
     }
 
     public void modificarFavorito(Favoritos favorito, Callback callback) {
-        OkHttpClient client = new OkHttpClient();
-        Gson gson = new Gson();
-        String json = gson.toJson(favorito);
+        if (comprobar()) {
+            OkHttpClient client = new OkHttpClient();
+            Gson gson = new Gson();
+            String json = gson.toJson(favorito);
 
-        RequestBody body = RequestBody.create(
-                json,
-                MediaType.parse("application/json")
-        );
+            RequestBody body = RequestBody.create(
+                    json,
+                    MediaType.parse("application/json")
+            );
 
-        Request request = new Request.Builder()
-                .url(baseUrl() + "/favoritos" + authParams())
-                .put(body)
-                .build();
+            Request request = new Request.Builder()
+                    .url(baseUrl() + "/favoritos" + authParams())
+                    .put(body)
+                    .build();
 
-        client.newCall(request).enqueue(callback);
+            client.newCall(request).enqueue(callback);
+        } else {
+            ((Activity) contexto).runOnUiThread(() ->
+                    Toast.makeText(contexto, R.string.unexpected_error, Toast.LENGTH_SHORT).show()
+            );
+        }
     }
 
     public void eliminarFavorito(FavoritosId id, Callback callback) {
-        OkHttpClient client = new OkHttpClient();
-        Gson gson = new Gson();
-        String json = gson.toJson(id);
+        if (comprobar()) {
+            OkHttpClient client = new OkHttpClient();
+            Gson gson = new Gson();
+            String json = gson.toJson(id);
 
-        RequestBody body = RequestBody.create(
-                json,
-                MediaType.parse("application/json")
-        );
+            RequestBody body = RequestBody.create(
+                    json,
+                    MediaType.parse("application/json")
+            );
 
-        Request request = new Request.Builder()
-                .url(baseUrl() + "/favoritos" + authParams())
-                .delete(body)
-                .build();
+            Request request = new Request.Builder()
+                    .url(baseUrl() + "/favoritos" + authParams())
+                    .delete(body)
+                    .build();
 
-        client.newCall(request).enqueue(callback);
+            client.newCall(request).enqueue(callback);
+        } else {
+            ((Activity) contexto).runOnUiThread(() ->
+                    Toast.makeText(contexto, R.string.unexpected_error, Toast.LENGTH_SHORT).show()
+            );
+        }
     }
-
 
     public interface OnUsuarioObtenidoListener {
         void onSuccess(Usuario usuario);

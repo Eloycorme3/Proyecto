@@ -91,7 +91,7 @@ public class AnimeAdapter extends ArrayAdapter<Anime> {
                     boolean success = false;
                     try {
                         if (newState) {
-                            Favoritos f = new Favoritos(favId, anime, u, 0, 0);
+                            Favoritos f = new Favoritos(favId, anime, u, 0f, 0);
                             servicioREST.crearFavorito(f, new Callback() {
                                 @Override
                                 public void onFailure(@NonNull Call call, @NonNull IOException e) {

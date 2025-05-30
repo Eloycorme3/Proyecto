@@ -31,6 +31,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.mock.ServicioREST;
@@ -100,6 +101,7 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
                     getResources().updateConfiguration(config, getResources().getDisplayMetrics());
                 }
                 if (isNetworkAvailable(getBaseContext())) {
+                    prefs.edit().putBoolean("login", false).apply();
                     bottomNavigationView.setVisibility(VISIBLE);
                     if (isActivityActive() && savedInstanceState == null) {
                         getSupportFragmentManager().beginTransaction()
@@ -141,6 +143,8 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
 
                     getResources().updateConfiguration(config, getResources().getDisplayMetrics());
 
+                    prefs.edit().putBoolean("login", true).apply();
+
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container_main, new LoginFragment())
                             .commit();
@@ -168,7 +172,7 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
                     }
 
                     bottomNavigationView.setVisibility(INVISIBLE);
-                    if (isActivityActive() && savedInstanceState == null) {
+                    if (isActivityActive()) {
                         getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.fragment_container_main, new NoConnectionFragment())
                                 .commit();
@@ -217,7 +221,6 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
         }
     }
 
-
     public static void scheduleWeeklyAnimeNotification(Context context) {
         SharedPreferences prefs = context.getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         boolean alreadyScheduled = prefs.getBoolean("alarm_scheduled", false);
@@ -225,8 +228,8 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
         if (alreadyScheduled) return;
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-        calendar.set(Calendar.HOUR_OF_DAY, 19);
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+        calendar.set(Calendar.HOUR_OF_DAY, 15);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
@@ -261,21 +264,30 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
         new Thread(() -> servicioREST.obtenerFavoritosPorUsuario(nombreUsuarioLogueado, new ServicioREST.OnAnimesFavoritosObtenidosListener() {
             @Override
             public void onSuccess(ArrayList<Favoritos> favoritos) {
-                ArrayList<String> nombres = new ArrayList<>();
-                for (Favoritos f : favoritos) {
-                    nombres.add(f.getAnime().getNombre());
-                }
-                cacheManager.guardarFavoritos(nombres);
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putBoolean("favoritosCargados", true);
-                editor.apply();
+                if (favoritos != null) {
+                    ArrayList<String> nombres = new ArrayList<>();
+                    for (Favoritos f : favoritos) {
+                        nombres.add(f.getAnime().getNombre());
+                    }
+                    cacheManager.guardarFavoritos(nombres);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putBoolean("favoritosCargados", true);
+                    editor.apply();
 
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(0, 0)
-                        .replace(R.id.fragment_container_main, new ListaAnimesFragment())
-                        .addToBackStack(null)
-                        .commit();
+                    Intent intent = new Intent(getBaseContext(), ListaAnimesView.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    ActivityOptions options = ActivityOptions
+                            .makeCustomAnimation(getBaseContext(), 0, 0);
+                    intent.putExtra("reinicio", false);
+                    startActivity(intent, options.toBundle());
+
+                    /*getSupportFragmentManager()
+                            .beginTransaction()
+                            .setCustomAnimations(0, 0)
+                            .replace(R.id.fragment_container_main, new ListaAnimesFragment())
+                            .commit();
+                            */
+                }
             }
 
             @Override
@@ -412,9 +424,16 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
 
             boolean favoritosCargados = prefs.getBoolean("favoritosCargados", false);
             if (favoritosCargados) {
-                getSupportFragmentManager().beginTransaction()
+                /*getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container_main, new ListaAnimesFragment())
                         .commit();
+                        */
+                Intent intent = new Intent(this, ListaAnimesView.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                ActivityOptions options = ActivityOptions
+                        .makeCustomAnimation(this, 0, 0);
+                intent.putExtra("reinicio", false);
+                startActivity(intent, options.toBundle());
             } else {
                 iniciarlizarCache();
             }
@@ -428,10 +447,17 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
         runOnUiThread(() -> {
             guardarUsuarioEnPreferencias(usuario);
 
-            getSupportFragmentManager().beginTransaction()
+            /*getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container_main, new ListaAnimesFragment())
+                    .setCustomAnimations(0, 0)
                     .commit();
-
+                    */
+            Intent intent = new Intent(this, ListaAnimesView.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            ActivityOptions options = ActivityOptions
+                    .makeCustomAnimation(this, 0, 0);
+            intent.putExtra("reinicio", false);
+            startActivity(intent, options.toBundle());
             bottomNavigationView.setVisibility(VISIBLE);
         });
     }

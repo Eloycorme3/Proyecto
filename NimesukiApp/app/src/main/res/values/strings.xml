@@ -38,6 +38,9 @@
     <string name="accept">Aceptar</string>
     <string name="cancel">Cancelar</string>
     <string name="delete_account">Eliminar cuenta</string>
+    <string name="delete_account_confirmation">¿Estás seguro de que deseas eliminar la cuenta?</string>
+    <string name="delete_account_error">Error al eliminar la cuenta, cerrando sesión...</string>
+    <string name="delete_account_successfully">Cuenta eliminada con éxito</string>
     <string name="username_no_whitespace_error">El nombre de usuario no puede contener espacios en blanco</string>
     <string name="password_no_whitespace_error">La contraseña no puede contener espacios en blanco</string>
     <string name="configuration">Configuración</string>
@@ -52,8 +55,7 @@
     <string name="error_init_favorites">Error al inicializar los favoritos</string>
     <string name="no_results">No se encontraron animes</string>
     <string name="no_more_animes">Te acabaste la lista... ¿repetimos capítulo?</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_connection_retry">Reintentar</string>
     <string name="no_connection">Sin conexión, vuelve a intentarlo</string>
+    <string name="unexpected_error">Error inesperado</string>
 </resources>

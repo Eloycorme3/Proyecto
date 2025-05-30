@@ -26,11 +26,10 @@ public class PerfilView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
-
+        prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         bottomNavigationView = findViewById(R.id.bottomNavigationView_perfil);
 
         if (savedInstanceState == null) {
-            prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
             nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
 
             if (nombreUsuarioLogueado != null) {

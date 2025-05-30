@@ -38,6 +38,9 @@
     <string name="accept">Aceptar</string>
     <string name="cancel">Cancelar</string>
     <string name="delete_account">Eliminar conta</string>
+    <string name="delete_account_confirmation">Estás seguro de que desexas eliminar a conta?</string>
+    <string name="delete_account_error">Erro ao eliminar a conta, pechando sesión...</string>
+    <string name="delete_account_successfully">Conta eliminada con éxito</string>
     <string name="username_no_whitespace_error">O nome de usuario non pode conter espazos en branco</string>
     <string name="password_no_whitespace_error">O contrasinal non pode conter espazos en branco</string>
     <string name="configuration">Configuración</string>
@@ -54,4 +57,5 @@
     <string name="no_more_animes">Remataches a lista... repetimos capítulo?</string>
     <string name="no_connection_retry">Reintentar</string>
     <string name="no_connection">Sin conexión, volve a intentalo</string>
+    <string name="unexpected_error">Erro inesperado</string>
 </resources>

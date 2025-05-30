@@ -82,12 +82,12 @@ public class UsuarioController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping
     public void delete(
             @RequestParam String ip,
             @RequestParam String user,
             @RequestParam String pass,
-            @PathVariable Integer id
+            @RequestBody Integer id
     ) {
         usuarioService.delete(ip, user, pass, id);
     }

@@ -113,12 +113,12 @@ public class AnimeController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping
     public void delete(
             @RequestParam String ip,
             @RequestParam String user,
             @RequestParam String pass,
-            @PathVariable Integer id
+            @RequestBody Integer id
     ) {
         animeService.delete(ip, user, pass, id);
     }

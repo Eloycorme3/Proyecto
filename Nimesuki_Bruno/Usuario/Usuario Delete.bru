@@ -5,8 +5,8 @@ meta {
 }
 
 delete {
-  url: http://localhost:8088/usuarios/23?ip=localhost&user=root&pass=root
-  body: none
+  url: http://localhost:8088/usuarios?ip=localhost&user=root&pass=root
+  body: json
   auth: inherit
 }
 
@@ -14,4 +14,8 @@ params:query {
   ip: localhost
   user: root
   pass: root
+}
+
+body:json {
+  "25"
 }

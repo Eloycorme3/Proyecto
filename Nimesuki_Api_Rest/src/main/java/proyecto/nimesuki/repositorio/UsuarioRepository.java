@@ -5,6 +5,7 @@
 package proyecto.nimesuki.repositorio;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
 import proyecto.nimesuki.modelo.Usuario;
@@ -63,6 +64,8 @@ public class UsuarioRepository {
             tx.begin();
             Usuario u = em.find(Usuario.class, id);
             if (u != null) {
+                Query q = em.createQuery("DELETE FROM Favoritos f WHERE f.usuario.idUsuario = :idUsuario");
+                q.setParameter("idUsuario", id).executeUpdate();
                 em.remove(u);
             }
             tx.commit();

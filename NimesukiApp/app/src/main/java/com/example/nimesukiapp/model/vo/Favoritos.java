@@ -10,11 +10,11 @@ public class Favoritos implements Serializable {
 
     private Usuario usuario;
 
-    private Integer valoracion;
+    private Float valoracion;
 
     private Integer capActual;
 
-    public Favoritos(FavoritosId id, Anime anime, Usuario usuario, Integer valoracion, Integer capActual) {
+    public Favoritos(FavoritosId id, Anime anime, Usuario usuario, Float valoracion, Integer capActual) {
         this.id = id;
         this.anime = anime;
         this.usuario = usuario;
@@ -53,11 +53,11 @@ public class Favoritos implements Serializable {
         this.usuario = usuario;
     }
 
-    public Integer getValoracion() {
+    public Float getValoracion() {
         return valoracion;
     }
 
-    public void setValoracion(Integer valoracion) {
+    public void setValoracion(Float valoracion) {
         this.valoracion = valoracion;
     }
 

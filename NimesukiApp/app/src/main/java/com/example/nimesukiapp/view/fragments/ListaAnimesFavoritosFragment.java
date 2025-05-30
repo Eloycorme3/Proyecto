@@ -80,6 +80,7 @@ public class ListaAnimesFavoritosFragment extends Fragment {
 
         searchEditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
+                mostrarProgress(true);
                 String textoBusqueda = searchEditText.getText().toString();
                 if (textoBusqueda.isEmpty()) {
                     cargarAnimesFavoritos();
@@ -106,7 +107,6 @@ public class ListaAnimesFavoritosFragment extends Fragment {
         } else {
             throw new ClassCastException(context.toString() + " debe implementar OnAnimeFavoriteSelectedListener");
         }
-
     }
 
     @Override
@@ -132,6 +132,7 @@ public class ListaAnimesFavoritosFragment extends Fragment {
         new Thread(() -> servicioREST.obtenerFavoritosPorUsuario(nombreUsuarioLogueado, new ServicioREST.OnAnimesFavoritosObtenidosListener() {
             @Override
             public void onSuccess(final ArrayList<Favoritos> animesFavoritos) {
+                if (animesFavoritos != null) {
                 if (isAdded()) {
                     listaAnimesFavoritos.clear();
                     listaAnimesFavoritos.addAll(animesFavoritos);
@@ -147,7 +148,7 @@ public class ListaAnimesFavoritosFragment extends Fragment {
                             adapter.notifyDataSetChanged();
                         }, 1000);
                     });
-                }
+                }}
             }
 
             @Override
@@ -167,21 +168,23 @@ public class ListaAnimesFavoritosFragment extends Fragment {
         new Thread(() -> servicioREST.obtenerFavoritosPorNombre(nombreUsuarioLogueado, textoBusqueda, new ServicioREST.OnAnimesFavoritosObtenidosPorNombreListener() {
             @Override
             public void onSuccess(final ArrayList<Favoritos> favoritosPorNombre) {
-                if (isAdded()) {
-                    listaAnimesFavoritos.clear();
-                    listaAnimesFavoritos.addAll(favoritosPorNombre);
+                if (favoritosPorNombre != null) {
+                    if (isAdded()) {
+                        listaAnimesFavoritos.clear();
+                        listaAnimesFavoritos.addAll(favoritosPorNombre);
 
-                    requireActivity().runOnUiThread(() -> {
-                        if (listaAnimesFavoritos.isEmpty()) {
-                            emptyViewFavoritos.setVisibility(VISIBLE);
-                        } else {
-                            emptyViewFavoritos.setVisibility(GONE);
-                        }
-                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                            mostrarProgress(false);
-                            adapter.notifyDataSetChanged();
-                        }, 1000);
-                    });
+                        requireActivity().runOnUiThread(() -> {
+                            if (listaAnimesFavoritos.isEmpty()) {
+                                emptyViewFavoritos.setVisibility(VISIBLE);
+                            } else {
+                                emptyViewFavoritos.setVisibility(GONE);
+                            }
+                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                mostrarProgress(false);
+                                adapter.notifyDataSetChanged();
+                            }, 1000);
+                        });
+                    }
                 }
             }
 

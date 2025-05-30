@@ -35,7 +35,7 @@ public class Favoritos implements Serializable {
     @EmbeddedId
     protected FavoritosPK favoritosPK;
     @Column(name = "valoracion")
-    private Integer valoracion;
+    private Float valoracion;
     @Column(name = "cap_actual")
     private Integer capActual;
     @JoinColumn(name = "id_anime_FK", referencedColumnName = "id_anime", insertable = false, updatable = false)
@@ -48,7 +48,7 @@ public class Favoritos implements Serializable {
     public Favoritos() {
     }
 
-    public Favoritos(FavoritosPK favoritosPK, Anime a, Usuario u, int valoracion, int capActual) {
+    public Favoritos(FavoritosPK favoritosPK, Anime a, Usuario u, float valoracion, int capActual) {
         this.favoritosPK = favoritosPK;
         this.anime = a;
         this.usuario = u;
@@ -68,11 +68,11 @@ public class Favoritos implements Serializable {
         this.favoritosPK = favoritosPK;
     }
 
-    public Integer getValoracion() {
+    public Float getValoracion() {
         return valoracion;
     }
 
-    public void setValoracion(Integer valoracion) {
+    public void setValoracion(Float valoracion) {
         this.valoracion = valoracion;
     }
 

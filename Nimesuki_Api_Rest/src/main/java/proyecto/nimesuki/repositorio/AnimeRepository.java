@@ -5,6 +5,7 @@
 package proyecto.nimesuki.repositorio;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
 import proyecto.nimesuki.modelo.Anime;
@@ -60,6 +61,8 @@ public class AnimeRepository {
             tx.begin();
             Anime a = em.find(Anime.class, id);
             if (a != null) {
+                Query q = em.createQuery("DELETE FROM Favoritos f WHERE f.anime.idAnime = :idAnime");
+                q.setParameter("idAnime", id).executeUpdate();
                 em.remove(a);
             }
             tx.commit();

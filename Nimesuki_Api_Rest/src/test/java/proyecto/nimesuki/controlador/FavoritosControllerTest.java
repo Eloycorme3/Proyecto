@@ -18,8 +18,10 @@ import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import proyecto.nimesuki.modelo.Anime;
 import proyecto.nimesuki.modelo.Favoritos;
 import proyecto.nimesuki.modelo.FavoritosId;
+import proyecto.nimesuki.modelo.Usuario;
 import proyecto.nimesuki.servicio.FavoritosService;
 
 /**
@@ -93,6 +95,27 @@ class FavoritosControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, response.getBody().size());
         assertEquals(favorito, response.getBody().get(0));
+    }
+    
+    /**
+     * Test of testGetByAnimeId method, of class FavoritosController.
+     */
+    @Test
+    public void testGetByAnimeId() {
+        FavoritosId id = new FavoritosId(1, 1);
+        Usuario u = new Usuario(1, "Eloy", "contrasenhaHasehada");
+        Anime a = new Anime(1, null, null, null, null, null, null);
+        Favoritos favorito = new Favoritos(id, a, u, 5, 10);
+
+        when(favoritosService.findByAnimeId(ip, user, pass, u.getNombre(), a.getIdAnime()))
+            .thenReturn(favorito);
+
+        ResponseEntity<Favoritos> response = favoritosController.getByAnimeId(
+            ip, user, pass, u.getNombre(), a.getIdAnime()
+        );
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(favorito, response.getBody());
     }
 
     /**

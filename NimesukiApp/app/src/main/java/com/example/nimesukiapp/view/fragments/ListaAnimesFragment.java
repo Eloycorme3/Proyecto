@@ -57,26 +57,29 @@ public class ListaAnimesFragment extends Fragment {
         searchEditText = view.findViewById(R.id.searchAnimes);
         loading = view.findViewById(R.id.progressBarLoading);
 
-        if (prefs.contains("detalle")) {
-            if (prefs.getBoolean("detalle", false)) {
-                prefs.edit().putBoolean("detalle", false).apply();
+        if (prefs.getBoolean("detalle", false)) {
+            prefs.edit().putBoolean("detalle", false).apply();
+        } else {
+            if (prefs.getBoolean("detalleFavoritos", false)) {
+                mostrarProgress(true);
+
+                cargarAnimes();
+                prefs.edit().putBoolean("detalleFavoritos", false);
             } else {
-                if (prefs.contains("detalleFavoritos")) {
-                    if (!prefs.getBoolean("detalleFavoritos", false)) {
+                if (!prefs.contains("reinicio")) {
+                    if (!prefs.getBoolean("login", false)) {
                         mostrarProgress(true);
 
                         cargarAnimes();
                     }
                 } else {
-                    mostrarProgress(true);
+                    if (!prefs.getBoolean("reinicio", false)) {
+                        mostrarProgress(true);
 
-                    cargarAnimes();
+                        cargarAnimes();
+                    }
                 }
             }
-        } else {
-            mostrarProgress(true);
-
-            cargarAnimes();
         }
 
         adapter = new AnimeAdapter(this.getContext(), listaAnimes);
@@ -175,21 +178,23 @@ public class ListaAnimesFragment extends Fragment {
         new Thread(() -> servicioREST.obtenerAnimes(new ServicioREST.OnAnimesObtenidosListener() {
             @Override
             public void onSuccess(final ArrayList<Anime> animes) {
-                if (isAdded()) {
-                    listaAnimes.clear();
-                    listaAnimes.addAll(animes);
+                if (animes != null) {
+                    if (isAdded()) {
+                        listaAnimes.clear();
+                        listaAnimes.addAll(animes);
 
-                    requireActivity().runOnUiThread(() -> {
-                        if (listaAnimes.isEmpty()) {
-                            emptyView.setVisibility(VISIBLE);
-                        } else {
-                            emptyView.setVisibility(GONE);
-                        }
-                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                            mostrarProgress(false);
-                            adapter.notifyDataSetChanged();
-                        }, 1000);
-                    });
+                        requireActivity().runOnUiThread(() -> {
+                            if (listaAnimes.isEmpty()) {
+                                emptyView.setVisibility(VISIBLE);
+                            } else {
+                                emptyView.setVisibility(GONE);
+                            }
+                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                mostrarProgress(false);
+                                adapter.notifyDataSetChanged();
+                            }, 1000);
+                        });
+                    }
                 }
             }
 
@@ -209,21 +214,23 @@ public class ListaAnimesFragment extends Fragment {
         new Thread(() -> servicioREST.obtenerAnimesPorNombre(textoBusqueda, new ServicioREST.OnAnimesObtenidosPorNombreListener() {
             @Override
             public void onSuccess(final ArrayList<Anime> animesPorNombre) {
-                if (isAdded()) {
-                    listaAnimes.clear();
-                    listaAnimes.addAll(animesPorNombre);
+                if (animesPorNombre != null) {
+                    if (isAdded()) {
+                        listaAnimes.clear();
+                        listaAnimes.addAll(animesPorNombre);
 
-                    requireActivity().runOnUiThread(() -> {
-                        if (listaAnimes.isEmpty()) {
-                            emptyView.setVisibility(VISIBLE);
-                        } else {
-                            emptyView.setVisibility(GONE);
-                        }
-                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                            mostrarProgress(false);
-                            adapter.notifyDataSetChanged();
-                        }, 1000);
-                    });
+                        requireActivity().runOnUiThread(() -> {
+                            if (listaAnimes.isEmpty()) {
+                                emptyView.setVisibility(VISIBLE);
+                            } else {
+                                emptyView.setVisibility(GONE);
+                            }
+                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                mostrarProgress(false);
+                                adapter.notifyDataSetChanged();
+                            }, 1000);
+                        });
+                    }
                 }
             }
 

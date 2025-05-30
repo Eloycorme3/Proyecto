@@ -56,6 +56,8 @@ public class LoginFragment extends Fragment {
             editor.putString("nombreUsuario", null);
             editor.putString("idioma", "es");
             editor.putBoolean("oscuro", false);
+            editor.putBoolean("detalleFavoritos", false);
+            editor.putBoolean("detalle", false);
             editor.apply();
         }
 
@@ -256,9 +258,9 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    private void loginUsuario(String username, String password) {
+    private void loginUsuario(String nombreUsuario, String password) {
         servicioREST = new ServicioREST(requireContext());
-        new Thread(() -> servicioREST.obtenerUsuarioPorNombre(username, new ServicioREST.OnUsuarioObtenidoListener() {
+        new Thread(() -> servicioREST.obtenerUsuarioPorNombre(nombreUsuario, new ServicioREST.OnUsuarioObtenidoListener() {
             @Override
             public void onSuccess(Usuario usuario) {
                 if (usuario != null) {

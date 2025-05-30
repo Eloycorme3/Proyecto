@@ -67,7 +67,7 @@ public class FavoritosDAO {
         return f;
     }
 
-    public void modificarFavorito(Session session, Favoritos f, int nuevaValoracion, int nuevoCapActual) {
+    public void modificarFavorito(Session session, Favoritos f, float nuevaValoracion, int nuevoCapActual) {
         f.setValoracion(nuevaValoracion);
         f.setCapActual(nuevoCapActual);
         session.evict(f);

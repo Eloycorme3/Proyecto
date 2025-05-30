@@ -49,7 +49,7 @@ public class controladorPrincipal {
     public static ReportAdmin reportAdmin = new ReportAdmin();
     static DefaultComboBoxModel modeloComboUsuariosFavoritos = new DefaultComboBoxModel();
     static DefaultComboBoxModel modeloComboAnimesFavoritos = new DefaultComboBoxModel();
-    static SpinnerNumberModel modeloSpinnerValoracion = new SpinnerNumberModel();
+    static SpinnerNumberModel modeloSpinnerValoracion = new SpinnerNumberModel(0, 0, 5, 0.5);
     static SpinnerNumberModel modeloSpinnerCapActual = new SpinnerNumberModel();
     static SpinnerNumberModel modeloSpinnerCapTotales = new SpinnerNumberModel();
     static SpinnerNumberModel modeloSpinnerAnhoSalida = new SpinnerNumberModel();
@@ -75,8 +75,9 @@ public class controladorPrincipal {
         consultas.getSpAnhoSalida().setModel(modeloSpinnerAnhoSalida);
         reportAdmin.getSpAnhoInicioParametro().setModel(modeloSpinnerAnhoInicio);
         reportAdmin.getSpAnhoFinParametro().setModel(modeloSpinnerAnhoFin);
-        modeloSpinnerValoracion.setMinimum(0);
-        modeloSpinnerValoracion.setMaximum(5);
+//        modeloSpinnerValoracion.setMinimum(0);
+//        modeloSpinnerValoracion.setMaximum(5);
+//        modeloSpinnerValoracion.setStepSize(0.5);
         modeloSpinnerCapActual.setMinimum(0);
         modeloSpinnerCapTotales.setMinimum(0);
         modeloSpinnerAnhoSalida.setMinimum(1960);
@@ -679,7 +680,7 @@ public class controladorPrincipal {
             Anime a = (Anime) consultas.getComboAnimesFavoritos().getSelectedItem();
             Usuario u = (Usuario) consultas.getComboFavoritosUsuarios().getSelectedItem();
             if (a != null && u != null) {
-                int valoracion = Integer.parseInt(consultas.getSpValoracion().getValue().toString());
+                float valoracion = Float.parseFloat(consultas.getSpValoracion().getValue().toString());
                 int capActual = Integer.parseInt(consultas.getSpCapActual().getValue().toString());
                 FavoritosPK fPK = new FavoritosPK(a.getIdAnime(), u.getIdUsuario());
                 Favoritos f = new Favoritos(fPK, a, u, valoracion, capActual);
@@ -712,7 +713,7 @@ public class controladorPrincipal {
             Anime a = (Anime) consultas.getComboAnimesFavoritos().getSelectedItem();
             Usuario u = (Usuario) consultas.getComboFavoritosUsuarios().getSelectedItem();
             if (a != null && u != null) {
-                int nuevaValoracion = Integer.parseInt(consultas.getSpValoracion().getValue().toString());
+                float nuevaValoracion = Float.parseFloat(consultas.getSpValoracion().getValue().toString());
                 int nuevoCapActual = Integer.parseInt(consultas.getSpCapActual().getValue().toString());
                 Favoritos f = favDAO.buscarFavorito(session, a, u);
 

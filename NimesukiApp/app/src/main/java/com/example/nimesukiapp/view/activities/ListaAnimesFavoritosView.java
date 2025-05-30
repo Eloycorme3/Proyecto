@@ -29,11 +29,11 @@ public class ListaAnimesFavoritosView extends AppCompatActivity implements Lista
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_favoritos);
+        prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView_favoritos);
 
         if (savedInstanceState == null) {
-            prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
             nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
 
             if (nombreUsuarioLogueado != null) {

@@ -24,15 +24,24 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.nimesukiapp.R;
+import com.example.nimesukiapp.mock.ServicioREST;
+import com.example.nimesukiapp.model.vo.Usuario;
 import com.example.nimesukiapp.view.activities.ListaAnimesView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.Locale;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class ProfileFragment extends Fragment {
     private TextInputEditText editTextNombre, editTextActualPass, editTextNuevaPass;
@@ -138,6 +147,83 @@ public class ProfileFragment extends Fragment {
                         .setPositiveButton(getString(R.string.accept), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(requireActivity(), ListaAnimesView.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                intent.putExtra("reinicio", true);
+                                startActivity(intent);
+
+                                requireActivity().overridePendingTransition(0, 0);
+
+                                requireActivity().finish();
+                                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.cancel), null)
+                        .show();
+            }
+        });
+
+        btnEliminarCuenta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(requireContext())
+                        .setTitle(getString(R.string.delete_account))
+                        .setMessage(getString(R.string.delete_account_confirmation))
+                        .setPositiveButton(getString(R.string.accept), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                requireActivity().runOnUiThread(() -> {
+                                    ServicioREST servicioREST = new ServicioREST(requireContext());
+                                    String usuarioJson = prefs.getString("usuario_completo", null);
+                                    if (usuarioJson != null) {
+                                        Gson gson = new Gson();
+                                        Usuario u = gson.fromJson(usuarioJson, Usuario.class);
+                                        servicioREST.eliminarUsuario(u.getIdUsuario(), new Callback() {
+                                            @Override
+                                            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                                                requireActivity().runOnUiThread(() ->
+                                                        Toast.makeText(requireContext(), R.string.delete_account_error, Toast.LENGTH_SHORT).show()
+                                                );
+                                            }
+
+                                            @Override
+                                            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                                                requireActivity().runOnUiThread(() ->
+                                                        Toast.makeText(requireContext(), R.string.delete_account_successfully, Toast.LENGTH_LONG).show()
+                                                );
+                                            }
+                                        });
+                                    } else {
+                                        servicioREST.obtenerUsuarioPorNombre(nombreGuardado, new ServicioREST.OnUsuarioObtenidoListener() {
+                                            @Override
+                                            public void onSuccess(Usuario usuario) {
+                                                servicioREST.eliminarUsuario(usuario.getIdUsuario(), new Callback() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                                                        requireActivity().runOnUiThread(() ->
+                                                                Toast.makeText(requireContext(), R.string.delete_account_error, Toast.LENGTH_SHORT).show()
+                                                        );
+                                                    }
+
+                                                    @Override
+                                                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                                                        requireActivity().runOnUiThread(() ->
+                                                                Toast.makeText(requireContext(), R.string.delete_account_successfully, Toast.LENGTH_LONG).show()
+                                                        );
+                                                    }
+                                                });
+                                            }
+
+                                            @Override
+                                            public void onError(Exception e) {
+                                                requireActivity().runOnUiThread(() ->
+                                                        Toast.makeText(requireContext(), R.string.get_user_error, Toast.LENGTH_LONG).show()
+                                                );
+                                            }
+                                        });
+                                    }
+                                });
+
                                 Intent intent = new Intent(requireActivity(), ListaAnimesView.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 intent.putExtra("reinicio", true);
