@@ -41,7 +41,7 @@ public class AnimeRandomView extends AppCompatActivity {
         loading = findViewById(R.id.progressBarLoadingRandom);
 
         mostrarProgress(true);
-        bottomNavigationView = findViewById(R.id.bottomNavigationView_random);
+        bottomNavigationView = findViewById(R.id.bottomNavigationViewRandom);
 
         prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
@@ -51,7 +51,7 @@ public class AnimeRandomView extends AppCompatActivity {
             bottomNavigationView.setVisibility(VISIBLE);
         } else {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container_random, new LoginFragment())
+                    .replace(R.id.fragmentContainerRandom, new LoginFragment())
                     .commit();
             bottomNavigationView.setVisibility(INVISIBLE);
         }
@@ -90,7 +90,7 @@ public class AnimeRandomView extends AppCompatActivity {
 
     private void mostrarProgress(boolean mostrar) {
         loading.setVisibility(mostrar ? VISIBLE : GONE);
-        findViewById(R.id.fragment_container_random).setVisibility(mostrar ? INVISIBLE : VISIBLE);
+        findViewById(R.id.fragmentContainerRandom).setVisibility(mostrar ? INVISIBLE : VISIBLE);
     }
 
     private void obtenerYMostrarAnimeRandom() {
@@ -107,7 +107,7 @@ public class AnimeRandomView extends AppCompatActivity {
                         if (!isFinishing()) {
                             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                                 getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.fragment_container_random, new AnimeRandomEmptyFragment())
+                                        .replace(R.id.fragmentContainerRandom, new AnimeRandomEmptyFragment())
                                         .commit();
                                 mostrarProgress(false);
                             }, (1000));
@@ -120,7 +120,7 @@ public class AnimeRandomView extends AppCompatActivity {
                         enableBottomBar(false);
                         new Handler(Looper.getMainLooper()).postDelayed(() -> {
                             getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.fragment_container_random, animeRandomFragment)
+                                    .replace(R.id.fragmentContainerRandom, animeRandomFragment)
                                     .commit();
                             mostrarProgress(false);
                             enableBottomBar(true);

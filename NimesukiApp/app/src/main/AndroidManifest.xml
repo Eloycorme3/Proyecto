@@ -37,6 +37,7 @@
             android:name=".view.activities.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/Theme.NimesukiApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,18 +49,22 @@
             android:name=".view.activities.ListaAnimesView"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/Theme.NimesukiApp" />
         <activity
             android:name=".view.activities.AnimeRandomView"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/Theme.NimesukiApp" />
         <activity
             android:name=".view.activities.ListaAnimesFavoritosView"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/Theme.NimesukiApp" />
         <activity
             android:name=".view.activities.PerfilView"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/Theme.NimesukiApp" />
     </application>
 

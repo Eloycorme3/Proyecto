@@ -31,19 +31,19 @@ public class ListaAnimesFavoritosView extends AppCompatActivity implements Lista
         setContentView(R.layout.activity_lista_favoritos);
         prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
 
-        bottomNavigationView = findViewById(R.id.bottomNavigationView_favoritos);
+        bottomNavigationView = findViewById(R.id.bottomNavigationViewFavoritos);
 
         if (savedInstanceState == null) {
             nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
 
             if (nombreUsuarioLogueado != null) {
                 getSupportFragmentManager().beginTransaction()
-                       .replace(R.id.fragment_container_favoritos, new ListaAnimesFavoritosFragment())
+                       .replace(R.id.fragmentContainerFavoritos, new ListaAnimesFavoritosFragment())
                        .commit();
                 bottomNavigationView.setVisibility(VISIBLE);
             } else {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container_favoritos, new LoginFragment())
+                        .replace(R.id.fragmentContainerFavoritos, new LoginFragment())
                         .commit();
                 bottomNavigationView.setVisibility(INVISIBLE);
             }
@@ -107,7 +107,7 @@ public class ListaAnimesFavoritosView extends AppCompatActivity implements Lista
                 R.anim.fragment_pop_enter,
                 R.anim.fragment_pop_exit
         );
-        transaction.replace(R.id.fragment_container_favoritos, animeFavoritoDetailFragment);
+        transaction.replace(R.id.fragmentContainerFavoritos, animeFavoritoDetailFragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }

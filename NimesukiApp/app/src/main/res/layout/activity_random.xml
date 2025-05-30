@@ -8,11 +8,11 @@
     android:background="@color/pastelBackground">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment_container_random"
+        android:id="@+id/fragmentContainerRandom"
         android:name="com.example.nimesukiapp.view.fragments.AnimeRandomFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottomNavigationView_random" />
+        android:layout_above="@id/bottomNavigationViewRandom" />
 
     <ProgressBar
         android:id="@+id/progressBarLoadingRandom"
@@ -23,7 +23,7 @@
         android:visibility="visible" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView_random"
+        android:id="@+id/bottomNavigationViewRandom"
         style="@style/NoRippleBottomNav"
         app:menu="@menu/bottom_nav_menu" />
 

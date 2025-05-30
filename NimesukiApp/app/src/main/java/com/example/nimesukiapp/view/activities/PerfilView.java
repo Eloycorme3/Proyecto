@@ -27,20 +27,20 @@ public class PerfilView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
         prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
-        bottomNavigationView = findViewById(R.id.bottomNavigationView_perfil);
+        bottomNavigationView = findViewById(R.id.bottomNavigationViewPerfil);
 
         if (savedInstanceState == null) {
             nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
 
             if (nombreUsuarioLogueado != null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container_perfil, new ProfileFragment())
+                        .replace(R.id.fragmentContainerPerfil, new ProfileFragment())
                         .commit();
 
                 bottomNavigationView.setVisibility(VISIBLE);
             } else {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container_perfil, new LoginFragment())
+                        .replace(R.id.fragmentContainerPerfil, new LoginFragment())
                         .commit();
                 bottomNavigationView.setVisibility(INVISIBLE);
             }

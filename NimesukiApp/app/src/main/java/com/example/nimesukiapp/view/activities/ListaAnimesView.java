@@ -21,17 +21,14 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.LocaleList;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentManager;
 
 import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.mock.ServicioREST;
@@ -69,7 +66,7 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
 
         scheduleWeeklyAnimeNotification(this);
 
-        bottomNavigationView = findViewById(R.id.bottomNavigationView_main);
+        bottomNavigationView = findViewById(R.id.bottomNavigationViewAnimes);
         nombreUsuarioLogueado = null;
 
         if (prefs.contains("nombreUsuario")) {
@@ -105,14 +102,14 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
                     bottomNavigationView.setVisibility(VISIBLE);
                     if (isActivityActive() && savedInstanceState == null) {
                         getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragment_container_main, new ListaAnimesFragment())
+                                .replace(R.id.fragmentContainerLista, new ListaAnimesFragment())
                                 .commit();
                     }
                 } else {
                     bottomNavigationView.setVisibility(INVISIBLE);
                     if (isActivityActive() && savedInstanceState == null) {
                         getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragment_container_main, new NoConnectionFragment())
+                                .replace(R.id.fragmentContainerLista, new NoConnectionFragment())
                                 .commit();
                     }
                 }
@@ -146,7 +143,7 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
                     prefs.edit().putBoolean("login", true).apply();
 
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container_main, new LoginFragment())
+                            .replace(R.id.fragmentContainerLista, new LoginFragment())
                             .commit();
                 } else {
                     if (prefs.contains("idioma")) {
@@ -174,7 +171,7 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
                     bottomNavigationView.setVisibility(INVISIBLE);
                     if (isActivityActive()) {
                         getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragment_container_main, new NoConnectionFragment())
+                                .replace(R.id.fragmentContainerLista, new NoConnectionFragment())
                                 .commit();
                     }
                 }
@@ -375,7 +372,7 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
                                                 R.anim.fragment_pop_enter,
                                                 R.anim.fragment_pop_exit
                                         )
-                                        .replace(R.id.fragment_container_main, animeFavoritoDetailFragment)
+                                        .replace(R.id.fragmentContainerLista, animeFavoritoDetailFragment)
                                         .addToBackStack(null)
                                         .commit();
                             } else {
@@ -389,7 +386,7 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
                                                 R.anim.fragment_pop_enter,
                                                 R.anim.fragment_pop_exit
                                         )
-                                        .replace(R.id.fragment_container_main, animeDetailFragment)
+                                        .replace(R.id.fragmentContainerLista, animeDetailFragment)
                                         .addToBackStack(null)
                                         .commit();
                             }
@@ -409,7 +406,7 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
                                             R.anim.fragment_pop_enter,
                                             R.anim.fragment_pop_exit
                                     )
-                                    .replace(R.id.fragment_container_main, animeDetailFragment)
+                                    .replace(R.id.fragmentContainerLista, animeDetailFragment)
                                     .addToBackStack(null)
                                     .commit();
                         });

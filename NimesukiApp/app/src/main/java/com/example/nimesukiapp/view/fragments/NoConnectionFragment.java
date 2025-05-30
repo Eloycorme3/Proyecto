@@ -64,14 +64,14 @@ public class NoConnectionFragment extends Fragment {
                         new Handler(Looper.getMainLooper()).postDelayed(() -> {
                             mostrarProgress(false);
                             requireActivity().getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.fragment_container_main, new ListaAnimesFragment())
+                                    .replace(R.id.fragmentContainerLista, new ListaAnimesFragment())
                                     .commit();
                             networkAvailableSuccessListener.onNetworkAvailableSuccess();
                         }, 1000);
                     } else {
                         new Handler(Looper.getMainLooper()).postDelayed(() -> {
                             requireActivity().getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.fragment_container_main, new LoginFragment())
+                                    .replace(R.id.fragmentContainerLista, new LoginFragment())
                                     .commit();
                             prefs.edit().clear();
                             mostrarProgress(false);
