@@ -50,7 +50,7 @@ class FavoritosControllerTest {
     @Test
     public void testGetAll() {
         FavoritosId id = new FavoritosId(1, 1);
-        Favoritos favorito = new Favoritos(id, null, null, 5, 10);
+        Favoritos favorito = new Favoritos(id, null, null, 5f, 10);
 
         when(favoritosService.findAll(ip, user, pass)).thenReturn(List.of(favorito));
 
@@ -66,7 +66,7 @@ class FavoritosControllerTest {
     @Test
     public void testGetByUserAnime() {
         FavoritosId id = new FavoritosId(1, 1);
-        Favoritos favorito = new Favoritos(id, null, null, 5, 10);
+        Favoritos favorito = new Favoritos(id, null, null, 5f, 10);
 
         when(favoritosService.findByUsuarioAndAnime(ip, user, pass, "Eloy", "One Piece"))
                 .thenReturn(List.of(favorito));
@@ -85,7 +85,7 @@ class FavoritosControllerTest {
     @Test
     public void testGetByUser() {
         FavoritosId id = new FavoritosId(1, 1);
-        Favoritos favorito = new Favoritos(id, null, null, 5, 10);
+        Favoritos favorito = new Favoritos(id, null, null, 5f, 10);
 
         when(favoritosService.findByUsuario(ip, user, pass, "Eloy")).thenReturn(List.of(favorito));
 
@@ -105,7 +105,7 @@ class FavoritosControllerTest {
         FavoritosId id = new FavoritosId(1, 1);
         Usuario u = new Usuario(1, "Eloy", "contrasenhaHasehada");
         Anime a = new Anime(1, null, null, null, null, null, null);
-        Favoritos favorito = new Favoritos(id, a, u, 5, 10);
+        Favoritos favorito = new Favoritos(id, a, u, 5f, 10);
 
         when(favoritosService.findByAnimeId(ip, user, pass, u.getNombre(), a.getIdAnime()))
             .thenReturn(favorito);
@@ -124,7 +124,7 @@ class FavoritosControllerTest {
     @Test
     public void testCreateFavorito() {
         FavoritosId id = new FavoritosId(1, 1);
-        Favoritos favorito = new Favoritos(id, null, null, 5, 10);
+        Favoritos favorito = new Favoritos(id, null, null, 5f, 10);
 
         when(favoritosService.save(ip, user, pass, favorito)).thenReturn(favorito);
 
@@ -139,7 +139,7 @@ class FavoritosControllerTest {
     @Test
     public void testUpdateFavorito() {
         FavoritosId id = new FavoritosId(1, 1);
-        Favoritos favorito = new Favoritos(id, null, null, 4, 12);
+        Favoritos favorito = new Favoritos(id, null, null, 4f, 12);
 
         when(favoritosService.update(ip, user, pass, favorito)).thenReturn(favorito);
 

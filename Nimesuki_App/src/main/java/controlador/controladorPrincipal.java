@@ -224,6 +224,48 @@ public class controladorPrincipal {
         return u;
     }
 
+    public static Usuario registrarUsuario(String secretPass) {
+        Usuario u = null;
+        login.getLblLogin().setText("");
+        char[] pw = login.getTxtPasswordLogin().getPassword();
+        String contrasenha = new String(pw);
+        if (contrasenha.contains(" ")) {
+            login.getLblLogin().setText("Registro incorrecto");
+        } else if (login.getTxtNombreLogin().getText().contains(" ")) {
+            login.getLblLogin().setText("Registro incorrecto");
+        } else {
+            if (login.getTxtNombreLogin().getText().isEmpty() || contrasenha.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Faltan datos", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            } else {
+                try {
+                    if (usuDAO != null) {
+                        String nombre = login.getTxtNombreLogin().getText();
+                        Usuario uBuscado = usuDAO.buscarUsuarioPorNombre(session, nombre);
+                        if (uBuscado == null) {
+                            String contrasenhaHasheada = BCrypt.hashpw(contrasenha, BCrypt.gensalt());
+                            if (secretPass.equals("luffyg5")) {
+                                u = new Usuario(nombre, contrasenhaHasheada, "ADMIN");
+                            } else {
+                                u = new Usuario(nombre, contrasenhaHasheada, "USER");
+                            }
+                            usuDAO.darAltaUsuario(session, u);
+                            nombreUsuarioLogeado = u.getNombre();
+                        } else {
+                            login.getLblLogin().setText("Registro incorrecto");
+                            JOptionPane.showMessageDialog(null, "Nombre de usuario ya existente.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Configuración no encontrada.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    }
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos o buscar usuario", "Error", JOptionPane.ERROR_MESSAGE);
+                    u = null;
+                }
+            }
+        }
+        return u;
+    }
+
     public static void cerrarSesionUsuario() {
         nombreUsuarioLogeado = "";
     }

@@ -20,10 +20,12 @@ config\ConfigManager.class
 vista\GestorYConsultas$9.class
 Nimesuki.class
 reports\SavePdfChooser.class
+vista\Login$5.class
 vista\GestorAdmin.class
 vista\GestorNombreAnime$2.class
 vista\GestorAdmin$4.class
 vista\GestorUsuario$6.class
+vista\Login$6.class
 vista\ConfigDialog$1.class
 vista\Login.class
 vista\GestorYConsultas$20.class
@@ -43,6 +45,7 @@ vista\GestorYConsultas$16.class
 modelo\dao\AnimeDAO.class
 vista\GestorAdmin$6.class
 vista\ConfigDialog$2.class
+vista\Login$7.class
 vista\Login$3.class
 reports\Report.class
 vista\GestorYConsultas.class

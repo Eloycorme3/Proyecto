@@ -7,6 +7,7 @@ package vista;
 import controlador.controladorPrincipal;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import modelo.vo.Usuario;
@@ -17,6 +18,8 @@ import modelo.vo.Usuario;
  */
 public class Login extends javax.swing.JFrame {
 
+    private String secretPass = "";
+    
     /**
      * Creates new form Login
      */
@@ -43,11 +46,18 @@ public class Login extends javax.swing.JFrame {
         lblNombre = new javax.swing.JLabel();
         cbVerPasswordLogin = new javax.swing.JCheckBox();
         lblLogin = new javax.swing.JLabel();
+        btnRegister = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         menuOpciones = new javax.swing.JMenu();
-        menuItemConfig = new javax.swing.JCheckBoxMenuItem();
+        menuItemConfig = new javax.swing.JMenuItem();
+        menuItemAdmin = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
@@ -73,7 +83,7 @@ public class Login extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         panel.add(txtPasswordLogin, gridBagConstraints);
 
-        btnLogin.setText("Login");
+        btnLogin.setText("Iniciar Sesión");
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLoginActionPerformed(evt);
@@ -84,7 +94,7 @@ public class Login extends javax.swing.JFrame {
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 55;
-        gridBagConstraints.insets = new java.awt.Insets(30, 0, 50, 0);
+        gridBagConstraints.insets = new java.awt.Insets(30, 0, 10, 0);
         panel.add(btnLogin, gridBagConstraints);
 
         lblPassword.setText("Contraseña:");
@@ -119,14 +129,27 @@ public class Login extends javax.swing.JFrame {
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(30, 15, 50, 50);
+        gridBagConstraints.insets = new java.awt.Insets(30, 15, 10, 50);
         panel.add(lblLogin, gridBagConstraints);
+
+        btnRegister.setText("Registrarse");
+        btnRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegisterActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 55;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 50, 0);
+        panel.add(btnRegister, gridBagConstraints);
 
         getContentPane().add(panel, java.awt.BorderLayout.CENTER);
 
         menuOpciones.setText("Opciones");
 
-        menuItemConfig.setSelected(true);
         menuItemConfig.setText("Configuración");
         menuItemConfig.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -134,6 +157,14 @@ public class Login extends javax.swing.JFrame {
             }
         });
         menuOpciones.add(menuItemConfig);
+
+        menuItemAdmin.setText("Admin access");
+        menuItemAdmin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemAdminActionPerformed(evt);
+            }
+        });
+        menuOpciones.add(menuItemAdmin);
 
         menuBar.add(menuOpciones);
 
@@ -176,12 +207,36 @@ public class Login extends javax.swing.JFrame {
         }*/
     }//GEN-LAST:event_formWindowOpened
 
+    private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
+        // TODO add your handling code here:
+        Usuario usuarioRegistrado = controladorPrincipal.registrarUsuario(this.secretPass);
+        if (usuarioRegistrado != null) {
+            if (usuarioRegistrado.getTipo().equals("USER")) {
+                this.setVisible(false);
+                controladorPrincipal.iniciarGestorUsuarios();
+            } else if (usuarioRegistrado.getTipo().equals("ADMIN")) {
+                this.setVisible(false);
+                controladorPrincipal.iniciarConsultas();
+            }
+        }
+    }//GEN-LAST:event_btnRegisterActionPerformed
+
     private void menuItemConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemConfigActionPerformed
         // TODO add your handling code here:
         ConfigDialog configDialog = new ConfigDialog(null, true);
         configDialog.setLocationRelativeTo(null);
         configDialog.setVisible(true);
     }//GEN-LAST:event_menuItemConfigActionPerformed
+
+    private void menuItemAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemAdminActionPerformed
+        // TODO add your handling code here:
+        this.secretPass = JOptionPane.showInputDialog(null, "¿Cuál es la contrasña secreta?");
+    }//GEN-LAST:event_menuItemAdminActionPerformed
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        // TODO add your handling code here:
+        this.secretPass = "";
+    }//GEN-LAST:event_formComponentShown
 
     public JTextField getTxtNombreLogin() {
         return txtNombreLogin;
@@ -233,12 +288,14 @@ public class Login extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogin;
+    private javax.swing.JButton btnRegister;
     private javax.swing.JCheckBox cbVerPasswordLogin;
     private javax.swing.JLabel lblLogin;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblPassword;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JCheckBoxMenuItem menuItemConfig;
+    private javax.swing.JMenuItem menuItemAdmin;
+    private javax.swing.JMenuItem menuItemConfig;
     private javax.swing.JMenu menuOpciones;
     private javax.swing.JPanel panel;
     private javax.swing.JTextField txtNombreLogin;
