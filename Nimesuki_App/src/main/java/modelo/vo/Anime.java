@@ -35,7 +35,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Anime.findByAnhoSalida", query = "SELECT a FROM Anime a WHERE a.anhoSalida = :anhoSalida"),
     @NamedQuery(name = "Anime.findByDescripcion", query = "SELECT a FROM Anime a WHERE a.descripcion = :descripcion"),
     @NamedQuery(name = "Anime.findByImagen", query = "SELECT a FROM Anime a WHERE a.imagen = :imagen"),
-    @NamedQuery(name = "Anime.findByCapTotales", query = "SELECT a FROM Anime a WHERE a.capTotales = :capTotales")})
+    @NamedQuery(name = "Anime.findByCapTotales", query = "SELECT a FROM Anime a WHERE a.capTotales = :capTotales"),
+    @NamedQuery(name = "Anime.findByNombreCointaining&CapitulosMax", query = "SELECT a FROM Anime a WHERE a.nombre LIKE CONCAT('%', :nombre, '%') AND a.capTotales <= :capitulos")})
 public class Anime implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -68,7 +69,7 @@ public class Anime implements Serializable {
     public Anime(Integer idAnime) {
         this.idAnime = idAnime;
     }
-    
+
     public Anime(String nombre, String categorias, int anhoSalida, String descripcion, String imagen, int capTotales) {
         this.nombre = nombre;
         this.categorias = categorias;
@@ -176,5 +177,5 @@ public class Anime implements Serializable {
     public String toString() {
         return nombre;
     }
-    
+
 }

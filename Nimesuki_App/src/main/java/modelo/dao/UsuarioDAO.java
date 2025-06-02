@@ -6,6 +6,7 @@ package modelo.dao;
 
 import java.util.Iterator;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JTextArea;
 import modelo.vo.Usuario;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -70,7 +71,7 @@ public class UsuarioDAO {
         String query = "Usuario.findByIdUsuario";
         Query q = session.createNamedQuery(query);
         q.setParameter("idUsuario", id);
-        
+
         Iterator it = q.list().iterator();
         if (it.hasNext()) {
             u = (Usuario) it.next();
@@ -78,8 +79,24 @@ public class UsuarioDAO {
         return u;
     }
 
-    public void darAltaUsuario(Session session, Usuario u) {
-        session.save(u);
+    public void cargarAreaUsuarios(Session session, JTextArea taSegundoListadoCompleto) {
+        taSegundoListadoCompleto.setText("");
+        String query = "Usuario.findAll";
+        Query q = session.createNamedQuery(query);
+        
+        if (q.list().isEmpty()) {
+            taSegundoListadoCompleto.setText("No se encontraron coincidencias.");
+            return; 
+        }
+        
+        Iterator it = q.list().iterator();
+        while (it.hasNext()) {
+            Usuario u = (Usuario) it.next();
+            taSegundoListadoCompleto.append(u.toString());
+            if (it.hasNext()) {
+                taSegundoListadoCompleto.append("\n");
+            }
+        }
     }
 
     public void modificarUsuario(Session session, Usuario u) {
@@ -91,6 +108,10 @@ public class UsuarioDAO {
         uLogAdmin.setTipo(tipo);
         session.evict(uLogAdmin);
         session.update(uLogAdmin);
+    }
+    
+    public void darAltaUsuario(Session session, Usuario u) {
+        session.save(u);
     }
 
 }

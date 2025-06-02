@@ -47,6 +47,7 @@ public class AnimeRandomView extends AppCompatActivity {
         nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
 
         if (nombreUsuarioLogueado != null) {
+            mostrarProgress(true);
             obtenerYMostrarAnimeRandom();
             bottomNavigationView.setVisibility(VISIBLE);
         } else {
@@ -73,6 +74,7 @@ public class AnimeRandomView extends AppCompatActivity {
                 finish();
                 return true;
             } else if (itemId == R.id.nav_random) {
+                mostrarProgress(true);
                 obtenerYMostrarAnimeRandom();
                 return true;
             } else if (itemId == R.id.nav_profile) {
@@ -93,7 +95,7 @@ public class AnimeRandomView extends AppCompatActivity {
         findViewById(R.id.fragmentContainerRandom).setVisibility(mostrar ? INVISIBLE : VISIBLE);
     }
 
-    private void obtenerYMostrarAnimeRandom() {
+    public void obtenerYMostrarAnimeRandom() {
         new Thread(() -> {
             try {
                 Anime animeAleatorio = obtenerAnimeRandom(nombreUsuarioLogueado);
@@ -110,34 +112,23 @@ public class AnimeRandomView extends AppCompatActivity {
                                         .replace(R.id.fragmentContainerRandom, new AnimeRandomEmptyFragment())
                                         .commit();
                                 mostrarProgress(false);
-                            }, (1000));
+                            }, 1000);
                             return;
                         }
                     }
 
-                    if (animeRandomFragment == null) {
-                        animeRandomFragment = AnimeRandomFragment.newInstance(animeAleatorio);
-                        enableBottomBar(false);
-                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                            getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.fragmentContainerRandom, animeRandomFragment)
-                                    .commit();
-                            mostrarProgress(false);
-                            enableBottomBar(true);
-                        }, (1000));
-                    } else {
-                        mostrarProgress(true);
-                        enableBottomBar(false);
-                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                            try {
-                                animeRandomFragment.actualizarAnime(animeAleatorio);
-                            } catch (InterruptedException e) {
-                                throw new RuntimeException(e);
-                            }
-                            mostrarProgress(false);
-                            enableBottomBar(true);
-                        }, (1000));
-                    }
+                    animeRandomFragment = AnimeRandomFragment.newInstance(animeAleatorio);
+                    enableBottomBar(false);
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .setCustomAnimations(0, 0)
+                                .replace(R.id.fragmentContainerRandom, animeRandomFragment)
+                                .commit();
+                        mostrarProgress(false);
+                        enableBottomBar(true);
+                    }, 1000);
+
                 });
             } catch (IOException e) {
                 Toast.makeText(this, getString(R.string.load_anime_error), Toast.LENGTH_LONG).show();

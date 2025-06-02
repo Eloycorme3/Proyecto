@@ -44,8 +44,10 @@ public class NoConnectionFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_no_connection, container, false);
-        prefs = getContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
+
+        prefs = requireContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
+
         layout = view.findViewById(R.id.contentLayout);
         loading = view.findViewById(R.id.progressBarLoadingConnection);
 

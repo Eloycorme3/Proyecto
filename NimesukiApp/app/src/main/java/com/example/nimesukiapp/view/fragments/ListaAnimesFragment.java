@@ -82,7 +82,7 @@ public class ListaAnimesFragment extends Fragment {
             }
         }
 
-        adapter = new AnimeAdapter(this.getContext(), listaAnimes);
+        adapter = new AnimeAdapter(this.requireContext(), listaAnimes);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -202,7 +202,7 @@ public class ListaAnimesFragment extends Fragment {
             public void onError(Exception e) {
                 if (isAdded()) {
                     requireActivity().runOnUiThread(() ->
-                            Toast.makeText(getContext(), getString(R.string.load_animes_error), Toast.LENGTH_LONG).show()
+                            Toast.makeText(requireContext(), getString(R.string.load_animes_error), Toast.LENGTH_LONG).show()
                     );
                 }
             }
@@ -238,7 +238,7 @@ public class ListaAnimesFragment extends Fragment {
             public void onError(Exception e) {
                 if (isAdded()) {
                     requireActivity().runOnUiThread(() -> {
-                        Toast.makeText(getContext(), getString(R.string.load_animes_error), Toast.LENGTH_LONG).show();
+                        Toast.makeText(requireContext(), getString(R.string.load_animes_error), Toast.LENGTH_LONG).show();
                         mostrarProgress(false);
                     });
                 }

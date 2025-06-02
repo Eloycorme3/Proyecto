@@ -28,7 +28,7 @@
             app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.None" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/nombreLayout"
+            android:id="@+id/layoutNombre"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -40,9 +40,6 @@
             app:boxCornerRadiusTopStart="16dp"
             app:boxStrokeColor="@color/pastelPrimary"
             app:boxStrokeWidth="0dp"
-            app:endIconDrawable="@drawable/ic_edit"
-            app:endIconMode="custom"
-            app:endIconTint="@color/pastelAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/profileImage">
@@ -58,6 +55,19 @@
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <ImageButton
+            android:id="@+id/nombreToggleEnabled"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginRight="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Mostrar/ocultar contraseña"
+            android:src="@drawable/ic_edit"
+            app:layout_constraintBottom_toBottomOf="@+id/layoutNombre"
+            app:layout_constraintEnd_toEndOf="@+id/layoutNombre"
+            app:layout_constraintTop_toTopOf="@+id/layoutNombre"
+            app:tint="@color/pastelAccent" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonCambiarNombre"
             android:layout_width="200dp"
@@ -69,7 +79,7 @@
             app:cornerRadius="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/nombreLayout" />
+            app:layout_constraintTop_toBottomOf="@id/layoutNombre" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutActualPass"
@@ -84,9 +94,6 @@
             app:boxCornerRadiusTopStart="16dp"
             app:boxStrokeColor="@color/pastelPrimary"
             app:boxStrokeWidth="0dp"
-            app:endIconDrawable="@drawable/password_icon"
-            app:endIconMode="password_toggle"
-            app:endIconTint="@color/pastelAccent"
             app:hintTextColor="@color/pastelPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -99,6 +106,19 @@
                 android:hint="@string/current_password"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/passwordToggleButtonActualPass"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginRight="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Mostrar/ocultar contraseña"
+            android:src="@drawable/ic_visibility_off"
+            app:layout_constraintBottom_toBottomOf="@+id/layoutActualPass"
+            app:layout_constraintEnd_toEndOf="@+id/layoutActualPass"
+            app:layout_constraintTop_toTopOf="@+id/layoutActualPass"
+            app:tint="@color/pastelAccent" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutNuevaPass"
@@ -113,9 +133,6 @@
             app:boxCornerRadiusTopStart="16dp"
             app:boxStrokeColor="@color/pastelPrimary"
             app:boxStrokeWidth="0dp"
-            app:endIconDrawable="@drawable/password_icon"
-            app:endIconMode="password_toggle"
-            app:endIconTint="@color/pastelAccent"
             app:hintTextColor="@color/pastelPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -128,6 +145,19 @@
                 android:hint="@string/new_password"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/passwordToggleButtonNuevaPass"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginRight="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Mostrar/ocultar contraseña"
+            android:src="@drawable/ic_visibility_off"
+            app:layout_constraintBottom_toBottomOf="@+id/layoutNuevaPass"
+            app:layout_constraintEnd_toEndOf="@+id/layoutNuevaPass"
+            app:layout_constraintTop_toTopOf="@+id/layoutNuevaPass"
+            app:tint="@color/pastelAccent" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonCambiarPassword"
@@ -143,47 +173,17 @@
             app:layout_constraintTop_toBottomOf="@id/layoutNuevaPass" />
 
         <LinearLayout
-            android:id="@+id/layoutTema"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/buttonCambiarPassword">
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:gravity="start"
-                android:text="@string/dark_mode"
-                android:textColor="@color/pastelPrimary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/switchTema"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end" />
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/layoutSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:background="@color/pastelBackground"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layoutTema">
+            app:layout_constraintTop_toBottomOf="@id/buttonCambiarPassword">
 
             <TextView
                 android:id="@+id/textIdioma"
@@ -206,6 +206,36 @@
                 android:padding="12dp" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/layoutTema"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutSpinner">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:gravity="start"
+                android:text="@string/dark_mode"
+                android:textColor="@color/pastelPrimary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switchTema"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end" />
+        </LinearLayout>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonCerrarSesion"
             android:layout_width="200dp"
@@ -217,7 +247,7 @@
             app:cornerRadius="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layoutSpinner" />
+            app:layout_constraintTop_toBottomOf="@id/layoutTema" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonEliminarCuenta"

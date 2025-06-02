@@ -155,7 +155,7 @@ public class ListaAnimesFavoritosFragment extends Fragment {
             public void onError(Exception e) {
                 if (isAdded()) {
                     requireActivity().runOnUiThread(() -> {
-                        Toast.makeText(getContext(), getString(R.string.load_favorite_anime_error), Toast.LENGTH_LONG).show();
+                        Toast.makeText(requireContext(), getString(R.string.load_favorite_anime_error), Toast.LENGTH_LONG).show();
                         mostrarProgress(false);
                     });
                 }
@@ -192,7 +192,7 @@ public class ListaAnimesFavoritosFragment extends Fragment {
             public void onError(Exception e) {
                 if (isAdded()) {
                     requireActivity().runOnUiThread(() ->
-                            Toast.makeText(getContext(), getString(R.string.load_favorite_anime_error), Toast.LENGTH_LONG).show()
+                            Toast.makeText(requireContext(), getString(R.string.load_favorite_anime_error), Toast.LENGTH_LONG).show()
                     );
                 }
             }

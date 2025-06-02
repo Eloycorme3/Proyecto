@@ -12,7 +12,7 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import vista.GestorYConsultas;
+import vista.GestorAdministrador;
 
 /**
  *
@@ -35,7 +35,7 @@ public class ReportService {
     }
 
     public Report get(String reportPath, Map<String, Object> parameters) throws Exception {
-        try (InputStream is = GestorYConsultas.class.getResourceAsStream(reportPath)) {
+        try (InputStream is = GestorAdministrador.class.getResourceAsStream(reportPath)) {
             try (Connection con = DriverManager.getConnection(url, user, password)) {
                 JasperReport jr = JasperCompileManager.compileReport(is);
                 JasperPrint jp = JasperFillManager.fillReport(jr, parameters, con);

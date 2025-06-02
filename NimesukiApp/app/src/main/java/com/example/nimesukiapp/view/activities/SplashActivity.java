@@ -22,6 +22,10 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash);
+
+        View splashLayout = findViewById(R.id.splash_root);
         prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         String nombre = prefs.getString("nombreUsuario", null);
         if (nombre != null && !nombre.isEmpty()) {
@@ -29,25 +33,28 @@ public class SplashActivity extends AppCompatActivity {
         } else {
             reinicio = true;
             error = false;
+            continuarSplash();
         }
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+    }
 
-        View splashLayout = findViewById(R.id.splash_root);
+    private void continuarSplash() {
+        runOnUiThread(() -> {
+            View splashLayout = findViewById(R.id.splash_root);
 
-        new Handler(Looper.getMainLooper()).postDelayed(() -> splashLayout.animate()
-                .alpha(0f)
-                .setDuration(800)
-                .withEndAction(() -> {
-                    splashLayout.setVisibility(GONE);
-                    Intent intent = new Intent(this, ListaAnimesView.class);
-                    intent.putExtra("reinicio", reinicio);
-                    intent.putExtra("error", error);
-                    startActivity(intent);
-                    overridePendingTransition(0, 0);
-                    finish();
-                })
-                .start(), 1500);
+            new Handler(Looper.getMainLooper()).postDelayed(() -> splashLayout.animate()
+                    .alpha(0f)
+                    .setDuration(800)
+                    .withEndAction(() -> {
+                        splashLayout.setVisibility(GONE);
+                        Intent intent = new Intent(this, ListaAnimesView.class);
+                        intent.putExtra("reinicio", reinicio);
+                        intent.putExtra("error", error);
+                        startActivity(intent);
+                        overridePendingTransition(0, 0);
+                        finish();
+                    })
+                    .start(), 1500);
+        });
     }
 
     private void comprobarUsuario(String nombre) {
@@ -57,12 +64,14 @@ public class SplashActivity extends AppCompatActivity {
             public void onSuccess(Usuario usuario) {
                 reinicio = false;
                 error = false;
+                continuarSplash();
             }
 
             @Override
             public void onError(Exception e) {
                 reinicio = true;
                 error = true;
+                continuarSplash();
             }
         }));
     }

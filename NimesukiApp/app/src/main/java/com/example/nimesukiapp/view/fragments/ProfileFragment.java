@@ -18,11 +18,13 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import android.os.LocaleList;
+import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -48,6 +50,7 @@ public class ProfileFragment extends Fragment {
     private TextInputLayout layoutActualPass, layoutNuevaPass, layoutNombre;
     private MaterialButton btnCambiarNombre, btnCambiarPassword, btnCerrarSesion, btnEliminarCuenta;
     private SwitchMaterial switchTema;
+    private ImageButton btnToggleVisibilityActualPass, btnToggleVisibilityNuevaPass, btnToggleEnabledText;
     private Spinner spinnerIdioma;
     private SharedPreferences prefs;
 
@@ -65,10 +68,51 @@ public class ProfileFragment extends Fragment {
         switchTema = view.findViewById(R.id.switchTema);
         layoutActualPass = view.findViewById(R.id.layoutActualPass);
         layoutNuevaPass = view.findViewById(R.id.layoutNuevaPass);
-        layoutNombre = view.findViewById(R.id.nombreLayout);
+        layoutNombre = view.findViewById(R.id.layoutNombre);
         spinnerIdioma = view.findViewById(R.id.spinnerIdioma);
         btnCerrarSesion = view.findViewById(R.id.buttonCerrarSesion);
         btnEliminarCuenta = view.findViewById(R.id.buttonEliminarCuenta);
+        btnToggleVisibilityActualPass = view.findViewById(R.id.passwordToggleButtonActualPass);
+        btnToggleVisibilityNuevaPass = view.findViewById(R.id.passwordToggleButtonNuevaPass);
+        btnToggleEnabledText = view.findViewById(R.id.nombreToggleEnabled);
+
+        btnToggleVisibilityActualPass.setOnClickListener(new View.OnClickListener() {
+            boolean isPasswordVisible = false;
+
+            @Override
+            public void onClick(View v) {
+                if (isPasswordVisible) {
+                    editTextActualPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    btnToggleVisibilityActualPass.setImageResource(R.drawable.ic_visibility_off);
+                } else {
+                    editTextActualPass.setTransformationMethod(null);
+                    btnToggleVisibilityActualPass.setImageResource(R.drawable.ic_visibility_on);
+                }
+
+                editTextActualPass.setSelection(editTextActualPass.getText().length());
+
+                isPasswordVisible = !isPasswordVisible;
+            }
+        });
+
+        btnToggleVisibilityNuevaPass.setOnClickListener(new View.OnClickListener() {
+            boolean isPasswordVisible = false;
+
+            @Override
+            public void onClick(View v) {
+                if (isPasswordVisible) {
+                    editTextNuevaPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    btnToggleVisibilityNuevaPass.setImageResource(R.drawable.ic_visibility_off);
+                } else {
+                    editTextNuevaPass.setTransformationMethod(null);
+                    btnToggleVisibilityNuevaPass.setImageResource(R.drawable.ic_visibility_on);
+                }
+
+                editTextNuevaPass.setSelection(editTextNuevaPass.getText().length());
+
+                isPasswordVisible = !isPasswordVisible;
+            }
+        });
 
         prefs = requireContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
 
@@ -95,10 +139,16 @@ public class ProfileFragment extends Fragment {
 
         editTextNombre.setText(nombreGuardado);
 
-        layoutNombre.setEndIconOnClickListener(v -> {
+        btnToggleEnabledText.setOnClickListener(new View.OnClickListener() {
             boolean isEnabled = editTextNombre.isEnabled();
-            editTextNombre.setEnabled(!isEnabled);
-            layoutNombre.setEndIconDrawable(isEnabled ? R.drawable.ic_edit : R.drawable.ic_done);
+
+            @Override
+            public void onClick(View v) {
+                editTextNombre.setEnabled(!isEnabled);
+                btnToggleEnabledText.setImageResource(isEnabled ? R.drawable.ic_edit : R.drawable.ic_done);
+
+                isEnabled = !isEnabled;
+            }
         });
 
         btnCambiarNombre.setOnClickListener(v -> {
@@ -257,7 +307,7 @@ public class ProfileFragment extends Fragment {
 
         getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
 
-        getActivity().recreate();
+        requireActivity().recreate();
     }
 
     private void setNightMode(boolean isNightMode) {

@@ -58,4 +58,6 @@
     <string name="no_connection_retry">Reintentar</string>
     <string name="no_connection">Sin conexión, vuelve a intentarlo</string>
     <string name="unexpected_error">Error inesperado</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

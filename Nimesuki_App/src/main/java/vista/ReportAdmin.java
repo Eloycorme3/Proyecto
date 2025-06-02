@@ -63,7 +63,7 @@ public class ReportAdmin extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 15);
         panel.add(jLabel2, gridBagConstraints);
 
-        jLabel3.setText("Nombre:");
+        jLabel3.setText("Nombre");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -133,7 +133,7 @@ public class ReportAdmin extends javax.swing.JFrame {
     private void menuItemVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemVolverActionPerformed
         // TODO add your handling code here:
         this.setVisible(false);
-        controladorPrincipal.iniciarConsultas();
+        controladorPrincipal.iniciarGestorAdministrador();
     }//GEN-LAST:event_menuItemVolverActionPerformed
 
     public JSpinner getSpAnhoFinParametro() {

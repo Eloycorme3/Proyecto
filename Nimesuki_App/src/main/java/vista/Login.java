@@ -97,7 +97,7 @@ public class Login extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(30, 0, 10, 0);
         panel.add(btnLogin, gridBagConstraints);
 
-        lblPassword.setText("Contraseña:");
+        lblPassword.setText("Contraseña");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -105,7 +105,7 @@ public class Login extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 20);
         panel.add(lblPassword, gridBagConstraints);
 
-        lblNombre.setText("Nombre:");
+        lblNombre.setText("Nombre");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -191,7 +191,7 @@ public class Login extends javax.swing.JFrame {
                 controladorPrincipal.iniciarGestorUsuarios();
             } else if (usuarioLogueado.getTipo().equals("ADMIN")) {
                 this.setVisible(false);
-                controladorPrincipal.iniciarConsultas();
+                controladorPrincipal.iniciarGestorAdministrador();
             }
         }
     }//GEN-LAST:event_btnLoginActionPerformed
@@ -216,7 +216,7 @@ public class Login extends javax.swing.JFrame {
                 controladorPrincipal.iniciarGestorUsuarios();
             } else if (usuarioRegistrado.getTipo().equals("ADMIN")) {
                 this.setVisible(false);
-                controladorPrincipal.iniciarConsultas();
+                controladorPrincipal.iniciarGestorAdministrador();
             }
         }
     }//GEN-LAST:event_btnRegisterActionPerformed

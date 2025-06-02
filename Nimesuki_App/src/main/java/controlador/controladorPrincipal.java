@@ -9,7 +9,6 @@ import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,10 +24,11 @@ import modelo.vo.FavoritosPK;
 import modelo.vo.Usuario;
 import org.hibernate.Session;
 import org.mindrot.jbcrypt.BCrypt;
-import vista.GestorAdmin;
+import vista.Consultas;
+import vista.GestorAdminUsuario;
 import vista.GestorNombreAnime;
 import vista.GestorUsuario;
-import vista.GestorYConsultas;
+import vista.GestorAdministrador;
 import vista.Login;
 import vista.ReportAdmin;
 
@@ -44,9 +44,10 @@ public class controladorPrincipal {
     public static FavoritosDAO favDAO;
     public static UsuarioDAO usuDAO;
     public static GestorUsuario gestorUsuario = new GestorUsuario();
-    public static GestorYConsultas consultas = new GestorYConsultas();
+    public static GestorAdministrador gestorAdministrador = new GestorAdministrador();
     public static Login login = new Login();
     public static ReportAdmin reportAdmin = new ReportAdmin();
+    public static Consultas consultas = new Consultas();
     static DefaultComboBoxModel modeloComboUsuariosFavoritos = new DefaultComboBoxModel();
     static DefaultComboBoxModel modeloComboAnimesFavoritos = new DefaultComboBoxModel();
     static SpinnerNumberModel modeloSpinnerValoracion = new SpinnerNumberModel(0, 0, 5, 0.5);
@@ -58,21 +59,21 @@ public class controladorPrincipal {
     public static String nombreUsuarioLogeado = "";
     public static String nombreUsuarioAdmin = "";
     public static String nombreAnimeGestor = "";
-    public static GestorAdmin ga;
+    public static GestorAdminUsuario ga;
     public static GestorNombreAnime gNa;
 
     public static void iniciar() {
         login.setVisible(true);
         login.setLocationRelativeTo(null);
-        consultas.getComboAnimesFavoritos().setModel(modeloComboAnimesFavoritos);
-        consultas.getComboAnimesFavoritos().setPreferredSize(new Dimension(55, consultas.getComboAnimesFavoritos().getPreferredSize().height));
-        consultas.getComboFavoritosUsuarios().setModel(modeloComboUsuariosFavoritos);
-        consultas.getComboTipoUsuario().addItem("USER");
-        consultas.getComboTipoUsuario().addItem("ADMIN");
-        consultas.getSpValoracion().setModel(modeloSpinnerValoracion);
-        consultas.getSpCapActual().setModel(modeloSpinnerCapActual);
-        consultas.getSpCapTotales().setModel(modeloSpinnerCapTotales);
-        consultas.getSpAnhoSalida().setModel(modeloSpinnerAnhoSalida);
+        gestorAdministrador.getComboAnimesFavoritos().setModel(modeloComboAnimesFavoritos);
+        gestorAdministrador.getComboAnimesFavoritos().setPreferredSize(new Dimension(55, gestorAdministrador.getComboAnimesFavoritos().getPreferredSize().height));
+        gestorAdministrador.getComboFavoritosUsuarios().setModel(modeloComboUsuariosFavoritos);
+        gestorAdministrador.getComboTipoUsuario().addItem("USER");
+        gestorAdministrador.getComboTipoUsuario().addItem("ADMIN");
+        gestorAdministrador.getSpValoracion().setModel(modeloSpinnerValoracion);
+        gestorAdministrador.getSpCapActual().setModel(modeloSpinnerCapActual);
+        gestorAdministrador.getSpCapTotales().setModel(modeloSpinnerCapTotales);
+        gestorAdministrador.getSpAnhoSalida().setModel(modeloSpinnerAnhoSalida);
         reportAdmin.getSpAnhoInicioParametro().setModel(modeloSpinnerAnhoInicio);
         reportAdmin.getSpAnhoFinParametro().setModel(modeloSpinnerAnhoFin);
 //        modeloSpinnerValoracion.setMinimum(0);
@@ -131,30 +132,30 @@ public class controladorPrincipal {
         gestorUsuario.getTxtPasswordUsuario().setEchoChar('*');
     }
 
-    public static void iniciarConsultas() {
-        reiniciarConsultas();
+    public static void iniciarGestorAdministrador() {
+        reiniciarGestorAdministrador();
         comprobarExistenciaUsuarios();
         comprobarExistenciaAnimes();
         cargarCombos();
-        consultas.setVisible(true);
-        consultas.setLocationRelativeTo(null);
+        gestorAdministrador.setVisible(true);
+        gestorAdministrador.setLocationRelativeTo(null);
     }
 
-    private static void reiniciarConsultas() {
-        consultas.getTxtIdUsuario().setText("");
-        consultas.getTxtNombreUsuario().setText("");
-        consultas.getTxtPasswordFavoritos().setText("");
-        consultas.getCbVerPasswordFavoritos().setSelected(false);
-        consultas.getTxtPasswordFavoritos().setEchoChar('*');
-        consultas.getTxtIdAnime().setText("");
-        consultas.getTxtNombreAnime().setText("");
-        consultas.getTxtCategorias().setText("");
-        consultas.getSpAnhoSalida().setValue(1960);
-        consultas.getTxtDescripcion().setText("");
-        consultas.getTxtImagen().setText("");
-        consultas.getSpCapTotales().setValue(0);
-        consultas.getSpValoracion().setValue(0);
-        consultas.getSpCapActual().setValue(0);
+    private static void reiniciarGestorAdministrador() {
+        gestorAdministrador.getTxtIdUsuario().setText("");
+        gestorAdministrador.getTxtNombreUsuario().setText("");
+        gestorAdministrador.getTxtPasswordFavoritos().setText("");
+        gestorAdministrador.getCbVerPasswordFavoritos().setSelected(false);
+        gestorAdministrador.getTxtPasswordFavoritos().setEchoChar('*');
+        gestorAdministrador.getTxtIdAnime().setText("");
+        gestorAdministrador.getTxtNombreAnime().setText("");
+        gestorAdministrador.getTxtCategorias().setText("");
+        gestorAdministrador.getSpAnhoSalida().setValue(1960);
+        gestorAdministrador.getTxtDescripcion().setText("");
+        gestorAdministrador.getTxtImagen().setText("");
+        gestorAdministrador.getSpCapTotales().setValue(0);
+        gestorAdministrador.getSpValoracion().setValue(0);
+        gestorAdministrador.getSpCapActual().setValue(0);
     }
 
     public static void iniciarReportAdmin() {
@@ -169,9 +170,26 @@ public class controladorPrincipal {
         reportAdmin.getTxtNombreParametro().setText("");
     }
 
+    public static void iniciarConsultas() {
+        reiniciarConsultas();
+        consultas.setVisible(true);
+        consultas.setLocationRelativeTo(null);
+    }
+
+    public static void reiniciarConsultas() {
+        consultas.getTxtUsuarioPrimerListado().setText("");
+        consultas.getTxtValoracionPrimerListado().setText("");
+        consultas.getTxtAnimeSegundoListado().setText("");
+        consultas.getTxtCapitulosMaxSegundoListado().setText("");
+        consultas.getTaPrimerListado().setText("");
+        consultas.getTaSegundoListado().setText("");
+        consultas.getTaPrimerListadoCompleto().setText("");
+        consultas.getTaSegundoListadoCompleto().setText("");
+    }
+
     public static void iniciarModAdmin(Frame parent) {
-        nombreUsuarioAdmin = consultas.getTxtNombreUsuario().getText();
-        ga = new GestorAdmin(parent, true);
+        nombreUsuarioAdmin = gestorAdministrador.getTxtNombreUsuario().getText();
+        ga = new GestorAdminUsuario(parent, true);
         ga.getComboTipoUsuario().addItem("USER");
         ga.getComboTipoUsuario().addItem("ADMIN");
         ga.setVisible(true);
@@ -179,7 +197,7 @@ public class controladorPrincipal {
     }
 
     public static void iniciarModAnime(Frame parent) {
-        nombreAnimeGestor = consultas.getTxtNombreAnime().getText().trim();
+        nombreAnimeGestor = gestorAdministrador.getTxtNombreAnime().getText().trim();
         gNa = new GestorNombreAnime(parent, true);
         gNa.setVisible(true);
         gNa.setLocationRelativeTo(null);
@@ -328,7 +346,7 @@ public class controladorPrincipal {
                         usuDAO.modificarNombreUsuario(session, uLogAdmin, nuevoNombre);
                         JOptionPane.showMessageDialog(null, "Nombre de usuario modificado con éxito.");
                         nombreUsuarioAdmin = nuevoNombre;
-                        consultas.getTxtNombreUsuario().setText(nuevoNombre);
+                        gestorAdministrador.getTxtNombreUsuario().setText(nuevoNombre);
                         ga.getTxtNombreUsuario().setText("");
                         cargarComboUsuarios();
                     } else {
@@ -401,7 +419,7 @@ public class controladorPrincipal {
                 } else {
                     usuDAO.modificarContrasenhaUsuario(session, uLogAdmin, contrasenhaEncriptada);
                     JOptionPane.showMessageDialog(null, "Cotraseña modificada con éxito.");
-                    consultas.getTxtPasswordFavoritos().setText(contrasenhaEncriptada);
+                    gestorAdministrador.getTxtPasswordFavoritos().setText(contrasenhaEncriptada);
                     ga.getTxtPasswordUsuario().setText("");
                     ga.getCbVerPassword().setSelected(false);
                     ga.getTxtPasswordUsuario().setEchoChar('*');
@@ -433,7 +451,7 @@ public class controladorPrincipal {
                     if (!uLogAdmin.getTipo().equals(tipo)) {
                         usuDAO.modificarTipoUsuario(session, uLogAdmin, tipo);
                         JOptionPane.showMessageDialog(null, "Tipo de usuario modificado con éxito.");
-                        consultas.getComboTipoUsuario().setSelectedItem(tipo);
+                        gestorAdministrador.getComboTipoUsuario().setSelectedItem(tipo);
                         if (nombreUsuarioAdmin.equals(nombreUsuarioLogeado)) {
                             permisosDegradados = true;
                         }
@@ -449,7 +467,7 @@ public class controladorPrincipal {
                 cerrarSesionUsuarioADMIN();
                 cerrarSesionUsuario();
                 ga.setVisible(false);
-                consultas.setVisible(false);
+                gestorAdministrador.setVisible(false);
                 iniciarLogin();
             }
         } catch (Exception e) {
@@ -570,46 +588,46 @@ public class controladorPrincipal {
         }
     }*/
     private static void vaciarTxtUsuarioFavoritos() {
-        consultas.getTxtIdUsuario().setText("");
-        consultas.getTxtPasswordFavoritos().setText("");
-        consultas.getComboTipoUsuario().setSelectedItem("USER");
+        gestorAdministrador.getTxtIdUsuario().setText("");
+        gestorAdministrador.getTxtPasswordFavoritos().setText("");
+        gestorAdministrador.getComboTipoUsuario().setSelectedItem("USER");
     }
 
     public static void comprobarExistenciaUsuarios() {
-        if (consultas.getTxtNombreUsuario().getText().isEmpty()) {
-            consultas.getBtnAltaUsuario().setEnabled(false);
-            consultas.getBtnModUsuarioFavoritos().setEnabled(false);
-            consultas.getBtnBajaUsuario().setEnabled(false);
-            consultas.getTxtPasswordFavoritos().setEnabled(true);
-            consultas.getComboTipoUsuario().setEnabled(true);
+        if (gestorAdministrador.getTxtNombreUsuario().getText().isEmpty()) {
+            gestorAdministrador.getBtnAltaUsuario().setEnabled(false);
+            gestorAdministrador.getBtnModUsuarioFavoritos().setEnabled(false);
+            gestorAdministrador.getBtnBajaUsuario().setEnabled(false);
+            gestorAdministrador.getTxtPasswordFavoritos().setEnabled(true);
+            gestorAdministrador.getComboTipoUsuario().setEnabled(true);
             vaciarTxtUsuarioFavoritos();
             return;
         }
         try {
-            String nombre = consultas.getTxtNombreUsuario().getText();
+            String nombre = gestorAdministrador.getTxtNombreUsuario().getText();
             Usuario u = usuDAO.buscarUsuarioPorNombre(session, nombre);
             if (u != null) {
-                consultas.getBtnAltaUsuario().setEnabled(false);
-                consultas.getBtnModUsuarioFavoritos().setEnabled(true);
-                consultas.getBtnBajaUsuario().setEnabled(true);
-                consultas.getTxtPasswordFavoritos().setEnabled(false);
-                consultas.getComboTipoUsuario().setEnabled(false);
-                consultas.getTxtIdUsuario().setText(String.valueOf(u.getIdUsuario()));
-                consultas.getTxtPasswordFavoritos().setText(u.getContrasenha());
-                consultas.getComboTipoUsuario().setSelectedItem(u.getTipo());
+                gestorAdministrador.getBtnAltaUsuario().setEnabled(false);
+                gestorAdministrador.getBtnModUsuarioFavoritos().setEnabled(true);
+                gestorAdministrador.getBtnBajaUsuario().setEnabled(true);
+                gestorAdministrador.getTxtPasswordFavoritos().setEnabled(false);
+                gestorAdministrador.getComboTipoUsuario().setEnabled(false);
+                gestorAdministrador.getTxtIdUsuario().setText(String.valueOf(u.getIdUsuario()));
+                gestorAdministrador.getTxtPasswordFavoritos().setText(u.getContrasenha());
+                gestorAdministrador.getComboTipoUsuario().setSelectedItem(u.getTipo());
             } else {
                 vaciarTxtUsuarioFavoritos();
-                consultas.getBtnAltaUsuario().setEnabled(true);
-                consultas.getBtnModUsuarioFavoritos().setEnabled(false);
-                consultas.getBtnBajaUsuario().setEnabled(false);
-                consultas.getTxtPasswordFavoritos().setEnabled(true);
-                consultas.getComboTipoUsuario().setEnabled(true);
+                gestorAdministrador.getBtnAltaUsuario().setEnabled(true);
+                gestorAdministrador.getBtnModUsuarioFavoritos().setEnabled(false);
+                gestorAdministrador.getBtnBajaUsuario().setEnabled(false);
+                gestorAdministrador.getTxtPasswordFavoritos().setEnabled(true);
+                gestorAdministrador.getComboTipoUsuario().setEnabled(true);
             }
         } catch (NumberFormatException e) {
             vaciarTxtUsuarioFavoritos();
-            consultas.getBtnAltaUsuario().setEnabled(false);
-            consultas.getBtnModUsuarioFavoritos().setEnabled(true);
-            consultas.getBtnBajaUsuario().setEnabled(true);
+            gestorAdministrador.getBtnAltaUsuario().setEnabled(false);
+            gestorAdministrador.getBtnModUsuarioFavoritos().setEnabled(true);
+            gestorAdministrador.getBtnBajaUsuario().setEnabled(true);
         } catch (Exception e) {
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
             JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
@@ -617,27 +635,27 @@ public class controladorPrincipal {
     }
 
     public static void darAltaUsuario() {
-        char[] pw = consultas.getTxtPasswordFavoritos().getPassword();
+        char[] pw = gestorAdministrador.getTxtPasswordFavoritos().getPassword();
         String contrasenha = new String(pw);
         if (contrasenha.contains(" ")) {
             JOptionPane.showMessageDialog(null, "La contraseña no puede contener espacios.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (consultas.getTxtNombreUsuario().getText().contains(" ")) {
+        if (gestorAdministrador.getTxtNombreUsuario().getText().contains(" ")) {
             JOptionPane.showMessageDialog(null, "El nombre de usuario no puede contener espacios.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (consultas.getTxtNombreUsuario().getText().isEmpty() || contrasenha.isEmpty() || consultas.getComboTipoUsuario().getItemCount() == 0) {
+        if (gestorAdministrador.getTxtNombreUsuario().getText().isEmpty() || contrasenha.isEmpty() || gestorAdministrador.getComboTipoUsuario().getItemCount() == 0) {
             JOptionPane.showMessageDialog(null, "Faltan Datos", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
         try {
             HibernateUtil.beginTx(session);
-            String nombre = consultas.getTxtNombreUsuario().getText();
+            String nombre = gestorAdministrador.getTxtNombreUsuario().getText();
             Usuario uExistente = usuDAO.buscarUsuarioPorNombre(session, nombre);
             if (uExistente == null) {
                 String contrasenhaEncriptada = BCrypt.hashpw(contrasenha, BCrypt.gensalt());
-                String tipo = (String) consultas.getComboTipoUsuario().getSelectedItem();
+                String tipo = (String) gestorAdministrador.getComboTipoUsuario().getSelectedItem();
                 if (tipo != null) {
                     Usuario u = new Usuario(nombre, contrasenhaEncriptada, tipo);
                     usuDAO.darAltaUsuario(session, u);
@@ -654,7 +672,7 @@ public class controladorPrincipal {
         } catch (NumberFormatException e) {
             HibernateUtil.rollbackTx(session);
             JOptionPane.showMessageDialog(null, "Error numérico", "Error", JOptionPane.ERROR_MESSAGE);
-            consultas.getTxtIdUsuario().setText("");
+            gestorAdministrador.getTxtIdUsuario().setText("");
         } catch (Exception e) {
             HibernateUtil.rollbackTx(session);
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
@@ -665,7 +683,7 @@ public class controladorPrincipal {
     public static void darBajaUsuarioFavoritos() {
         try {
             HibernateUtil.beginTx(session);
-            String nombre = consultas.getTxtNombreUsuario().getText();
+            String nombre = gestorAdministrador.getTxtNombreUsuario().getText();
             Usuario u = usuDAO.buscarUsuarioPorNombre(session, nombre);
             Usuario uLogueado = usuDAO.buscarUsuarioPorNombre(session, nombreUsuarioLogeado);
             if (u != null) {
@@ -688,12 +706,12 @@ public class controladorPrincipal {
                     usuDAO.borrarUsuario(session, u);
                     JOptionPane.showMessageDialog(null, "Usuario borrado con éxito.");
                     comprobarExistenciaUsuarios();
-                    consultas.getTxtNombreUsuario().setText("");
+                    gestorAdministrador.getTxtNombreUsuario().setText("");
                     cargarComboUsuarios();
 
                     if (uLogueado.getNombre().equals(nombre)) {
                         cerrarSesionUsuario();
-                        consultas.setVisible(false);
+                        gestorAdministrador.setVisible(false);
                         controladorPrincipal.iniciarLogin();
                     }
                 }
@@ -712,18 +730,18 @@ public class controladorPrincipal {
     }
 
     public static void darAltaFavoritos() {
-        if (consultas.getComboAnimesFavoritos().getItemCount() == 0 || consultas.getComboFavoritosUsuarios().getItemCount() == 0) {
+        if (gestorAdministrador.getComboAnimesFavoritos().getItemCount() == 0 || gestorAdministrador.getComboFavoritosUsuarios().getItemCount() == 0) {
             JOptionPane.showMessageDialog(null, "Faltan Datos", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
         try {
             HibernateUtil.beginTx(session);
 
-            Anime a = (Anime) consultas.getComboAnimesFavoritos().getSelectedItem();
-            Usuario u = (Usuario) consultas.getComboFavoritosUsuarios().getSelectedItem();
+            Anime a = (Anime) gestorAdministrador.getComboAnimesFavoritos().getSelectedItem();
+            Usuario u = (Usuario) gestorAdministrador.getComboFavoritosUsuarios().getSelectedItem();
             if (a != null && u != null) {
-                float valoracion = Float.parseFloat(consultas.getSpValoracion().getValue().toString());
-                int capActual = Integer.parseInt(consultas.getSpCapActual().getValue().toString());
+                float valoracion = Float.parseFloat(gestorAdministrador.getSpValoracion().getValue().toString());
+                int capActual = Integer.parseInt(gestorAdministrador.getSpCapActual().getValue().toString());
                 FavoritosPK fPK = new FavoritosPK(a.getIdAnime(), u.getIdUsuario());
                 Favoritos f = new Favoritos(fPK, a, u, valoracion, capActual);
 
@@ -745,18 +763,18 @@ public class controladorPrincipal {
     }
 
     public static void modificarFavoritos() {
-        if (consultas.getComboAnimesFavoritos().getItemCount() == 0 || consultas.getComboFavoritosUsuarios().getItemCount() == 0) {
+        if (gestorAdministrador.getComboAnimesFavoritos().getItemCount() == 0 || gestorAdministrador.getComboFavoritosUsuarios().getItemCount() == 0) {
             JOptionPane.showMessageDialog(null, "Faltan Datos", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
         try {
             HibernateUtil.beginTx(session);
 
-            Anime a = (Anime) consultas.getComboAnimesFavoritos().getSelectedItem();
-            Usuario u = (Usuario) consultas.getComboFavoritosUsuarios().getSelectedItem();
+            Anime a = (Anime) gestorAdministrador.getComboAnimesFavoritos().getSelectedItem();
+            Usuario u = (Usuario) gestorAdministrador.getComboFavoritosUsuarios().getSelectedItem();
             if (a != null && u != null) {
-                float nuevaValoracion = Float.parseFloat(consultas.getSpValoracion().getValue().toString());
-                int nuevoCapActual = Integer.parseInt(consultas.getSpCapActual().getValue().toString());
+                float nuevaValoracion = Float.parseFloat(gestorAdministrador.getSpValoracion().getValue().toString());
+                int nuevoCapActual = Integer.parseInt(gestorAdministrador.getSpCapActual().getValue().toString());
                 Favoritos f = favDAO.buscarFavorito(session, a, u);
 
                 favDAO.modificarFavorito(session, f, nuevaValoracion, nuevoCapActual);
@@ -779,8 +797,8 @@ public class controladorPrincipal {
     public static void darBajaFavoritos() {
         try {
             HibernateUtil.beginTx(session);
-            Anime a = (Anime) consultas.getComboAnimesFavoritos().getSelectedItem();
-            Usuario u = (Usuario) consultas.getComboFavoritosUsuarios().getSelectedItem();
+            Anime a = (Anime) gestorAdministrador.getComboAnimesFavoritos().getSelectedItem();
+            Usuario u = (Usuario) gestorAdministrador.getComboFavoritosUsuarios().getSelectedItem();
             if (a != null && u != null) {
                 Favoritos f = favDAO.buscarFavorito(session, a, u);
 
@@ -803,29 +821,29 @@ public class controladorPrincipal {
 
     public static void comprobarExistenciaFavoritos() {
         try {
-            Anime a = (Anime) consultas.getComboAnimesFavoritos().getSelectedItem();
-            Usuario u = (Usuario) consultas.getComboFavoritosUsuarios().getSelectedItem();
+            Anime a = (Anime) gestorAdministrador.getComboAnimesFavoritos().getSelectedItem();
+            Usuario u = (Usuario) gestorAdministrador.getComboFavoritosUsuarios().getSelectedItem();
             if (a != null && u != null) {
                 Favoritos f = favDAO.buscarFavorito(session, a, u);
                 if (f != null) {
-                    consultas.getBtnAltaFavorito().setEnabled(false);
-                    consultas.getBtnBajaFavorito().setEnabled(true);
-                    consultas.getBtnModFavorito().setEnabled(true);
+                    gestorAdministrador.getBtnAltaFavorito().setEnabled(false);
+                    gestorAdministrador.getBtnBajaFavorito().setEnabled(true);
+                    gestorAdministrador.getBtnModFavorito().setEnabled(true);
                     modeloSpinnerCapActual.setMaximum(f.getAnime().getCapTotales());
                     modeloSpinnerCapActual.setValue(f.getCapActual());
                     modeloSpinnerValoracion.setValue(f.getValoracion());
                 } else {
-                    consultas.getBtnAltaFavorito().setEnabled(true);
-                    consultas.getBtnBajaFavorito().setEnabled(false);
-                    consultas.getBtnModFavorito().setEnabled(false);
+                    gestorAdministrador.getBtnAltaFavorito().setEnabled(true);
+                    gestorAdministrador.getBtnBajaFavorito().setEnabled(false);
+                    gestorAdministrador.getBtnModFavorito().setEnabled(false);
                     modeloSpinnerCapActual.setMaximum(a.getCapTotales());
                     modeloSpinnerCapActual.setValue(0);
                     modeloSpinnerValoracion.setValue(0);
                 }
             } else {
-                consultas.getBtnAltaFavorito().setEnabled(false);
-                consultas.getBtnBajaFavorito().setEnabled(false);
-                consultas.getBtnModFavorito().setEnabled(false);
+                gestorAdministrador.getBtnAltaFavorito().setEnabled(false);
+                gestorAdministrador.getBtnBajaFavorito().setEnabled(false);
+                gestorAdministrador.getBtnModFavorito().setEnabled(false);
                 modeloSpinnerCapActual.setValue(0);
                 modeloSpinnerValoracion.setValue(0);
             }
@@ -836,50 +854,50 @@ public class controladorPrincipal {
     }
 
     private static void vaciarTxtAnime() {
-        consultas.getTxtIdAnime().setText("");
-        consultas.getTxtCategorias().setText("");
-        consultas.getSpAnhoSalida().setValue(1960);
-        consultas.getTxtDescripcion().setText("");
-        consultas.getTxtImagen().setText("");
+        gestorAdministrador.getTxtIdAnime().setText("");
+        gestorAdministrador.getTxtCategorias().setText("");
+        gestorAdministrador.getSpAnhoSalida().setValue(1960);
+        gestorAdministrador.getTxtDescripcion().setText("");
+        gestorAdministrador.getTxtImagen().setText("");
         modeloSpinnerCapTotales.setValue(0);
     }
 
     public static void comprobarExistenciaAnimes() {
-        if (consultas.getTxtNombreAnime().getText().trim().isEmpty()) {
-            consultas.getBtnCambiarNombreAnime().setEnabled(false);
-            consultas.getBtnAltaAnime().setEnabled(false);
-            consultas.getBtnModAnime().setEnabled(false);
-            consultas.getBtnBajaAnime().setEnabled(false);
+        if (gestorAdministrador.getTxtNombreAnime().getText().trim().isEmpty()) {
+            gestorAdministrador.getBtnCambiarNombreAnime().setEnabled(false);
+            gestorAdministrador.getBtnAltaAnime().setEnabled(false);
+            gestorAdministrador.getBtnModAnime().setEnabled(false);
+            gestorAdministrador.getBtnBajaAnime().setEnabled(false);
             vaciarTxtAnime();
             return;
         }
         try {
-            String nombre = consultas.getTxtNombreAnime().getText().trim();
+            String nombre = gestorAdministrador.getTxtNombreAnime().getText().trim();
             Anime a = aniDAO.buscarAnimePorNombre(session, nombre);
             if (a != null) {
-                consultas.getBtnCambiarNombreAnime().setEnabled(true);
-                consultas.getBtnAltaAnime().setEnabled(false);
-                consultas.getBtnModAnime().setEnabled(true);
-                consultas.getBtnBajaAnime().setEnabled(true);
-                consultas.getTxtIdAnime().setText(String.valueOf(a.getIdAnime()));
-                consultas.getTxtCategorias().setText(a.getCategorias());
-                consultas.getSpAnhoSalida().setValue(a.getAnhoSalida());
-                consultas.getTxtDescripcion().setText(a.getDescripcion());
-                consultas.getTxtImagen().setText(a.getImagen());
+                gestorAdministrador.getBtnCambiarNombreAnime().setEnabled(true);
+                gestorAdministrador.getBtnAltaAnime().setEnabled(false);
+                gestorAdministrador.getBtnModAnime().setEnabled(true);
+                gestorAdministrador.getBtnBajaAnime().setEnabled(true);
+                gestorAdministrador.getTxtIdAnime().setText(String.valueOf(a.getIdAnime()));
+                gestorAdministrador.getTxtCategorias().setText(a.getCategorias());
+                gestorAdministrador.getSpAnhoSalida().setValue(a.getAnhoSalida());
+                gestorAdministrador.getTxtDescripcion().setText(a.getDescripcion());
+                gestorAdministrador.getTxtImagen().setText(a.getImagen());
                 modeloSpinnerCapTotales.setValue(a.getCapTotales());
             } else {
                 vaciarTxtAnime();
-                consultas.getBtnCambiarNombreAnime().setEnabled(false);
-                consultas.getBtnAltaAnime().setEnabled(true);
-                consultas.getBtnModAnime().setEnabled(false);
-                consultas.getBtnBajaAnime().setEnabled(false);
+                gestorAdministrador.getBtnCambiarNombreAnime().setEnabled(false);
+                gestorAdministrador.getBtnAltaAnime().setEnabled(true);
+                gestorAdministrador.getBtnModAnime().setEnabled(false);
+                gestorAdministrador.getBtnBajaAnime().setEnabled(false);
             }
         } catch (NumberFormatException e) {
             vaciarTxtAnime();
-            consultas.getBtnCambiarNombreAnime().setEnabled(true);
-            consultas.getBtnAltaAnime().setEnabled(false);
-            consultas.getBtnModAnime().setEnabled(true);
-            consultas.getBtnBajaAnime().setEnabled(true);
+            gestorAdministrador.getBtnCambiarNombreAnime().setEnabled(true);
+            gestorAdministrador.getBtnAltaAnime().setEnabled(false);
+            gestorAdministrador.getBtnModAnime().setEnabled(true);
+            gestorAdministrador.getBtnBajaAnime().setEnabled(true);
         } catch (Exception e) {
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
             JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
@@ -887,18 +905,18 @@ public class controladorPrincipal {
     }
 
     public static void darAltaAnime() {
-        if (consultas.getTxtNombreAnime().getText().trim().isEmpty()) {
+        if (gestorAdministrador.getTxtNombreAnime().getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Faltan Datos", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
         try {
             HibernateUtil.beginTx(session);
-            String nombreAnime = consultas.getTxtNombreAnime().getText().trim();
-            String categorias = consultas.getTxtCategorias().getText();
-            int anhoSalida = Integer.parseInt(consultas.getSpAnhoSalida().getValue().toString());
-            String descripcion = consultas.getTxtDescripcion().getText();
-            String imagen = consultas.getTxtImagen().getText();
-            int capTotales = Integer.parseInt(consultas.getSpCapTotales().getValue().toString());
+            String nombreAnime = gestorAdministrador.getTxtNombreAnime().getText().trim();
+            String categorias = gestorAdministrador.getTxtCategorias().getText();
+            int anhoSalida = Integer.parseInt(gestorAdministrador.getSpAnhoSalida().getValue().toString());
+            String descripcion = gestorAdministrador.getTxtDescripcion().getText();
+            String imagen = gestorAdministrador.getTxtImagen().getText();
+            int capTotales = Integer.parseInt(gestorAdministrador.getSpCapTotales().getValue().toString());
             Anime a = new Anime(nombreAnime, categorias, anhoSalida, descripcion, imagen, capTotales);
             aniDAO.darAltaAnime(session, a);
             JOptionPane.showMessageDialog(null, "Anime añadido con éxito.");
@@ -917,20 +935,20 @@ public class controladorPrincipal {
     }
 
     public static void modAnime() {
-        if (consultas.getTxtNombreAnime().getText().trim().isEmpty()) {
+        if (gestorAdministrador.getTxtNombreAnime().getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Faltan Datos", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
         try {
             HibernateUtil.beginTx(session);
-            String nombreAnime = consultas.getTxtNombreAnime().getText().trim();
+            String nombreAnime = gestorAdministrador.getTxtNombreAnime().getText().trim();
             Anime a = aniDAO.buscarAnimePorNombre(session, nombreAnime);
             if (a != null) {
-                String nuevasCategorias = consultas.getTxtCategorias().getText();
-                int nuevoAnhoSalida = Integer.parseInt(consultas.getSpAnhoSalida().getValue().toString());
-                String nuevaDescripcion = consultas.getTxtDescripcion().getText();
-                String nuevaImagen = consultas.getTxtImagen().getText();
-                int nuevoCapTotales = Integer.parseInt(consultas.getSpCapTotales().getValue().toString());
+                String nuevasCategorias = gestorAdministrador.getTxtCategorias().getText();
+                int nuevoAnhoSalida = Integer.parseInt(gestorAdministrador.getSpAnhoSalida().getValue().toString());
+                String nuevaDescripcion = gestorAdministrador.getTxtDescripcion().getText();
+                String nuevaImagen = gestorAdministrador.getTxtImagen().getText();
+                int nuevoCapTotales = Integer.parseInt(gestorAdministrador.getSpCapTotales().getValue().toString());
                 a.setCategorias(nuevasCategorias);
                 a.setAnhoSalida(nuevoAnhoSalida);
                 a.setDescripcion(nuevaDescripcion);
@@ -956,13 +974,13 @@ public class controladorPrincipal {
     }
 
     public static void darBajaAnime() {
-        if (consultas.getTxtNombreAnime().getText().trim().isEmpty()) {
+        if (gestorAdministrador.getTxtNombreAnime().getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Faltan Datos", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
         try {
             HibernateUtil.beginTx(session);
-            String nombreAnime = consultas.getTxtNombreAnime().getText().trim();
+            String nombreAnime = gestorAdministrador.getTxtNombreAnime().getText().trim();
             Anime a = aniDAO.buscarAnimePorNombre(session, nombreAnime);
             if (a != null) {
                 List<Favoritos> favoritos = favDAO.buscarFavoritosPorAnime(session, a);
@@ -1005,7 +1023,7 @@ public class controladorPrincipal {
                         aniDAO.modificarNombreAnime(session, a, nuevoNombre);
                         JOptionPane.showMessageDialog(null, "Nombre del anime modificado con éxito.");
                         nombreAnimeGestor = nuevoNombre;
-                        consultas.getTxtNombreAnime().setText(nuevoNombre);
+                        gestorAdministrador.getTxtNombreAnime().setText(nuevoNombre);
                         dialog.dispose();
                         cargarComboAnimes();
                     } else {
@@ -1020,6 +1038,66 @@ public class controladorPrincipal {
             HibernateUtil.commitTx(session);
         } catch (Exception e) {
             HibernateUtil.rollbackTx(session);
+            Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public static void ejecutarPrimerListado() {
+        try {
+            float valoracion;
+            if (consultas.getTxtValoracionPrimerListado().getText().trim().isEmpty()) {
+                valoracion = 0f;
+            } else {
+                valoracion = Float.parseFloat(consultas.getTxtValoracionPrimerListado().getText().trim());
+                if (valoracion > 5 || valoracion < 0) {
+                    consultas.getTaPrimerListado().setText("Valoración errónea.");
+                    return;
+                }
+            }
+            favDAO.cargarAreaAnimesFavoritosPorUsuarioYValoracionMinima(session, consultas.getTaPrimerListado(), consultas.getTxtUsuarioPrimerListado().getText().trim(), valoracion);
+        } catch (NumberFormatException e) {
+            consultas.getTaPrimerListado().setText("Error numérico.");
+        } catch (Exception e) {
+            Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public static void ejecutarSegundoListado() {
+        try {
+            int capitulos;
+            if (consultas.getTxtCapitulosMaxSegundoListado().getText().trim().isEmpty()) {
+                capitulos = -1;
+            } else {
+                capitulos = Integer.parseInt(consultas.getTxtCapitulosMaxSegundoListado().getText().trim());
+                if (capitulos < 0) {
+                   consultas.getTaSegundoListado().setText("No se encontraron coincidencias."); 
+                   return;
+                }
+            }
+            aniDAO.cargarAreaAnimesPorNombreYCapitulosMaximos(session, consultas.getTaSegundoListado(), consultas.getTxtAnimeSegundoListado().getText(), capitulos);
+        } catch (NumberFormatException e) {
+            consultas.getTaSegundoListado().setText("Error numérico.");
+        } catch (Exception e) {
+            Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public static void ejecutarPrimerListadoCompleto() {
+        try {
+            aniDAO.cargarAreaAnimes(session, consultas.getTaPrimerListadoCompleto());
+        } catch (Exception e) {
+            Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public static void ejecutarSegundoListadoCompleto() {
+        try {
+            usuDAO.cargarAreaUsuarios(session, consultas.getTaSegundoListadoCompleto());
+        } catch (Exception e) {
             Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, null, e);
             JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
         }

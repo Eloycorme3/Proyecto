@@ -28,7 +28,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Favoritos.findByIdUsuarioFK", query = "SELECT f FROM Favoritos f WHERE f.favoritosPK.idusuarioFK = :idusuarioFK"),
     @NamedQuery(name = "Favoritos.findByIdUsuarioFK&IdAnimeFK", query = "SELECT f FROM Favoritos f WHERE f.favoritosPK.idusuarioFK = :idusuarioFK AND f.favoritosPK.idanimeFK = :idanimeFK"),
     @NamedQuery(name = "Favoritos.findByValoracion", query = "SELECT f FROM Favoritos f WHERE f.valoracion = :valoracion"),
-    @NamedQuery(name = "Favoritos.findByCapActual", query = "SELECT f FROM Favoritos f WHERE f.capActual = :capActual")})
+    @NamedQuery(name = "Favoritos.findByCapActual", query = "SELECT f FROM Favoritos f WHERE f.capActual = :capActual"),
+    @NamedQuery(name = "Favoritos.findByNombreUsuario&ValoracionMinima", query = "SELECT f FROM Favoritos f WHERE f.usuario.nombre = :nombreUsuario AND f.valoracion >= :valoracion"),
+    @NamedQuery(name = "Favoritos.findByValoracionMinima", query = "SELECT f FROM Favoritos f WHERE f.valoracion >= :valoracion")})
+
 public class Favoritos implements Serializable {
 
     private static final long serialVersionUID = 1L;

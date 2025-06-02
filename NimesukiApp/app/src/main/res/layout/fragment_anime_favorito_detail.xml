@@ -107,4 +107,23 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnFloatingFavFavoritos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="30dp"
+        android:src="@drawable/ic_favorite"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Material3.Button"
+        app:backgroundTint="@color/pastelSecondary"
+        app:tint="@null" />
+
+    <ProgressBar
+        android:id="@+id/progressBarLoadingAnimeFavoritoDetail"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center"
+        android:visibility="visible" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

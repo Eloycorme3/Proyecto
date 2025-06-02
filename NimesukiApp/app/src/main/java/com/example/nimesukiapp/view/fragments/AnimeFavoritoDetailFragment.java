@@ -1,6 +1,8 @@
 package com.example.nimesukiapp.view.fragments;
 
 import static android.content.Context.MODE_PRIVATE;
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -11,6 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.StaticLayout;
@@ -23,15 +27,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.nimesukiapp.R;
+import com.example.nimesukiapp.mock.ServicioREST;
+import com.example.nimesukiapp.model.FavoritosManager;
 import com.example.nimesukiapp.model.vo.Favoritos;
+import com.example.nimesukiapp.model.vo.FavoritosId;
+import com.example.nimesukiapp.model.vo.Usuario;
+import com.example.nimesukiapp.view.activities.ListaAnimesFavoritosView;
+import com.example.nimesukiapp.view.activities.ListaAnimesView;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,10 +63,14 @@ public class AnimeFavoritoDetailFragment extends Fragment {
     private ImageView imageViewAnimeFav;
     private MaterialTextView textNombreFav, textDescripcionFav,
             textAnhoFav, textCategoriasFav, textCapitulosFav;
+    private FloatingActionButton btnFloatingFavFavoritos;
+    private ProgressBar loading;
     private MaterialToolbar toolbar;
     private String imageVersionFav = "?v=3";
     private boolean isExpanded = false;
     private Favoritos animeFav;
+    private FavoritosManager cacheManager;
+    private ArrayList<String> favoritosCache;
     private SharedPreferences prefs;
 
     public AnimeFavoritoDetailFragment() {
@@ -74,7 +99,7 @@ public class AnimeFavoritoDetailFragment extends Fragment {
             @Nullable Bundle savedInstanceState
     ) {
         super.onViewCreated(view, savedInstanceState);
-        prefs = getContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
+        prefs = requireContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         prefs.edit().putBoolean("detalleFavoritos", true).apply();
 
         if (getArguments() != null) {
@@ -88,6 +113,10 @@ public class AnimeFavoritoDetailFragment extends Fragment {
         textCategoriasFav = view.findViewById(R.id.textCategoriasFav);
         textCapitulosFav = view.findViewById(R.id.textCapitulosFav);
         toolbar = view.findViewById(R.id.topAppBarFav);
+        btnFloatingFavFavoritos = view.findViewById(R.id.btnFloatingFavFavoritos);
+        loading = view.findViewById(R.id.progressBarLoadingAnimeFavoritoDetail);
+
+        mostrarProgress(false);
 
         CollapsingToolbarLayout collapsingToolbarFav = view.findViewById(R.id.collapsingToolbarFav);
         collapsingToolbarFav.setTitle("");
@@ -110,12 +139,92 @@ public class AnimeFavoritoDetailFragment extends Fragment {
                     .into(imageViewAnimeFav);
         }
 
+        cacheManager = new FavoritosManager(requireContext());
+
+        favoritosCache = cacheManager.cargarFavoritos();
+
+        btnFloatingFavFavoritos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnFloatingFavFavoritos.setEnabled(false);
+                ServicioREST servicioREST = new ServicioREST(requireContext());
+                new Thread(() -> {
+                    try {
+                        servicioREST.eliminarFavorito(animeFav.getId(), new Callback() {
+                            @Override
+                            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                                (requireActivity()).runOnUiThread(() ->
+                                        Toast.makeText(requireContext(), requireContext().getString(R.string.network_error), Toast.LENGTH_SHORT).show()
+                                );
+                            }
+
+                            @Override
+                            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                                if (response.isSuccessful()) {
+                                    (requireActivity()).runOnUiThread(() -> {
+                                        Toast.makeText(requireContext(), requireContext().getString(R.string.delete_favourite_anime_successfully), Toast.LENGTH_SHORT).show();
+                                        favoritosCache.remove(animeFav.getAnime().getNombre());
+                                        cacheManager.guardarFavoritos(favoritosCache);
+                                        AnimeDetailFragment animeDetailFragment = AnimeDetailFragment.newInstance(animeFav.getAnime());
+                                        //mostrarProgress(true);
+                                        if (requireActivity() instanceof ListaAnimesView) {
+                                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                                requireActivity().getSupportFragmentManager()
+                                                        .beginTransaction()
+                                                        .setCustomAnimations(0, 0)
+                                                        .replace(R.id.fragmentContainerLista, animeDetailFragment)
+                                                        .commit();
+
+                                                //mostrarProgress(false);
+                                            }, 100);
+                                        } else if (requireActivity() instanceof ListaAnimesFavoritosView) {
+                                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                                requireActivity().getSupportFragmentManager()
+                                                        .beginTransaction()
+                                                        .setCustomAnimations(0, 0)
+                                                        .replace(R.id.fragmentContainerFavoritos, animeDetailFragment)
+                                                        .commit();
+
+                                                mostrarProgress(false);
+                                            }, 500);
+                                        } else {
+                                            mostrarProgress(false);
+                                        }
+                                    });
+                                } else {
+                                    (requireActivity()).runOnUiThread(() ->
+                                            Toast.makeText(requireContext(), requireContext().getString(R.string.delete_favourite_anime_error), Toast.LENGTH_SHORT).show()
+                                    );
+                                }
+                            }
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    (requireActivity()).runOnUiThread(() -> btnFloatingFavFavoritos.setEnabled(true));
+                }).start();
+            }
+        });
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 requireActivity().getOnBackPressedDispatcher().onBackPressed();
             }
         });
+    }
+
+    private void mostrarProgress(boolean mostrar) {
+        loading.setVisibility(mostrar ? VISIBLE : GONE);
+        imageViewAnimeFav.setVisibility(mostrar ? GONE : VISIBLE);
+        textNombreFav.setVisibility(mostrar ? GONE : VISIBLE);
+        textDescripcionFav.setVisibility(mostrar ? GONE : VISIBLE);
+        textAnhoFav.setVisibility(mostrar ? GONE : VISIBLE);
+        textCategoriasFav.setVisibility(mostrar ? GONE : VISIBLE);
+        textCapitulosFav.setVisibility(mostrar ? GONE : VISIBLE);
+        toolbar.setVisibility(mostrar ? GONE : VISIBLE);
+        btnFloatingFavFavoritos.setVisibility(mostrar ? GONE : VISIBLE);
     }
 
     private void setupExpandableText(MaterialTextView textView, String descripcion, int maxLines) {
@@ -180,7 +289,8 @@ public class AnimeFavoritoDetailFragment extends Fragment {
                                 textoFinal = limite;
                             }
 
-                            if (textoFinal.isEmpty()) textoFinal = descripcion.length() > 5 ? descripcion.substring(0, 5) : descripcion;
+                            if (textoFinal.isEmpty())
+                                textoFinal = descripcion.length() > 5 ? descripcion.substring(0, 5) : descripcion;
 
                             String textoCompleto = textoFinal + textoExtra;
                             SpannableString spannable = new SpannableString(textoCompleto);
@@ -217,5 +327,5 @@ public class AnimeFavoritoDetailFragment extends Fragment {
             }
         });
     }
-    
+
 }
