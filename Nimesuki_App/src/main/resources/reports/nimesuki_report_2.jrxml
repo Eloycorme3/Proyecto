@@ -1,0 +1,147 @@
+<!-- Created with Jaspersoft Studio version 7.0.1.final using JasperReports Library version 7.0.1-573496633c2b4074e32f433154b543003f7d2498  -->
+<jasperReport name="nimesuki_report_2" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a7a5b870-3fbc-4abe-8ae7-8f2b7ff863ca">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Nimesuki"/>
+	<dataset name="ValoracionesAgrupadasFavoritos" uuid="886e77ec-89d8-4853-82ce-aab4fd5f056a">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Nimesuki"/>
+		<parameter name="Limite_animes_dataset" class="java.lang.Integer">
+			<defaultValueExpression><![CDATA[10]]></defaultValueExpression>
+		</parameter>
+		<parameter name="Nombre_usuario_dataset" class="java.lang.String">
+			<defaultValueExpression><![CDATA["Eloy"]]></defaultValueExpression>
+		</parameter>
+		<query language="SQL"><![CDATA[WITH AnimesLimitados AS (
+  SELECT 
+    a.id_anime,
+    a.nombre,
+    f.valoracion
+  FROM Usuario u
+  JOIN Favoritos f ON u.id_usuario = f.id_usuario_FK
+  JOIN Anime a ON f.id_anime_FK = a.id_anime
+  WHERE u.nombre = $P{Nombre_usuario_dataset}
+    AND f.valoracion IS NOT NULL
+  ORDER BY f.valoracion DESC, a.nombre
+  LIMIT $P{Limite_animes_dataset}
+)
+SELECT
+  valoracion,
+  COUNT(*) AS cantidad_favoritos
+FROM AnimesLimitados
+GROUP BY valoracion
+ORDER BY cantidad_favoritos DESC
+]]></query>
+		<field name="valoracion" class="java.lang.Float">
+			<property name="com.jaspersoft.studio.field.name" value="valoracion"/>
+			<property name="com.jaspersoft.studio.field.label" value="valoracion"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="favoritos"/>
+		</field>
+		<field name="cantidad_favoritos" class="java.lang.Long">
+			<property name="com.jaspersoft.studio.field.name" value="cantidad_favoritos"/>
+			<property name="com.jaspersoft.studio.field.label" value="cantidad_favoritos"/>
+		</field>
+	</dataset>
+	<parameter name="Limite_animes" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[10]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Nombre_usuario" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Eloy"]]></defaultValueExpression>
+	</parameter>
+	<query language="SQL"><![CDATA[SELECT 
+  a.nombre,
+  f.valoracion,
+  f.cap_actual
+FROM Usuario u
+JOIN Favoritos f ON u.id_usuario = f.id_usuario_FK
+JOIN Anime a ON f.id_anime_FK = a.id_anime
+WHERE u.nombre = $P{Nombre_usuario}
+  AND f.valoracion IS NOT NULL
+ORDER BY f.valoracion DESC, a.nombre
+LIMIT $P{Limite_animes}
+]]></query>
+	<field name="nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="anime"/>
+	</field>
+	<field name="valoracion" class="java.lang.Float">
+		<property name="com.jaspersoft.studio.field.name" value="valoracion"/>
+		<property name="com.jaspersoft.studio.field.label" value="valoracion"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="favoritos"/>
+	</field>
+	<field name="cap_actual" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="cap_actual"/>
+		<property name="com.jaspersoft.studio.field.label" value="cap_actual"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="favoritos"/>
+	</field>
+	<background splitType="Stretch"/>
+	<title height="338" splitType="Stretch">
+		<element kind="textField" uuid="9205b5cb-0150-461a-a6a7-ddcbcc7ed799" x="0" y="20" width="110" height="30" fontSize="19.0" bold="true">
+			<expression><![CDATA["Nimesuki"]]></expression>
+		</element>
+		<element kind="chart" chartType="pie" uuid="2b8b0ec8-cb8c-4a32-be22-49ec6329fbf8" x="80" y="100" width="400" height="200" evaluationTime="Report" linkType="None" linkTarget="Self">
+			<dataset kind="pie">
+				<datasetRun uuid="5833ffea-197d-41fb-a0bd-7a0831eedcb3" subDataset="ValoracionesAgrupadasFavoritos">
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<parameter name="Limite_animes_dataset">
+						<expression><![CDATA[$P{Limite_animes}]]></expression>
+					</parameter>
+					<parameter name="Nombre_usuario_dataset">
+						<expression><![CDATA[$P{Nombre_usuario}]]></expression>
+					</parameter>
+				</datasetRun>
+				<series>
+					<keyExpression><![CDATA[$F{valoracion} + "⭐"]]></keyExpression>
+					<valueExpression><![CDATA[$F{cantidad_favoritos}]]></valueExpression>
+					<labelExpression><![CDATA[String.valueOf($F{cantidad_favoritos})]]></labelExpression>
+				</series>
+			</dataset>
+			<plot>
+				<itemLabel/>
+			</plot>
+		</element>
+		<element kind="textField" uuid="5556b262-50eb-4e86-8de8-0b1725afd3ff" x="172" y="70" width="210" height="30" fontSize="16.0" bold="true" hTextAlign="Center">
+			<expression><![CDATA["Valoraciones de favoritos"]]></expression>
+		</element>
+	</title>
+	<columnHeader height="57" splitType="Stretch">
+		<element kind="staticText" uuid="bb6c3515-1782-4c8f-b83c-8ba8539dd6f0" x="298" y="0" width="85" height="26" fontSize="14.0" bold="true" hTextAlign="Center">
+			<text><![CDATA[Valoración]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0ef8bb87-889b-4562-9013-69ce0e207ec9"/>
+		</element>
+		<element kind="staticText" uuid="e70645b6-6bb1-4d1b-bf46-47c6dfa3fe27" x="435" y="0" width="120" height="26" fontSize="14.0" bold="true" hTextAlign="Center">
+			<text><![CDATA[Capítulo Actual]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="24c915cd-db69-43dc-a922-0c2323311ccd"/>
+		</element>
+		<element kind="staticText" uuid="e7616184-3ceb-41f2-8cbd-ca5706487185" x="0" y="0" width="100" height="26" fontSize="14.0" bold="true">
+			<text><![CDATA[Anime]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0ef8bb87-889b-4562-9013-69ce0e207ec9"/>
+		</element>
+		<element kind="line" uuid="7a73bdae-d1ea-41bd-9fed-c9db1209b8e6" x="0" y="33" width="555" height="1" forecolor="rgba(0, 0, 0, 0.3882353)">
+			<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<pen lineWidth="1.0" lineStyle="Dashed"/>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="44" splitType="Stretch">
+			<element kind="textField" uuid="01551905-bd1d-4683-a6bf-17886b969122" x="0" y="0" width="270" height="30" fontSize="12.0">
+				<expression><![CDATA[$F{nombre}]]></expression>
+			</element>
+			<element kind="textField" uuid="2cb13cf4-fe85-4775-9de3-162ac8ad8da0" x="290" y="0" width="100" height="30" fontSize="12.0" hTextAlign="Center">
+				<expression><![CDATA[$F{valoracion} + "⭐"]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0ef8bb87-889b-4562-9013-69ce0e207ec9"/>
+			</element>
+			<element kind="textField" uuid="928c6567-3460-4054-90ce-8df03ffcc9bb" x="445" y="0" width="100" height="30" fontSize="12.0" hTextAlign="Center">
+				<expression><![CDATA[$F{cap_actual}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="24c915cd-db69-43dc-a922-0c2323311ccd"/>
+			</element>
+		</band>
+	</detail>
+	<pageFooter height="35" splitType="Stretch">
+		<element kind="textField" uuid="c7ad7591-a602-418c-b9ee-3ebff5e340aa" x="530" y="0" width="30" height="30">
+			<expression><![CDATA[$V{PAGE_NUMBER}]]></expression>
+		</element>
+	</pageFooter>
+	<summary height="42" splitType="Stretch"/>
+</jasperReport>

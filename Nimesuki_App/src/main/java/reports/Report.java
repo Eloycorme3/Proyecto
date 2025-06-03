@@ -38,7 +38,7 @@ public class Report {
     }
 
     public Report toPdf(String destFile, boolean open) throws IOException {
-        if (!destFile.endsWith(".pdf") || !destFile.endsWith(".PDF")) {
+        if (!destFile.toLowerCase().endsWith(".pdf")) {
             destFile = destFile + ".pdf";
         } 
         try {

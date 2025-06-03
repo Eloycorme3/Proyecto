@@ -24,7 +24,7 @@ public class UsuarioService {
 
     private EntityManager createEM(String ip, String user, String pass) {
         DataSource ds = DynamicDataSourceFactory.create(ip, user, pass);
-        String key = ip + "_" + user + "_" + pass;  // clave única para cache
+        String key = ip + "_" + user + "_" + pass;
         return DynamicEntityManagerFactory.createEntityManager(ds, key);
     }
 

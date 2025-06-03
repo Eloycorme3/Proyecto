@@ -1,0 +1,171 @@
+<!-- Created with Jaspersoft Studio version 7.0.1.final using JasperReports Library version 7.0.1-573496633c2b4074e32f433154b543003f7d2498  -->
+<jasperReport name="nimesuki_report" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3810afc4-c109-4b41-94b4-6807932337c4">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Nimesuki"/>
+	<dataset name="AnimesConMasEpisodios" uuid="d2a44bcc-ba72-4fa7-bf96-d3c07064a7e4">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Nimesuki"/>
+		<parameter name="Fecha_inicio_dataset" class="java.lang.Integer">
+			<defaultValueExpression><![CDATA[1960]]></defaultValueExpression>
+		</parameter>
+		<parameter name="Fecha_fin_dataset" class="java.lang.Integer">
+			<defaultValueExpression><![CDATA[java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
+]]></defaultValueExpression>
+		</parameter>
+		<parameter name="Nombre_anime_dataset" class="java.lang.String">
+			<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+		</parameter>
+		<parameter name="Nombre_anime_like_dataset" forPrompting="false" class="java.lang.String">
+			<defaultValueExpression><![CDATA["%" + $P{Nombre_anime_dataset} + "%"]]></defaultValueExpression>
+		</parameter>
+		<query language="SQL"><![CDATA[SELECT 
+  CASE
+    WHEN a.nombre LIKE 'Re:Zero%' THEN 'Re:Zero'
+    WHEN a.nombre LIKE 'Shingeki no kyojin%' THEN 'Shingeki no Kyojin'
+    WHEN a.nombre LIKE 'Naruto%' THEN 'Naruto'
+    WHEN a.nombre LIKE 'Kimetsu no Yaiba%' THEN 'Kimetsu no Yaiba'
+    WHEN a.nombre LIKE 'Fullmetal Alchemist%' THEN 'Fullmetal Alchemist'
+    WHEN a.nombre = 'One Piece' THEN 'One Piece'
+    WHEN a.nombre = 'Death Note' THEN 'Death Note'
+    WHEN a.nombre LIKE 'Frieren%' THEN 'Frieren'
+    ELSE 'Otros'
+  END AS grupo,
+  SUM(a.cap_totales) AS total_capitulos
+FROM Anime a
+WHERE 
+  a.anho_salida BETWEEN $P{Fecha_inicio_dataset} AND $P{Fecha_fin_dataset} 
+  AND a.nombre LIKE $P{Nombre_anime_like_dataset} 
+GROUP BY grupo
+ORDER BY total_capitulos DESC
+
+]]></query>
+		<field name="grupo" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="grupo"/>
+			<property name="com.jaspersoft.studio.field.label" value="grupo"/>
+		</field>
+		<field name="total_capitulos" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.name" value="total_capitulos"/>
+			<property name="com.jaspersoft.studio.field.label" value="total_capitulos"/>
+		</field>
+	</dataset>
+	<parameter name="Fecha_inicio" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1960]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Fecha_fin" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
+]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Nombre_anime" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Nombre_anime_like" forPrompting="false" class="java.lang.String">
+		<defaultValueExpression><![CDATA["%" + $P{Nombre_anime} + "%"]]></defaultValueExpression>
+	</parameter>
+	<query language="SQL"><![CDATA[SELECT * FROM anime a
+WHERE a.anho_salida BETWEEN $P{Fecha_inicio} AND $P{Fecha_fin}
+AND a.nombre LIKE $P{Nombre_anime_like}
+ORDER BY a.nombre]]></query>
+	<field name="id_anime" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="id_anime"/>
+		<property name="com.jaspersoft.studio.field.label" value="id_anime"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="anime"/>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="anime"/>
+	</field>
+	<field name="categorias" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="categorias"/>
+		<property name="com.jaspersoft.studio.field.label" value="categorias"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="anime"/>
+	</field>
+	<field name="anho_salida" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="anho_salida"/>
+		<property name="com.jaspersoft.studio.field.label" value="anho_salida"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="anime"/>
+	</field>
+	<field name="descripcion" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="descripcion"/>
+		<property name="com.jaspersoft.studio.field.label" value="descripcion"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="anime"/>
+	</field>
+	<field name="imagen" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="imagen"/>
+		<property name="com.jaspersoft.studio.field.label" value="imagen"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="anime"/>
+	</field>
+	<field name="cap_totales" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="cap_totales"/>
+		<property name="com.jaspersoft.studio.field.label" value="cap_totales"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="anime"/>
+	</field>
+	<background splitType="Stretch"/>
+	<title height="61" splitType="Stretch">
+		<element kind="textField" uuid="cab4328e-f880-4b62-a5ed-0d915d2a2273" x="0" y="20" width="100" height="30" fontSize="19.0" bold="true">
+			<expression><![CDATA["Nimesuki"]]></expression>
+		</element>
+	</title>
+	<columnHeader height="13" splitType="Stretch"/>
+	<detail>
+		<band height="113" splitType="Stretch">
+			<element kind="textField" uuid="ac77c400-daf0-4fa1-ac73-1c71f23c390a" x="0" y="-10" width="556" height="20" fontSize="12.0" bold="true">
+				<expression><![CDATA[$F{nombre}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="75364470-f85f-4f4d-8ac6-fbaf015cb1b5"/>
+			</element>
+			<element kind="textField" uuid="d3553379-bd99-45f8-95e9-388cdd49f3c2" x="0" y="30" width="100" height="20">
+				<expression><![CDATA[$F{anho_salida}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="da2f8842-5778-4961-93ef-7dbd702e5a62"/>
+			</element>
+			<element kind="textField" uuid="2affd4d8-4937-4983-b2ba-f463a30fefae" x="0" y="60" width="100" height="20">
+				<expression><![CDATA["Capítulos: " + $F{cap_totales}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bbefa3d0-bcea-4d9f-b672-073fff162251"/>
+			</element>
+			<element kind="textField" uuid="fd91dbce-3ac6-43c6-bcd6-1bbdad20a2f7" x="119" y="21" width="436" height="80" hTextAlign="Justified">
+				<expression><![CDATA[$F{descripcion}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e5398f1d-1a4a-4b3f-a3d7-84d208fd578b"/>
+			</element>
+			<element kind="line" uuid="a89559b1-c6ba-4922-9677-219a453f8ba2" x="0" y="101" width="556" height="1" forecolor="rgba(0, 0, 0, 0.3882353)">
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</element>
+		</band>
+	</detail>
+	<pageFooter height="27" splitType="Stretch">
+		<element kind="textField" uuid="e00add18-7c5f-4a3c-9d7f-8af730cbe0c5" x="540" y="5" width="25" height="17">
+			<expression><![CDATA[$V{PAGE_NUMBER}]]></expression>
+		</element>
+	</pageFooter>
+	<summary height="236" splitType="Stretch">
+		<element kind="chart" chartType="bar" uuid="410b0a26-3458-4929-ac9d-8899bb344764" x="1" y="30" width="555" height="203" evaluationTime="Report" linkType="None" linkTarget="Self">
+			<dataset kind="category">
+				<datasetRun uuid="78c41f61-f6da-4642-bd4e-168eabd5f7de" subDataset="AnimesConMasEpisodios">
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<parameter name="Fecha_inicio_dataset">
+						<expression><![CDATA[$P{Fecha_inicio}]]></expression>
+					</parameter>
+					<parameter name="Fecha_fin_dataset">
+						<expression><![CDATA[$P{Fecha_fin}]]></expression>
+					</parameter>
+					<parameter name="Nombre_anime_dataset">
+						<expression><![CDATA[$P{Nombre_anime}]]></expression>
+					</parameter>
+					<parameter name="Nombre_anime_like_dataset">
+						<expression><![CDATA[$P{Nombre_anime_like}]]></expression>
+					</parameter>
+				</datasetRun>
+				<series>
+					<seriesExpression><![CDATA[$F{grupo}]]></seriesExpression>
+					<categoryExpression><![CDATA[""]]></categoryExpression>
+					<valueExpression><![CDATA[$F{total_capitulos}]]></valueExpression>
+				</series>
+			</dataset>
+			<plot categoryAxisLabelColor="#000000" categoryAxisTickLabelColor="#000000" categoryAxisLineColor="#000000" valueAxisLabelColor="#000000" valueAxisTickLabelColor="#000000" valueAxisLineColor="#000000">
+				<itemLabel/>
+			</plot>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+		</element>
+		<element kind="textField" uuid="dd0420da-7ef2-43f1-b196-d22fe55614c6" x="190" y="0" width="170" height="30" fontSize="16.0" bold="true">
+			<expression><![CDATA["Sagas por capítulos"]]></expression>
+		</element>
+	</summary>
+</jasperReport>

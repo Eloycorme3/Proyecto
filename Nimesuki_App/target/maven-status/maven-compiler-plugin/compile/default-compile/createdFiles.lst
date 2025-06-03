@@ -70,6 +70,7 @@ modelo\vo\Usuario_.class
 modelo\vo\Anime.class
 vista\GestorAdministrador$20.class
 modelo\vo\FavoritosPK.class
+vista\ReportAdmin$3.class
 vista\GestorAdministrador$7.class
 vista\GestorUsuario$1.class
 vista\GestorAdministrador$12.class

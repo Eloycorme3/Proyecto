@@ -26,14 +26,27 @@ public class SavePdfChooser {
             @Override
             public void approveSelection() {
                 File f = getSelectedFile();
+                String path = f.getAbsolutePath();
+
+                if (!path.toLowerCase().endsWith(".pdf")) {
+                    f = new File(path + ".pdf");
+                }
+
                 if (f.exists() && getDialogType() == SAVE_DIALOG) {
-                    int result = JOptionPane.showConfirmDialog(this, "El fichero ya existe, ¿quieres sobrescribirlo?", "Fichero existente", JOptionPane.YES_NO_CANCEL_OPTION);
+                    int result = JOptionPane.showConfirmDialog(
+                            this,
+                            "El fichero ya existe, ¿quieres sobrescribirlo?",
+                            "Fichero existente",
+                            JOptionPane.YES_NO_OPTION
+                    );
                     if (result != JOptionPane.YES_OPTION) {
                         return;
                     }
                 }
+                setSelectedFile(f);
                 super.approveSelection();
             }
+
         };
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         chooser.setFileFilter(new FileNameExtensionFilter("PDF", "pdf"));

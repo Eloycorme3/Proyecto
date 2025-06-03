@@ -56,6 +56,7 @@ public class controladorPrincipal {
     static SpinnerNumberModel modeloSpinnerAnhoSalida = new SpinnerNumberModel();
     static SpinnerNumberModel modeloSpinnerAnhoInicio = new SpinnerNumberModel();
     static SpinnerNumberModel modeloSpinnerAnhoFin = new SpinnerNumberModel();
+    static SpinnerNumberModel modeloSpinnerLimiteAnimes = new SpinnerNumberModel();
     public static String nombreUsuarioLogeado = "";
     public static String nombreUsuarioAdmin = "";
     public static String nombreAnimeGestor = "";
@@ -74,8 +75,9 @@ public class controladorPrincipal {
         gestorAdministrador.getSpCapActual().setModel(modeloSpinnerCapActual);
         gestorAdministrador.getSpCapTotales().setModel(modeloSpinnerCapTotales);
         gestorAdministrador.getSpAnhoSalida().setModel(modeloSpinnerAnhoSalida);
-        reportAdmin.getSpAnhoInicioParametro().setModel(modeloSpinnerAnhoInicio);
-        reportAdmin.getSpAnhoFinParametro().setModel(modeloSpinnerAnhoFin);
+        reportAdmin.getSpAnhoInicio().setModel(modeloSpinnerAnhoInicio);
+        reportAdmin.getSpAnhoFin().setModel(modeloSpinnerAnhoFin);
+        reportAdmin.getSpLimiteAnimes().setModel(modeloSpinnerLimiteAnimes);
 //        modeloSpinnerValoracion.setMinimum(0);
 //        modeloSpinnerValoracion.setMaximum(5);
 //        modeloSpinnerValoracion.setStepSize(0.5);
@@ -87,6 +89,7 @@ public class controladorPrincipal {
         modeloSpinnerAnhoInicio.setMaximum(LocalDate.now().getYear());
         modeloSpinnerAnhoFin.setMinimum(1960);
         modeloSpinnerAnhoFin.setMaximum(LocalDate.now().getYear());
+        modeloSpinnerLimiteAnimes.setMinimum(0);
     }
 
     public static void buildConnection(String ip, String user, String pass) throws Exception {
@@ -165,9 +168,11 @@ public class controladorPrincipal {
     }
 
     public static void reiniciarReportAdmin() {
-        reportAdmin.getSpAnhoInicioParametro().setValue(1960);
-        reportAdmin.getSpAnhoFinParametro().setValue(1960);
-        reportAdmin.getTxtNombreParametro().setText("");
+        reportAdmin.getSpAnhoInicio().setValue(1960);
+        reportAdmin.getSpAnhoFin().setValue(1960);
+        reportAdmin.getTxtNombreAnime().setText("");
+        reportAdmin.getTxtNombreUsuario().setText("");
+        reportAdmin.getSpLimiteAnimes().setValue(0);
     }
 
     public static void iniciarConsultas() {

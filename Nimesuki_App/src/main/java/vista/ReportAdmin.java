@@ -5,8 +5,16 @@
 package vista;
 
 import controlador.controladorPrincipal;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import reports.ReportService;
+import reports.SavePdfChooser;
 
 /**
  *
@@ -14,11 +22,28 @@ import javax.swing.JTextField;
  */
 public class ReportAdmin extends javax.swing.JFrame {
 
+    private static final String REPORT_PATH_1 = "/reports/nimesuki_report_1.jrxml";
+    private static final String REPORT_PATH_2 = "/reports/nimesuki_report_2.jrxml";
+    private final ReportService reportService;
+
     /**
      * Creates new form ReportView
      */
     public ReportAdmin() {
         initComponents();
+        Properties prop = new Properties();
+        try {
+            prop.load(ReportAdmin.class.getClassLoader().getResourceAsStream("report.properties"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            this.dispose();
+        }
+
+        reportService = new ReportService(
+                prop.getProperty("dburl"),
+                prop.getProperty("dbuser"),
+                prop.getProperty("dbpassword")
+        );
     }
 
     /**
@@ -35,10 +60,15 @@ public class ReportAdmin extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        txtNombreParametro = new javax.swing.JTextField();
-        spAnhoInicioParametro = new javax.swing.JSpinner();
-        spAnhoFinParametro = new javax.swing.JSpinner();
-        btnGenerarReport = new javax.swing.JButton();
+        txtNombreAnime = new javax.swing.JTextField();
+        spAnhoInicio = new javax.swing.JSpinner();
+        spAnhoFin = new javax.swing.JSpinner();
+        btnGenerarReport1 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        btnGenerarReport2 = new javax.swing.JButton();
+        txtNombreUsuario = new javax.swing.JTextField();
+        spLimiteAnimes = new javax.swing.JSpinner();
         menuBar = new javax.swing.JMenuBar();
         menuOpciones = new javax.swing.JMenu();
         menuItemVolver = new javax.swing.JMenuItem();
@@ -76,26 +106,26 @@ public class ReportAdmin extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 55;
         gridBagConstraints.insets = new java.awt.Insets(50, 0, 0, 50);
-        panel.add(txtNombreParametro, gridBagConstraints);
+        panel.add(txtNombreAnime, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 55;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 50);
-        panel.add(spAnhoInicioParametro, gridBagConstraints);
+        panel.add(spAnhoInicio, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 55;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 50);
-        panel.add(spAnhoFinParametro, gridBagConstraints);
+        panel.add(spAnhoFin, gridBagConstraints);
 
-        btnGenerarReport.setText("Generar Report");
-        btnGenerarReport.addActionListener(new java.awt.event.ActionListener() {
+        btnGenerarReport1.setText("Generar Report");
+        btnGenerarReport1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGenerarReportActionPerformed(evt);
+                btnGenerarReport1ActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -104,7 +134,51 @@ public class ReportAdmin extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 55;
         gridBagConstraints.insets = new java.awt.Insets(25, 0, 50, 50);
-        panel.add(btnGenerarReport, gridBagConstraints);
+        panel.add(btnGenerarReport1, gridBagConstraints);
+
+        jLabel4.setText("Usuario");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 15);
+        panel.add(jLabel4, gridBagConstraints);
+
+        jLabel5.setText("Límite");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 15);
+        panel.add(jLabel5, gridBagConstraints);
+
+        btnGenerarReport2.setText("Generar Report");
+        btnGenerarReport2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerarReport2ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 55;
+        gridBagConstraints.insets = new java.awt.Insets(25, 0, 50, 50);
+        panel.add(btnGenerarReport2, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 55;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 50);
+        panel.add(txtNombreUsuario, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 55;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 50);
+        panel.add(spLimiteAnimes, gridBagConstraints);
 
         getContentPane().add(panel, java.awt.BorderLayout.CENTER);
 
@@ -125,10 +199,25 @@ public class ReportAdmin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnGenerarReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarReportActionPerformed
+    private void btnGenerarReport1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarReport1ActionPerformed
         // TODO add your handling code here:
-        
-    }//GEN-LAST:event_btnGenerarReportActionPerformed
+        SavePdfChooser chooser = new SavePdfChooser(this);
+        String dest = chooser.getFilePath();
+
+        try {
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("Fecha_inicio", Integer.valueOf(spAnhoInicio.getValue().toString()));
+            parametros.put("Fecha_fin", Integer.valueOf(spAnhoFin.getValue().toString()));
+            parametros.put("Nombre_anime", txtNombreAnime.getText());
+            if (!dest.isEmpty()) {
+                reportService.get(REPORT_PATH_1, parametros).view().toPdf(dest, false);
+            }
+        } catch (NullPointerException | ClassNotFoundException ex) {
+        } catch (Exception ex) {
+            Logger.getLogger(ReportAdmin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_btnGenerarReport1ActionPerformed
 
     private void menuItemVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemVolverActionPerformed
         // TODO add your handling code here:
@@ -136,43 +225,80 @@ public class ReportAdmin extends javax.swing.JFrame {
         controladorPrincipal.iniciarGestorAdministrador();
     }//GEN-LAST:event_menuItemVolverActionPerformed
 
-    public JSpinner getSpAnhoFinParametro() {
-        return spAnhoFinParametro;
+    private void btnGenerarReport2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarReport2ActionPerformed
+        // TODO add your handling code here:
+        SavePdfChooser chooser = new SavePdfChooser(this);
+        String dest = chooser.getFilePath();
+
+        try {
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("Nombre_usuario", txtNombreUsuario.getText());
+            parametros.put("Limite_animes", Integer.valueOf(spLimiteAnimes.getValue().toString()));
+            if (!dest.isEmpty()) {
+                reportService.get(REPORT_PATH_2, parametros).view().toPdf(dest, false);
+            }
+        } catch (NullPointerException | ClassNotFoundException ex) {
+        } catch (Exception ex) {
+            Logger.getLogger(ReportAdmin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnGenerarReport2ActionPerformed
+
+    public JSpinner getSpAnhoFin() {
+        return spAnhoFin;
     }
 
-    public void setSpAnhoFinParametro(JSpinner spAnhoFinParametro) {
-        this.spAnhoFinParametro = spAnhoFinParametro;
+    public void setSpAnhoFin(JSpinner spAnhoFin) {
+        this.spAnhoFin = spAnhoFin;
     }
 
-    public JSpinner getSpAnhoInicioParametro() {
-        return spAnhoInicioParametro;
+    public JSpinner getSpAnhoInicio() {
+        return spAnhoInicio;
     }
 
-    public void setSpAnhoInicioParametro(JSpinner spAnhoInicioParametro) {
-        this.spAnhoInicioParametro = spAnhoInicioParametro;
+    public void setSpAnhoInicio(JSpinner spAnhoInicio) {
+        this.spAnhoInicio = spAnhoInicio;
     }
 
-    public JTextField getTxtNombreParametro() {
-        return txtNombreParametro;
+    public JTextField getTxtNombreAnime() {
+        return txtNombreAnime;
     }
 
-    public void setTxtNombreParametro(JTextField txtNombreParametro) {
-        this.txtNombreParametro = txtNombreParametro;
+    public void setTxtNombreAnime(JTextField txtNombreAnime) {
+        this.txtNombreAnime = txtNombreAnime;
     }
 
-    
+    public JSpinner getSpLimiteAnimes() {
+        return spLimiteAnimes;
+    }
+
+    public void setSpLimiteAnimes(JSpinner spLimiteAnimes) {
+        this.spLimiteAnimes = spLimiteAnimes;
+    }
+
+    public JTextField getTxtNombreUsuario() {
+        return txtNombreUsuario;
+    }
+
+    public void setTxtNombreUsuario(JTextField txtNombreUsuario) {
+        this.txtNombreUsuario = txtNombreUsuario;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnGenerarReport;
+    private javax.swing.JButton btnGenerarReport1;
+    private javax.swing.JButton btnGenerarReport2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem menuItemVolver;
     private javax.swing.JMenu menuOpciones;
     private javax.swing.JPanel panel;
-    private javax.swing.JSpinner spAnhoFinParametro;
-    private javax.swing.JSpinner spAnhoInicioParametro;
-    private javax.swing.JTextField txtNombreParametro;
+    private javax.swing.JSpinner spAnhoFin;
+    private javax.swing.JSpinner spAnhoInicio;
+    private javax.swing.JSpinner spLimiteAnimes;
+    private javax.swing.JTextField txtNombreAnime;
+    private javax.swing.JTextField txtNombreUsuario;
     // End of variables declaration//GEN-END:variables
 }
