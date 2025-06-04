@@ -173,7 +173,7 @@ public class AnimeDetailFragment extends Fragment {
                                             favoritosCache.add(anime.getNombre());
                                             cacheManager.guardarFavoritos(favoritosCache);
                                             AnimeFavoritoDetailFragment animeFavoritoDetailFragment = AnimeFavoritoDetailFragment.newInstance(f);
-                                            //mostrarProgress(true);
+                                            mostrarProgress(true);
                                             if (requireActivity() instanceof ListaAnimesView) {
                                                 new Handler(Looper.getMainLooper()).postDelayed(() -> {
                                                     requireActivity().getSupportFragmentManager()
@@ -182,8 +182,8 @@ public class AnimeDetailFragment extends Fragment {
                                                             .replace(R.id.fragmentContainerLista, animeFavoritoDetailFragment)
                                                             .commit();
 
-                                                    //mostrarProgress(false);
-                                                }, 100);
+                                                    mostrarProgress(false);
+                                                }, 500);
                                             } else if (requireActivity() instanceof ListaAnimesFavoritosView) {
                                                 new Handler(Looper.getMainLooper()).postDelayed(() -> {
                                                     requireActivity().getSupportFragmentManager()

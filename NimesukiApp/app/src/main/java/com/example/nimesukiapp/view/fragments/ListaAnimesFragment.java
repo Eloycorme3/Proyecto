@@ -97,7 +97,6 @@ public class ListaAnimesFragment extends Fragment {
 
         searchEditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
-                mostrarProgress(true);
                 String textoBusqueda = searchEditText.getText().toString();
                 if (textoBusqueda.isEmpty()) {
                     cargarAnimes();
@@ -225,6 +224,7 @@ public class ListaAnimesFragment extends Fragment {
                             } else {
                                 emptyView.setVisibility(GONE);
                             }
+                            mostrarProgress(true);
                             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                                 mostrarProgress(false);
                                 adapter.notifyDataSetChanged();

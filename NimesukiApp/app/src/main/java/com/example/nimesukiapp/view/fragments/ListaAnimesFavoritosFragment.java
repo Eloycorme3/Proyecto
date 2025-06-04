@@ -55,12 +55,6 @@ public class ListaAnimesFavoritosFragment extends Fragment {
         searchEditText = view.findViewById(R.id.searchTextFavoritos);
         loading = view.findViewById(R.id.progressBarLoadingFavoritos);
 
-        if (prefs.contains("detalleFavoritos")) {
-            if (prefs.getBoolean("detalleFavoritos", false)) {
-                prefs.edit().putBoolean("detalleFavoritos", false).apply();
-            }
-        }
-
         mostrarProgress(true);
 
         cargarAnimesFavoritos();

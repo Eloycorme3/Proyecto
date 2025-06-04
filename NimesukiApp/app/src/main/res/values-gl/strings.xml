@@ -58,4 +58,9 @@
     <string name="no_connection_retry">Reintentar</string>
     <string name="no_connection">Sin conexión, volve a intentalo</string>
     <string name="unexpected_error">Erro inesperado</string>
+    <string name="change_password_error">Erro ao cambiar o contrasinal</string>
+    <string name="change_password_successfully">Contrasinal cambiado con éxito</string>
+    <string name="same_password_change">O contrasinal non pode ser o mesmo</string>
+    <string name="update_favorite_successfully">Favorito modificado con éxito</string>
+    <string name="update_favorite_error">Erro ao modificar favorito</string>
 </resources>

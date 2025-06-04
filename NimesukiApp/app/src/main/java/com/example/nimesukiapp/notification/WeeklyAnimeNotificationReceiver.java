@@ -53,6 +53,7 @@ public class WeeklyAnimeNotificationReceiver extends BroadcastReceiver {
                 .setContentText("¡No te pierdas tus animes favoritos esta semana!")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(contentIntent)
+                .setColor(ContextCompat.getColor(context, R.color.pastelBackground))
                 .setAutoCancel(true);
 
         notificationManager.notify(100, builder.build());

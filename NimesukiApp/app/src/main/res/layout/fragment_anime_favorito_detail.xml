@@ -35,7 +35,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@android:color/transparent"
-                android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar"
+                android:theme="@style/TransparentToolbarMenu"
+                app:menu="@menu/top_app_bar_fav_menu"
                 app:layout_collapseMode="pin"
                 app:navigationIcon="@drawable/ic_close"
                 app:navigationIconTint="@color/pastelAccent"
@@ -104,6 +105,55 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:textColor="@color/pastelGray" />
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textProgreso"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Progreso"
+                    android:textColor="@color/pastelGray" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_horizontal_picker"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:clipToPadding="false"
+                    android:paddingStart="80dp"
+                    android:paddingEnd="80dp" />
+            </LinearLayout>
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textValoracion"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Valoración"
+                    android:textColor="@color/pastelGray" />
+
+                <RatingBar
+                    android:id="@+id/ratingBarAnimeFavorito"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:stepSize="0.5"
+                    android:theme="@style/CustomRatingBarTheme" />
+            </LinearLayout>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
@@ -114,8 +164,8 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="30dp"
         android:src="@drawable/ic_favorite"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Material3.Button"
         app:backgroundTint="@color/pastelSecondary"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Material3.Button"
         app:tint="@null" />
 
     <ProgressBar

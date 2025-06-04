@@ -38,6 +38,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.io.IOException;
 import java.util.Locale;
 
@@ -52,6 +54,8 @@ public class ProfileFragment extends Fragment {
     private SwitchMaterial switchTema;
     private ImageButton btnToggleVisibilityActualPass, btnToggleVisibilityNuevaPass, btnToggleEnabledText;
     private Spinner spinnerIdioma;
+    private boolean isPasswordVisibleActual = false;
+    private boolean isPasswordVisibleNueva = false;
     private SharedPreferences prefs;
 
     @Nullable
@@ -77,11 +81,9 @@ public class ProfileFragment extends Fragment {
         btnToggleEnabledText = view.findViewById(R.id.nombreToggleEnabled);
 
         btnToggleVisibilityActualPass.setOnClickListener(new View.OnClickListener() {
-            boolean isPasswordVisible = false;
-
             @Override
             public void onClick(View v) {
-                if (isPasswordVisible) {
+                if (isPasswordVisibleActual) {
                     editTextActualPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
                     btnToggleVisibilityActualPass.setImageResource(R.drawable.ic_visibility_off);
                 } else {
@@ -91,16 +93,14 @@ public class ProfileFragment extends Fragment {
 
                 editTextActualPass.setSelection(editTextActualPass.getText().length());
 
-                isPasswordVisible = !isPasswordVisible;
+                isPasswordVisibleActual = !isPasswordVisibleActual;
             }
         });
 
         btnToggleVisibilityNuevaPass.setOnClickListener(new View.OnClickListener() {
-            boolean isPasswordVisible = false;
-
             @Override
             public void onClick(View v) {
-                if (isPasswordVisible) {
+                if (isPasswordVisibleNueva) {
                     editTextNuevaPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
                     btnToggleVisibilityNuevaPass.setImageResource(R.drawable.ic_visibility_off);
                 } else {
@@ -110,13 +110,13 @@ public class ProfileFragment extends Fragment {
 
                 editTextNuevaPass.setSelection(editTextNuevaPass.getText().length());
 
-                isPasswordVisible = !isPasswordVisible;
+                isPasswordVisibleNueva = !isPasswordVisibleNueva;
             }
         });
 
         prefs = requireContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
 
-        String nombreGuardado = prefs.getString("nombreUsuario", null);
+        String nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
         boolean temaOscuro = prefs.getBoolean("oscuro", false);
 
         switchTema.setChecked(temaOscuro);
@@ -137,7 +137,7 @@ public class ProfileFragment extends Fragment {
             spinnerIdioma.setSelection(1);
         }
 
-        editTextNombre.setText(nombreGuardado);
+        editTextNombre.setText(nombreUsuarioLogueado);
 
         btnToggleEnabledText.setOnClickListener(new View.OnClickListener() {
             boolean isEnabled = editTextNombre.isEnabled();
@@ -160,10 +160,75 @@ public class ProfileFragment extends Fragment {
         });
 
         btnCambiarPassword.setOnClickListener(v -> {
-            //String actual = editTextActualPass.getText().toString();
-            //String nueva = editTextNuevaPass.getText().toString();
+            String actual = editTextActualPass.getText().toString();
+            String nueva = editTextNuevaPass.getText().toString();
+            if (!nueva.contains(" ")) {
+                ServicioREST servicioREST = new ServicioREST(requireContext());
+                new Thread(() -> servicioREST.obtenerUsuarioPorNombre(nombreUsuarioLogueado, new ServicioREST.OnUsuarioObtenidoListener() {
+                    @Override
+                    public void onSuccess(Usuario usuario) {
+                        if (usuario != null) {
+                            if (BCrypt.checkpw(actual, usuario.getContrasenha())) {
+                                if (!BCrypt.checkpw(nueva, usuario.getContrasenha())) {
+                                    String cotrasenhaHasheada = BCrypt.hashpw(nueva, BCrypt.gensalt());
+                                    usuario.setContrasenha(cotrasenhaHasheada);
+                                    servicioREST.actualizarUsuario(usuario.getIdUsuario(), usuario, new Callback() {
+                                        @Override
+                                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                                            requireActivity().runOnUiThread(() ->
+                                                    Toast.makeText(requireContext(), getString(R.string.change_password_error), Toast.LENGTH_LONG).show()
+                                            );
+                                        }
 
-            //cambiar la contraseña
+                                        @Override
+                                        public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                                            requireActivity().runOnUiThread(() -> {
+                                                Toast.makeText(requireContext(), getString(R.string.change_password_successfully), Toast.LENGTH_LONG).show();
+
+                                                Gson gson = new Gson();
+                                                String usuarioJson = (gson.toJson(usuario));
+                                                prefs.edit().putString("usuario_completo", usuarioJson);
+
+                                                editTextActualPass.setText("");
+                                                editTextNuevaPass.setText("");
+                                                isPasswordVisibleNueva = false;
+                                                editTextNuevaPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                                                btnToggleVisibilityNuevaPass.setImageResource(R.drawable.ic_visibility_off);
+                                                isPasswordVisibleActual = false;
+                                                editTextActualPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                                                btnToggleVisibilityActualPass.setImageResource(R.drawable.ic_visibility_off);
+                                            });
+                                        }
+                                    });
+                                } else {
+                                    requireActivity().runOnUiThread(() ->
+                                            Toast.makeText(requireContext(), getString(R.string.same_password_change), Toast.LENGTH_LONG).show()
+                                    );
+                                }
+                            } else {
+                                requireActivity().runOnUiThread(() ->
+                                        Toast.makeText(requireContext(), getString(R.string.incorrect_password), Toast.LENGTH_SHORT).show()
+                                );
+                            }
+                        } else {
+                            requireActivity().runOnUiThread(() ->
+                                    Toast.makeText(requireContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show()
+                            );
+                        }
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        requireActivity().runOnUiThread(() ->
+                                Toast.makeText(requireContext(), getString(R.string.get_user_error), Toast.LENGTH_SHORT).show()
+                        );
+                    }
+                })).start();
+            } else {
+                requireActivity().runOnUiThread(() ->
+                        Toast.makeText(requireContext(), getString(R.string.password_no_whitespace_error), Toast.LENGTH_LONG).show()
+                );
+            }
         });
 
         switchTema.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -244,7 +309,7 @@ public class ProfileFragment extends Fragment {
                                             }
                                         });
                                     } else {
-                                        servicioREST.obtenerUsuarioPorNombre(nombreGuardado, new ServicioREST.OnUsuarioObtenidoListener() {
+                                        servicioREST.obtenerUsuarioPorNombre(nombreUsuarioLogueado, new ServicioREST.OnUsuarioObtenidoListener() {
                                             @Override
                                             public void onSuccess(Usuario usuario) {
                                                 servicioREST.eliminarUsuario(usuario.getIdUsuario(), new Callback() {

@@ -126,6 +126,30 @@ public class ServicioREST {
         }
     }
 
+    public void actualizarUsuario(Integer idUsuario, Usuario u, Callback callback) {
+        if (comprobar()) {
+            OkHttpClient client = new OkHttpClient();
+            Gson gson = new Gson();
+            String json = gson.toJson(u);
+
+            RequestBody body = RequestBody.create(
+                    json,
+                    MediaType.parse("application/json")
+            );
+
+            Request request = new Request.Builder()
+                    .url(baseUrl() + "/usuarios/" + idUsuario + authParams())
+                    .put(body)
+                    .build();
+
+            client.newCall(request).enqueue(callback);
+        } else {
+            ((Activity) contexto).runOnUiThread(() ->
+                    Toast.makeText(contexto, R.string.unexpected_error, Toast.LENGTH_SHORT).show()
+            );
+        }
+    }
+
     public void eliminarUsuario(Integer idUsuario, Callback callback) {
         if (comprobar()) {
             OkHttpClient client = new OkHttpClient();
@@ -452,7 +476,7 @@ public class ServicioREST {
         }
     }
 
-    public void modificarFavorito(Favoritos favorito, Callback callback) {
+    public void actualizarFavorito(Favoritos favorito, Callback callback) {
         if (comprobar()) {
             OkHttpClient client = new OkHttpClient();
             Gson gson = new Gson();

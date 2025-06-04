@@ -28,4 +28,12 @@
         <item name="itemPaddingBottom">20dp</item>
     </style>
 
+    <style name="CustomRatingBarTheme" parent="Theme.MaterialComponents.DayNight">
+        <item name="colorControlActivated">@color/pastelAccent</item>
+    </style>
+
+    <style name="TransparentToolbarMenu" parent="ThemeOverlay.Material3.Dark.ActionBar">
+        <item name="actionBarItemBackground">@android:color/transparent</item>
+    </style>
+
 </resources>
