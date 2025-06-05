@@ -18,7 +18,7 @@ import com.example.nimesukiapp.view.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class PerfilView extends AppCompatActivity {
-    private String nombreUsuarioLogueado = "";
+    private String nombreUsuarioLogueado = null;
     private BottomNavigationView bottomNavigationView;
     private SharedPreferences prefs;
 

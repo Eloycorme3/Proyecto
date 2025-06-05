@@ -127,7 +127,7 @@ public class AnimeFavoritoDetailFragment extends Fragment {
         toolbar = view.findViewById(R.id.topAppBarFav);
         btnFloatingFavFavoritos = view.findViewById(R.id.btnFloatingFavFavoritos);
         loading = view.findViewById(R.id.progressBarLoadingAnimeFavoritoDetail);
-        rvHorizontalPicker = view.findViewById(R.id.rv_horizontal_picker);
+        rvHorizontalPicker = view.findViewById(R.id.rvHorizontalPicker);
         ratingBarAnimeFavorito = view.findViewById(R.id.ratingBarAnimeFavorito);
         textProgreso = view.findViewById(R.id.textProgreso);
         textValoracion = view.findViewById(R.id.textValoracion);

@@ -28,7 +28,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.io.IOException;
 
 public class AnimeRandomView extends AppCompatActivity {
-    private String nombreUsuarioLogueado = "";
+    private String nombreUsuarioLogueado = null;
     private BottomNavigationView bottomNavigationView;
     private AnimeRandomFragment animeRandomFragment;
     private SharedPreferences prefs;
@@ -38,12 +38,13 @@ public class AnimeRandomView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_random);
-        loading = findViewById(R.id.progressBarLoadingRandom);
+        prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
 
+        loading = findViewById(R.id.progressBarLoadingRandom);
         mostrarProgress(true);
+
         bottomNavigationView = findViewById(R.id.bottomNavigationViewRandom);
 
-        prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
 
         if (nombreUsuarioLogueado != null) {

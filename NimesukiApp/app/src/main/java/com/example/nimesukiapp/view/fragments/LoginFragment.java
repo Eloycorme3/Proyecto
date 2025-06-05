@@ -114,6 +114,14 @@ public class LoginFragment extends Fragment {
                 requireActivity().runOnUiThread(() ->
                         Toast.makeText(requireContext(), getString(R.string.enter_user_and_password), Toast.LENGTH_SHORT).show()
                 );
+            } else if (username.contains(" ")) {
+                requireActivity().runOnUiThread(() ->
+                        Toast.makeText(requireContext(), getString(R.string.username_no_whitespace_error), Toast.LENGTH_SHORT).show()
+                );
+            } else if (password.contains(" ")) {
+                requireActivity().runOnUiThread(() ->
+                        Toast.makeText(requireContext(), getString(R.string.password_no_whitespace_error), Toast.LENGTH_SHORT).show()
+                );
             } else {
                 loginUsuario(username, password);
             }
@@ -209,6 +217,27 @@ public class LoginFragment extends Fragment {
         TextInputEditText editNombre = view.findViewById(R.id.editNombre);
         TextInputEditText editContrasena = view.findViewById(R.id.editContrasenha);
         TextInputEditText editIp = view.findViewById(R.id.editIp);
+        ImageButton btnPasswordToggleConfig = view.findViewById(R.id.passwordToggleButtonConfig);
+
+        btnPasswordToggleConfig.setOnClickListener(new View.OnClickListener() {
+            boolean isPasswordVisible = false;
+
+            @Override
+            public void onClick(View v) {
+                if (isPasswordVisible) {
+                    editContrasena.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    btnPasswordToggleConfig.setImageResource(R.drawable.ic_visibility_off);
+                } else {
+                    editContrasena.setTransformationMethod(null);
+                    btnPasswordToggleConfig.setImageResource(R.drawable.ic_visibility_on);
+                }
+
+                editContrasena.setSelection(editContrasena.getText().length());
+
+                isPasswordVisible = !isPasswordVisible;
+            }
+        });
+
 
         editNombre.setText(prefs.getString("nombreBD", "root"));
         editContrasena.setText(prefs.getString("contrasenhaBD", "root"));

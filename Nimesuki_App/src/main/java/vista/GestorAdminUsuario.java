@@ -25,6 +25,7 @@ public class GestorAdminUsuario extends javax.swing.JDialog {
     public GestorAdminUsuario(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        txtPasswordUsuario.setEchoChar('*');
     }
 
     /**

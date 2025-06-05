@@ -18,6 +18,8 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import android.os.LocaleList;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,13 +51,12 @@ import okhttp3.Response;
 
 public class ProfileFragment extends Fragment {
     private TextInputEditText editTextNombre, editTextActualPass, editTextNuevaPass;
-    private TextInputLayout layoutActualPass, layoutNuevaPass, layoutNombre;
     private MaterialButton btnCambiarNombre, btnCambiarPassword, btnCerrarSesion, btnEliminarCuenta;
     private SwitchMaterial switchTema;
     private ImageButton btnToggleVisibilityActualPass, btnToggleVisibilityNuevaPass, btnToggleEnabledText;
     private Spinner spinnerIdioma;
-    private boolean isPasswordVisibleActual = false;
-    private boolean isPasswordVisibleNueva = false;
+    private boolean isPasswordVisibleActual = false, isPasswordVisibleNueva = false, isEnabled = false;
+    private String nombreUsuarioLogueado = null;
     private SharedPreferences prefs;
 
     @Nullable
@@ -63,6 +64,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        prefs = requireContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
 
         editTextNombre = view.findViewById(R.id.editTextNombre);
         btnCambiarNombre = view.findViewById(R.id.buttonCambiarNombre);
@@ -70,9 +72,6 @@ public class ProfileFragment extends Fragment {
         editTextNuevaPass = view.findViewById(R.id.editTextNuevaPass);
         btnCambiarPassword = view.findViewById(R.id.buttonCambiarPassword);
         switchTema = view.findViewById(R.id.switchTema);
-        layoutActualPass = view.findViewById(R.id.layoutActualPass);
-        layoutNuevaPass = view.findViewById(R.id.layoutNuevaPass);
-        layoutNombre = view.findViewById(R.id.layoutNombre);
         spinnerIdioma = view.findViewById(R.id.spinnerIdioma);
         btnCerrarSesion = view.findViewById(R.id.buttonCerrarSesion);
         btnEliminarCuenta = view.findViewById(R.id.buttonEliminarCuenta);
@@ -114,9 +113,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        prefs = requireContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
-
-        String nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
+        nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
         boolean temaOscuro = prefs.getBoolean("oscuro", false);
 
         switchTema.setChecked(temaOscuro);
@@ -139,8 +136,12 @@ public class ProfileFragment extends Fragment {
 
         editTextNombre.setText(nombreUsuarioLogueado);
 
+        if (nombreUsuarioLogueado.equals(editTextNombre.getText().toString())) {
+            btnCambiarNombre.setEnabled(false);
+            btnCambiarNombre.setAlpha(0.5f);
+        }
+
         btnToggleEnabledText.setOnClickListener(new View.OnClickListener() {
-            boolean isEnabled = editTextNombre.isEnabled();
 
             @Override
             public void onClick(View v) {
@@ -151,12 +152,94 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        btnCambiarNombre.setOnClickListener(v -> {
-            //String nuevoNombre = editTextNombre.getText().toString();
+        editTextNombre.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (nombreUsuarioLogueado.equals(editTextNombre.getText().toString())) {
+                    btnCambiarNombre.setEnabled(false);
+                    btnCambiarNombre.setAlpha(0.5f);
+                } else {
+                    boolean habilitado = !s.toString().trim().isEmpty();
 
-            //cambiar nombre dao
-            //prefs.edit().putString("nombreUsuario", nuevoNombre).apply();
-            //Toast.makeText(getContext(), getString(R.string.name_updated), Toast.LENGTH_SHORT).show();
+                    if (habilitado) {
+                        btnCambiarNombre.setEnabled(true);
+                        btnCambiarNombre.setAlpha(1.0f);
+                    } else {
+                        btnCambiarNombre.setEnabled(false);
+                        btnCambiarNombre.setAlpha(0.5f);
+                    }
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        });
+
+        btnCambiarNombre.setOnClickListener(v -> {
+            String nuevoNombre = editTextNombre.getText().toString();
+            if (!nuevoNombre.isEmpty()) {
+                if (!nuevoNombre.contains(" ")) {
+                    if (!nuevoNombre.equals(nombreUsuarioLogueado)) {
+                        ServicioREST servicioREST = new ServicioREST(requireContext());
+                        new Thread(() -> servicioREST.obtenerUsuarioPorNombre(nuevoNombre, new ServicioREST.OnUsuarioObtenidoListener() {
+                            @Override
+                            public void onSuccess(Usuario usuario) {
+                                requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), getString(R.string.user_exists), Toast.LENGTH_LONG).show());
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+                                String usuarioJson = prefs.getString("usuario_completo", null);
+                                if (usuarioJson != null) {
+                                    Gson gson = new Gson();
+                                    Usuario usuarioLogueado = gson.fromJson(usuarioJson, Usuario.class);
+                                    usuarioLogueado.setNombre(nuevoNombre);
+                                    servicioREST.actualizarUsuario(usuarioLogueado, new Callback() {
+                                        @Override
+                                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                                            requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), getString(R.string.name_updated_error), Toast.LENGTH_LONG).show());
+                                        }
+
+                                        @Override
+                                        public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                                            requireActivity().runOnUiThread(() -> {
+                                                Toast.makeText(requireContext(), getString(R.string.name_updated_successfully), Toast.LENGTH_LONG).show();
+
+                                                prefs.edit().putString("nombreUsuario", nuevoNombre).apply();
+                                                nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
+                                                Gson gson = new Gson();
+                                                String usuarioActualizadoJson = gson.toJson(usuarioLogueado);
+                                                prefs.edit().putString("usuario_completo", usuarioActualizadoJson).apply();
+
+                                                isEnabled = false;
+                                                editTextNombre.setEnabled(isEnabled);
+                                                btnToggleEnabledText.setImageResource(isEnabled ? R.drawable.ic_done : R.drawable.ic_edit);
+
+                                                btnCambiarNombre.setEnabled(false);
+                                                btnCambiarNombre.setAlpha(0.5f);
+                                            });
+
+                                        }
+                                    });
+                                } else {
+                                    requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), getString(R.string.unexpected_error), Toast.LENGTH_SHORT).show());
+                                }
+                            }
+                        })).start();
+                    } else {
+                        Toast.makeText(getContext(), getString(R.string.same_username_error), Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(getContext(), getString(R.string.username_no_whitespace_error), Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(getContext(), getString(R.string.username_empty_error), Toast.LENGTH_SHORT).show();
+            }
         });
 
         btnCambiarPassword.setOnClickListener(v -> {
@@ -172,7 +255,7 @@ public class ProfileFragment extends Fragment {
                                 if (!BCrypt.checkpw(nueva, usuario.getContrasenha())) {
                                     String cotrasenhaHasheada = BCrypt.hashpw(nueva, BCrypt.gensalt());
                                     usuario.setContrasenha(cotrasenhaHasheada);
-                                    servicioREST.actualizarUsuario(usuario.getIdUsuario(), usuario, new Callback() {
+                                    servicioREST.actualizarUsuario(usuario, new Callback() {
                                         @Override
                                         public void onFailure(@NonNull Call call, @NonNull IOException e) {
                                             requireActivity().runOnUiThread(() ->

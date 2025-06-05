@@ -5,7 +5,6 @@
 package vista;
 
 import controlador.controladorPrincipal;
-import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;

@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -22,12 +23,16 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.StyleSpan;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -37,6 +42,8 @@ import com.example.nimesukiapp.mock.ServicioREST;
 import com.example.nimesukiapp.model.FavoritosManager;
 import com.example.nimesukiapp.model.vo.Favoritos;
 import com.example.nimesukiapp.view.activities.AnimeRandomView;
+import com.example.nimesukiapp.view.adapters.PickerAdapter;
+import com.example.nimesukiapp.view.adapters.PickerLayoutManager;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textview.MaterialTextView;
@@ -56,14 +63,23 @@ import okhttp3.Response;
 public class AnimeRandomFavoritoFragment extends Fragment {
     private ImageView imageViewAnimeRandomFav;
     private MaterialTextView textNombreRandomFav, textDescripcionRandomFav,
-            textAnhoRandomFav, textCategoriasRandomFav, textCapitulosRandomFav;
+            textAnhoRandomFav, textCategoriasRandomFav, textCapitulosRandomFav, textProgresoRandom, textValoracionRandom;
     private FloatingActionButton btnFloatingFavRandomFav;
     private ProgressBar loading;
+    private RecyclerView rvHorizontalPickerRandom;
+    private RatingBar ratingBarAnimeFavoritoRandom;
+    private ImageButton btnGuardarCambios;
     private String imageVersionRandomFav = "?v=3";
     private boolean isExpanded = false;
     private Favoritos animeRandomFav;
     private FavoritosManager cacheManager;
     private ArrayList<String> favoritosCache;
+    private PickerAdapter adapter;
+    private ArrayList<String> data;
+    private Handler handler = new Handler(Looper.getMainLooper());
+    private Runnable saveRunnable;
+    private static final int SAVE_DELAY = 500;
+    private int lastSavedPosition = -1;
     private SharedPreferences prefs;
 
     public AnimeRandomFavoritoFragment(Favoritos animeFav) {
@@ -110,6 +126,11 @@ public class AnimeRandomFavoritoFragment extends Fragment {
         textCapitulosRandomFav = view.findViewById(R.id.textCapitulosRandomFav);
         btnFloatingFavRandomFav = view.findViewById(R.id.btnFloatingFavRandomFavorito);
         loading = view.findViewById(R.id.progressBarLoadingAnimeRandomFavorito);
+        rvHorizontalPickerRandom = view.findViewById(R.id.rvHorizontalPickerRandom);
+        ratingBarAnimeFavoritoRandom = view.findViewById(R.id.ratingBarAnimeFavoritoRandom);
+        textProgresoRandom = view.findViewById(R.id.textProgresoRandom);
+        textValoracionRandom = view.findViewById(R.id.textValoracionRandom);
+        btnGuardarCambios = view.findViewById(R.id.btnGuardarCambios);
 
         mostrarProgress(false);
 
@@ -124,9 +145,30 @@ public class AnimeRandomFavoritoFragment extends Fragment {
             }
         }
 
+        setHorizontalPicker(0, animeRandomFav.getAnime().getCapTotales(), animeRandomFav.getCapActual());
+
         cacheManager = new FavoritosManager(requireContext());
 
         favoritosCache = cacheManager.cargarFavoritos();
+
+        ratingBarAnimeFavoritoRandom.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                if (fromUser) {
+                    if (rating != animeRandomFav.getValoracion()) {
+                        changeEnabled(true);
+                    } else if (lastSavedPosition == -1) {
+                        changeEnabled(false);
+                    } else if (rating == animeRandomFav.getValoracion() && lastSavedPosition == animeRandomFav.getCapActual()) {
+                        changeEnabled(false);
+                    } else {
+                        changeEnabled(true);
+                    }
+                }
+            }
+        });
+
+        ratingBarAnimeFavoritoRandom.setRating(animeRandomFav.getValoracion());
 
         btnFloatingFavRandomFav.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,6 +219,94 @@ public class AnimeRandomFavoritoFragment extends Fragment {
                 }).start();
             }
         });
+
+        btnGuardarCambios.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (lastSavedPosition != animeRandomFav.getCapActual() && lastSavedPosition != -1) {
+                    animeRandomFav.setCapActual(lastSavedPosition);
+                }
+                if (ratingBarAnimeFavoritoRandom.getRating() != animeRandomFav.getValoracion()) {
+                    animeRandomFav.setValoracion(ratingBarAnimeFavoritoRandom.getRating());
+                }
+                ServicioREST servicioREST = new ServicioREST(requireContext());
+                new Thread(() -> servicioREST.actualizarFavorito(animeRandomFav, new Callback() {
+                    @Override
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                        requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), getString(R.string.update_favorite_error), Toast.LENGTH_SHORT).show());
+                    }
+
+                    @Override
+                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                        requireActivity().runOnUiThread(() -> {
+                            Toast.makeText(requireContext(), getString(R.string.update_favorite_successfully), Toast.LENGTH_SHORT).show();
+                            changeEnabled(false);
+                        });
+                    }
+                })).start();
+            }
+        });
+
+        changeEnabled(false);
+    }
+
+    private void setHorizontalPicker(int min, int max, int startValue) {
+        data = new ArrayList<>();
+        for (int i = min; i <= max; i++) {
+            data.add(String.valueOf(i));
+        }
+
+        int padding = (getResources().getDisplayMetrics().widthPixels / 2) - dpToPx(40);
+        rvHorizontalPickerRandom.setPadding(padding, 0, padding, 0);
+        rvHorizontalPickerRandom.setClipToPadding(false);
+
+        PickerLayoutManager layoutManager = new PickerLayoutManager(requireContext());
+        rvHorizontalPickerRandom.setLayoutManager(layoutManager);
+
+        if (adapter == null) adapter = new PickerAdapter(requireContext());
+        adapter.setData(data);
+        rvHorizontalPickerRandom.setAdapter(adapter);
+
+        layoutManager.setOnItemSelectedListener(position -> {
+            adapter.setSelectedItem(position);
+
+            if (saveRunnable != null) handler.removeCallbacks(saveRunnable);
+
+            saveRunnable = () -> {
+                lastSavedPosition = position;
+                if (position != animeRandomFav.getCapActual()) {
+                    changeEnabled(true);
+                } else if (position == animeRandomFav.getCapActual() && ratingBarAnimeFavoritoRandom.getRating() == animeRandomFav.getValoracion()) {
+                    changeEnabled(false);
+                } else {
+                    changeEnabled(true);
+                }
+            };
+            handler.postDelayed(saveRunnable, SAVE_DELAY);
+        });
+
+        rvHorizontalPickerRandom.post(() -> {
+            int startPosition = startValue - min;
+            rvHorizontalPickerRandom.scrollToPosition(startPosition);
+            adapter.setSelectedItem(startPosition);
+        });
+    }
+
+    private int dpToPx(int dp) {
+        return (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                dp,
+                getResources().getDisplayMetrics()
+        );
+    }
+
+    private void changeEnabled(boolean enabled) {
+        btnGuardarCambios.setEnabled(enabled);
+        if (enabled) {
+            btnGuardarCambios.setImageAlpha(255);
+        } else {
+            btnGuardarCambios.setImageAlpha(130);
+        }
     }
 
     private void actualizarVistaAnime(Favoritos favorito) throws InterruptedException {
@@ -207,6 +337,10 @@ public class AnimeRandomFavoritoFragment extends Fragment {
         textCategoriasRandomFav.setVisibility(mostrar ? GONE : VISIBLE);
         textCapitulosRandomFav.setVisibility(mostrar ? GONE : VISIBLE);
         btnFloatingFavRandomFav.setVisibility(mostrar ? GONE : VISIBLE);
+        textProgresoRandom.setVisibility(mostrar ? GONE : VISIBLE);
+        rvHorizontalPickerRandom.setVisibility(mostrar ? GONE : VISIBLE);
+        textValoracionRandom.setVisibility(mostrar ? GONE : VISIBLE);
+        ratingBarAnimeFavoritoRandom.setVisibility(mostrar ? GONE : VISIBLE);
     }
 
     private void setupExpandableText(MaterialTextView textView, String descripcion, int maxLines) {

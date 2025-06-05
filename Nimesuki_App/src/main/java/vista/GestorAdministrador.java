@@ -29,6 +29,7 @@ public class GestorAdministrador extends javax.swing.JFrame {
      */
     public GestorAdministrador() {
         initComponents();
+        txtPasswordFavoritos.setEchoChar('*');
     }
 
     /**

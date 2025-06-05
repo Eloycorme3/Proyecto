@@ -1,7 +1,6 @@
 package com.example.nimesukiapp.view.adapters;
 
 import android.content.Context;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.nimesukiapp.R;
 
 import java.util.ArrayList;
-import java.util.List;
-
 public class PickerAdapter extends RecyclerView.Adapter<PickerAdapter.PickerViewHolder> {
 
     private ArrayList<String> data = new ArrayList<>();

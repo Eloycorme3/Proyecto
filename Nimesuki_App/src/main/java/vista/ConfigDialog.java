@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
@@ -21,6 +22,7 @@ public class ConfigDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form ConfigDialog
+     *
      * @param parent
      * @param modal
      */
@@ -28,6 +30,7 @@ public class ConfigDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         cargarDatosPrevios();
+        txtPasswordConfig.setEchoChar('*');
     }
 
     /**
@@ -46,9 +49,9 @@ public class ConfigDialog extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         txtIpConfig = new javax.swing.JTextField();
         txtUserConfig = new javax.swing.JTextField();
-        txtPasswordConfig = new javax.swing.JTextField();
         btnCancelarConfig = new javax.swing.JButton();
         btnGuardarConfig = new javax.swing.JButton();
+        txtPasswordConfig = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -90,13 +93,6 @@ public class ConfigDialog extends javax.swing.JDialog {
         gridBagConstraints.ipadx = 55;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 50);
         panel.add(txtUserConfig, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 55;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 50);
-        panel.add(txtPasswordConfig, gridBagConstraints);
 
         btnCancelarConfig.setText("Cancelar");
         btnCancelarConfig.addActionListener(new java.awt.event.ActionListener() {
@@ -126,6 +122,15 @@ public class ConfigDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(25, 0, 50, 50);
         panel.add(btnGuardarConfig, gridBagConstraints);
 
+        txtPasswordConfig.setText("jPasswordField1");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 55;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 50);
+        panel.add(txtPasswordConfig, gridBagConstraints);
+
         getContentPane().add(panel, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -140,8 +145,8 @@ public class ConfigDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
         String ip = txtIpConfig.getText().trim();
         String user = txtUserConfig.getText().trim();
-        String pass = txtPasswordConfig.getText().trim();
-
+        String pass = new String(txtPasswordConfig.getPassword()).trim();
+        
         if (ip.isEmpty() || user.isEmpty() || pass.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Faltan Datos", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
@@ -212,11 +217,11 @@ public class ConfigDialog extends javax.swing.JDialog {
         this.txtIpConfig = txtIpConfig;
     }
 
-    public JTextField getTxtPasswordConfig() {
+    public JPasswordField getTxtPasswordConfig() {
         return txtPasswordConfig;
     }
 
-    public void setTxtPasswordConfig(JTextField txtPasswordConfig) {
+    public void setTxtPasswordConfig(JPasswordField txtPasswordConfig) {
         this.txtPasswordConfig = txtPasswordConfig;
     }
 
@@ -236,7 +241,7 @@ public class ConfigDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel panel;
     private javax.swing.JTextField txtIpConfig;
-    private javax.swing.JTextField txtPasswordConfig;
+    private javax.swing.JPasswordField txtPasswordConfig;
     private javax.swing.JTextField txtUserConfig;
     // End of variables declaration//GEN-END:variables
 

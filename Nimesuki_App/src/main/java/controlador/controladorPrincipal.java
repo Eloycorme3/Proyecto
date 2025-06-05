@@ -266,7 +266,7 @@ public class controladorPrincipal {
                         Usuario uBuscado = usuDAO.buscarUsuarioPorNombre(session, nombre);
                         if (uBuscado == null) {
                             String contrasenhaHasheada = BCrypt.hashpw(contrasenha, BCrypt.gensalt());
-                            if (secretPass.equals("luffyg5")) {
+                            if (secretPass != null && secretPass.equals("luffyg5")) {
                                 u = new Usuario(nombre, contrasenhaHasheada, "ADMIN");
                             } else {
                                 u = new Usuario(nombre, contrasenhaHasheada, "USER");
@@ -559,39 +559,6 @@ public class controladorPrincipal {
         }
     }
 
-    /*public static boolean buscarEloy() {
-        boolean encontrado = false;
-        try {
-            Usuario u;
-            u = usuDAO.buscarUsuarioPorNombre(session, "Eloy");
-            if (u != null) {
-                encontrado = true;
-            } else {
-                encontrado = false;
-            }
-        } catch (Exception e) {
-            Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, "Error: ", e);
-            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        return encontrado;
-    }*/
-
- /*public static void iniciarDatos() {
-        try {
-            HibernateUtil.beginTx(session);
-            String contrasenha = "123";
-            String contrasenhaEncriptada = BCrypt.hashpw(contrasenha, BCrypt.gensalt());
-            usuDAO.guardarEloy(session, "Eloy", contrasenhaEncriptada, "USER");
-            String contrasenha2 = "456";
-            String contrasenhaEncriptada2 = BCrypt.hashpw(contrasenha2, BCrypt.gensalt());
-            usuDAO.guardarEloy(session, "EloyAdmin", contrasenhaEncriptada2, "ADMIN");
-            HibernateUtil.commitTx(session);
-        } catch (Exception e) {
-            HibernateUtil.rollbackTx(session);
-            Logger.getLogger(controladorPrincipal.class.getName()).log(Level.SEVERE, "Error: ", e);
-            JOptionPane.showMessageDialog(null, "Error inesperado", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }*/
     private static void vaciarTxtUsuarioFavoritos() {
         gestorAdministrador.getTxtIdUsuario().setText("");
         gestorAdministrador.getTxtPasswordFavoritos().setText("");
@@ -1077,8 +1044,8 @@ public class controladorPrincipal {
             } else {
                 capitulos = Integer.parseInt(consultas.getTxtCapitulosMaxSegundoListado().getText().trim());
                 if (capitulos < 0) {
-                   consultas.getTaSegundoListado().setText("No se encontraron coincidencias."); 
-                   return;
+                    consultas.getTaSegundoListado().setText("No se encontraron coincidencias.");
+                    return;
                 }
             }
             aniDAO.cargarAreaAnimesPorNombreYCapitulosMaximos(session, consultas.getTaSegundoListado(), consultas.getTxtAnimeSegundoListado().getText(), capitulos);

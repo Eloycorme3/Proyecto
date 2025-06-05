@@ -21,7 +21,7 @@ import com.example.nimesukiapp.model.vo.Favoritos;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ListaAnimesFavoritosView extends AppCompatActivity implements ListaAnimesFavoritosFragment.OnAnimeFavoriteSelectedListener {
-    private String nombreUsuarioLogueado = "";
+    private String nombreUsuarioLogueado = null;
     private BottomNavigationView bottomNavigationView;
     private SharedPreferences prefs;
 

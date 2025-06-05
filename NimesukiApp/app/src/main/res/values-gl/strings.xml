@@ -20,7 +20,8 @@
     <string name="favorites">Favoritos</string>
     <string name="profile">Perfíl</string>
     <string name="random">Random</string>
-    <string name="name_updated">Nome actualizado</string>
+    <string name="name_updated_error">Erro ao actualizar o nome</string>
+    <string name="name_updated_successfully">Nome actualizado con éxito</string>
     <string name="enter_user_and_password">Por favor, introduce o usuario e contrasinal</string>
     <string name="fill_all_fields">Completa todos os campos</string>
     <string name="user_exists">Ese usuario xa existe</string>
@@ -41,8 +42,8 @@
     <string name="delete_account_confirmation">Estás seguro de que desexas eliminar a conta?</string>
     <string name="delete_account_error">Erro ao eliminar a conta, pechando sesión...</string>
     <string name="delete_account_successfully">Conta eliminada con éxito</string>
-    <string name="username_no_whitespace_error">O nome de usuario non pode conter espazos en branco</string>
-    <string name="password_no_whitespace_error">O contrasinal non pode conter espazos en branco</string>
+    <string name="username_no_whitespace_error">O nome non pode ter espazos</string>
+    <string name="password_no_whitespace_error">O contrasinal non pode ter espazos</string>
     <string name="configuration">Configuración</string>
     <string name="save">Gardar</string>
     <string name="hint_nombre">Nome</string>
@@ -63,4 +64,6 @@
     <string name="same_password_change">O contrasinal non pode ser o mesmo</string>
     <string name="update_favorite_successfully">Favorito modificado con éxito</string>
     <string name="update_favorite_error">Erro ao modificar favorito</string>
+    <string name="username_empty_error">Nome de usuario valeiro</string>
+    <string name="same_username_error">O nome de usuario é o mesmo</string>
 </resources>

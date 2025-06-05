@@ -61,10 +61,6 @@ public class UsuarioDAO {
         session.update(uLogueado);
     }
 
-    public void guardarEloy(Session session, String eloy, String contrasenhaEncriptada, String tipo) {
-        Usuario u = new Usuario(eloy, contrasenhaEncriptada, tipo);
-        session.save(u);
-    }
 
     public Usuario buscarUsuarioPorId(Session session, int id) {
         Usuario u = null;

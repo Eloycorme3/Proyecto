@@ -5,6 +5,7 @@
 package vista;
 
 import controlador.controladorPrincipal;
+import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,13 +20,14 @@ import modelo.vo.Usuario;
 public class Login extends javax.swing.JFrame {
 
     private String secretPass = "";
-    
+
     /**
      * Creates new form Login
      */
     public Login() {
         initComponents();
         this.getRootPane().setDefaultButton(btnLogin);
+        txtPasswordLogin.setEchoChar('*');
     }
 
     /**
@@ -202,9 +204,6 @@ public class Login extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        /*if (!controladorPrincipal.buscarEloy()) {
-            controladorPrincipal.iniciarDatos();
-        }*/
     }//GEN-LAST:event_formWindowOpened
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
@@ -230,13 +229,36 @@ public class Login extends javax.swing.JFrame {
 
     private void menuItemAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemAdminActionPerformed
         // TODO add your handling code here:
-        this.secretPass = JOptionPane.showInputDialog(null, "¿Cuál es la contrasña secreta?");
+        this.secretPass = getSecretPassword();
     }//GEN-LAST:event_menuItemAdminActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // TODO add your handling code here:
         this.secretPass = "";
     }//GEN-LAST:event_formComponentShown
+
+    public static String getSecretPassword() {
+        JPasswordField passwordField = new JPasswordField(19);
+        passwordField.setEchoChar('*');
+
+        Object[] message = {
+            "¿Cuál es la contraseña secreta?",
+            passwordField
+        };
+
+        int option = JOptionPane.showConfirmDialog(
+                null,
+                message,
+                "Contraseña secreta",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (option == JOptionPane.OK_OPTION) {
+            return new String(passwordField.getPassword());
+        }
+        return null;
+    }
 
     public JTextField getTxtNombreLogin() {
         return txtNombreLogin;

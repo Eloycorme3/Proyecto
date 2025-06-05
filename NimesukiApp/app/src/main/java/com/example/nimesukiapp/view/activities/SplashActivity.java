@@ -25,7 +25,6 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        View splashLayout = findViewById(R.id.splash_root);
         prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         String nombre = prefs.getString("nombreUsuario", null);
         if (nombre != null && !nombre.isEmpty()) {

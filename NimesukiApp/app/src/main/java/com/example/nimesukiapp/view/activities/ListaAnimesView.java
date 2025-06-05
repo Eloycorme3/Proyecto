@@ -50,7 +50,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class ListaAnimesView extends AppCompatActivity implements NoConnectionFragment.OnNetworkAvailableSuccessListener, ListaAnimesFragment.OnAnimeSelectedListener, LoginFragment.OnLoginSuccessListener, LoginFragment.OnRegisterSuccessListener {
-    private String nombreUsuarioLogueado = "";
+    private String nombreUsuarioLogueado = null;
     private BottomNavigationView bottomNavigationView;
     private SharedPreferences prefs;
     private FavoritosManager cacheManager;
@@ -277,13 +277,6 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
                             .makeCustomAnimation(getBaseContext(), 0, 0);
                     intent.putExtra("reinicio", false);
                     startActivity(intent, options.toBundle());
-
-                    /*getSupportFragmentManager()
-                            .beginTransaction()
-                            .setCustomAnimations(0, 0)
-                            .replace(R.id.fragment_container_main, new ListaAnimesFragment())
-                            .commit();
-                            */
                 }
             }
 
@@ -421,10 +414,6 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
 
             boolean favoritosCargados = prefs.getBoolean("favoritosCargados", false);
             if (favoritosCargados) {
-                /*getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container_main, new ListaAnimesFragment())
-                        .commit();
-                        */
                 Intent intent = new Intent(this, ListaAnimesView.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 ActivityOptions options = ActivityOptions
@@ -444,11 +433,6 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
         runOnUiThread(() -> {
             guardarUsuarioEnPreferencias(usuario);
 
-            /*getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container_main, new ListaAnimesFragment())
-                    .setCustomAnimations(0, 0)
-                    .commit();
-                    */
             Intent intent = new Intent(this, ListaAnimesView.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             ActivityOptions options = ActivityOptions

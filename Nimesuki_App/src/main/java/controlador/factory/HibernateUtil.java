@@ -77,6 +77,7 @@ public class HibernateUtil {
     /**
      * ********************** INCORPORA LOS MÉTODOS PARA CREAR LOS OBJETOS DAO
      * *******
+     * @return 
      */
     public static AnimeDAO getAnimeDAO() {
         return new AnimeDAO();

@@ -126,7 +126,7 @@ public class ServicioREST {
         }
     }
 
-    public void actualizarUsuario(Integer idUsuario, Usuario u, Callback callback) {
+    public void actualizarUsuario(Usuario u, Callback callback) {
         if (comprobar()) {
             OkHttpClient client = new OkHttpClient();
             Gson gson = new Gson();
@@ -138,7 +138,7 @@ public class ServicioREST {
             );
 
             Request request = new Request.Builder()
-                    .url(baseUrl() + "/usuarios/" + idUsuario + authParams())
+                    .url(baseUrl() + "/usuarios/" + u.getIdUsuario() + authParams())
                     .put(body)
                     .build();
 

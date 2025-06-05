@@ -20,7 +20,8 @@
     <string name="favorites">Favoritos</string>
     <string name="profile">Perfíl</string>
     <string name="random">Random</string>
-    <string name="name_updated">Nombre actualizado</string>
+    <string name="name_updated_error">Error al actualizar el nome</string>
+    <string name="name_updated_successfully">Nombre actualizado con éxito</string>
     <string name="enter_user_and_password">Por favor ingresa usuario y contraseña</string>
     <string name="fill_all_fields">Rellena todos los campos</string>
     <string name="user_exists">Ese usuario ya existe</string>
@@ -41,8 +42,8 @@
     <string name="delete_account_confirmation">¿Estás seguro de que deseas eliminar la cuenta?</string>
     <string name="delete_account_error">Error al eliminar la cuenta, cerrando sesión...</string>
     <string name="delete_account_successfully">Cuenta eliminada con éxito</string>
-    <string name="username_no_whitespace_error">El nombre de usuario no puede contener espacios en blanco</string>
-    <string name="password_no_whitespace_error">La contraseña no puede contener espacios en blanco</string>
+    <string name="username_no_whitespace_error">El nombre no puede tener espacios</string>
+    <string name="password_no_whitespace_error">La contraseña no puede tener espacios</string>
     <string name="configuration">Configuración</string>
     <string name="save">Guardar</string>
     <string name="hint_nombre">Nombre</string>
@@ -63,4 +64,6 @@
     <string name="same_password_change">La contraseña no puede ser la misma</string>
     <string name="update_favorite_successfully">Favorito modificado con éxito</string>
     <string name="update_favorite_error">Error al modificar favorito</string>
+    <string name="username_empty_error">Nombre de usuario vacío</string>
+    <string name="same_username_error">El nombre de usuario es el mismo</string>
 </resources>

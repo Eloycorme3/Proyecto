@@ -40,7 +40,7 @@ public class ListaAnimesFavoritosFragment extends Fragment {
     private ArrayList<Favoritos> listaAnimesFavoritos = new ArrayList<>();
     private OnAnimeFavoriteSelectedListener listener;
     private FavoritoAdapter adapter;
-    private String nombreUsuarioLogueado = "";
+    private String nombreUsuarioLogueado = null;
     private SharedPreferences prefs;
 
     public ListaAnimesFavoritosFragment() {
