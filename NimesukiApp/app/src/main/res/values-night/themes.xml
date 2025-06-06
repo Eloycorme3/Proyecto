@@ -33,7 +33,7 @@
     </style>
 
     <style name="TransparentToolbarMenu" parent="ThemeOverlay.Material3.Dark.ActionBar">
-        <item name="actionBarItemBackground">@android:color/transparent</item>
+        <item name="android:backgroundTint">@android:color/transparent</item>
     </style>
 
 </resources>

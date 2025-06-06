@@ -79,7 +79,7 @@
                 android:textColor="@color/pastelGray" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/textCategoriasRandomFav"
+                android:id="@+id/textCapitulosRandomFav"
                 style="@style/TextAppearance.Material3.BodySmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
                 android:textColor="@color/pastelGray" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/textCapitulosRandomFav"
+                android:id="@+id/textCategoriasRandomFav"
                 style="@style/TextAppearance.Material3.BodySmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

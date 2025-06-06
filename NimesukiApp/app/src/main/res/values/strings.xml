@@ -18,7 +18,7 @@
     <string name="episodes">Capítulos</string>
     <string name="catalog">Catálogo</string>
     <string name="favorites">Favoritos</string>
-    <string name="profile">Perfíl</string>
+    <string name="settings">Ajustes</string>
     <string name="random">Random</string>
     <string name="name_updated_error">Error al actualizar el nome</string>
     <string name="name_updated_successfully">Nombre actualizado con éxito</string>

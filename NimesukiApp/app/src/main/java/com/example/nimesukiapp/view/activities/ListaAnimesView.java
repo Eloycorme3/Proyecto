@@ -20,9 +20,13 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.LocaleList;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -57,95 +61,51 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
-        cacheManager = new FavoritosManager(getBaseContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista);
+        prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
 
-        requestNotificationPermission();
+        cacheManager = new FavoritosManager(getBaseContext());
 
-        scheduleWeeklyAnimeNotification(this);
-
-        bottomNavigationView = findViewById(R.id.bottomNavigationViewAnimes);
         nombreUsuarioLogueado = null;
 
         if (prefs.contains("nombreUsuario")) {
             nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
         }
 
-        if (savedInstanceState == null) {
-            boolean reinicio = getIntent().getBooleanExtra("reinicio", false);
-            if (!reinicio) {
-                if (prefs.contains("idioma")) {
-                    String idioma = prefs.getString("idioma", "es");
-                    cambiarIdioma(idioma);
-                } else {
-                    Locale defaultLocale;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        defaultLocale = Resources.getSystem().getConfiguration().getLocales().get(0);
-                    } else {
-                        defaultLocale = Resources.getSystem().getConfiguration().locale;
-                    }
+        requestNotificationPermission();
 
-                    Locale.setDefault(defaultLocale);
-                    Configuration config = getResources().getConfiguration();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        config.setLocales(new LocaleList(defaultLocale));
-                    } else {
-                        config.setLocale(defaultLocale);
-                    }
+        scheduleWeeklyAnimeNotification(this);
 
-                    getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-                }
-                if (isNetworkAvailable(getBaseContext())) {
-                    prefs.edit().putBoolean("login", false).apply();
-                    bottomNavigationView.setVisibility(VISIBLE);
-                    if (isActivityActive() && savedInstanceState == null) {
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragmentContainerLista, new ListaAnimesFragment())
-                                .commit();
-                    }
-                } else {
-                    bottomNavigationView.setVisibility(INVISIBLE);
-                    if (isActivityActive() && savedInstanceState == null) {
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragmentContainerLista, new NoConnectionFragment())
-                                .commit();
-                    }
-                }
-            } else {
-                if (isNetworkAvailable(getBaseContext())) {
-                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
-                    prefs.edit().clear().apply();
-                    boolean error = getIntent().getBooleanExtra("error", false);
-                    if (error) {
-                        Toast.makeText(this, getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
-                    }
+        boolean reiniciar = getIntent().getBooleanExtra("reinicio", false);
+        boolean goToLogin = getIntent().getBooleanExtra("goToLogin", false);
 
-                    bottomNavigationView.setVisibility(INVISIBLE);
-                    Locale defaultLocale;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        defaultLocale = Resources.getSystem().getConfiguration().getLocales().get(0);
-                    } else {
-                        defaultLocale = Resources.getSystem().getConfiguration().locale;
-                    }
+        if (reiniciar && goToLogin) {
+            setContentView(R.layout.activity_lista);
 
-                    Locale.setDefault(defaultLocale);
-                    Configuration config = getResources().getConfiguration();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        config.setLocales(new LocaleList(defaultLocale));
-                    } else {
-                        config.setLocale(defaultLocale);
-                    }
+            bottomNavigationView = findViewById(R.id.bottomNavigationViewAnimes);
+            bottomNavigationView.setVisibility(View.INVISIBLE);
 
-                    getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainerLista, new LoginFragment())
+                    .commit();
 
-                    prefs.edit().putBoolean("login", true).apply();
+            getIntent().removeExtra("goToLogin");
+            getIntent().removeExtra("reinicio");
 
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragmentContainerLista, new LoginFragment())
-                            .commit();
-                } else {
+        } else {
+            bottomNavigationView = findViewById(R.id.bottomNavigationViewAnimes);
+            Menu menu = bottomNavigationView.getMenu();
+            for (int i = 0; i < menu.size(); i++) {
+                MenuItem menuItem = menu.getItem(i);
+                View itemView = bottomNavigationView.findViewById(menuItem.getItemId());
+                itemView.setOnLongClickListener(v -> true);
+                itemView.setHapticFeedbackEnabled(false);
+            }
+
+            if (savedInstanceState == null) {
+                boolean reinicio = getIntent().getBooleanExtra("reinicio", false);
+                if (!reinicio) {
                     if (prefs.contains("idioma")) {
                         String idioma = prefs.getString("idioma", "es");
                         cambiarIdioma(idioma);
@@ -165,46 +125,135 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
                             config.setLocale(defaultLocale);
                         }
 
-                        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                            createConfigurationContext(config);
+                        } else {
+                            getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+                        }
                     }
+                    if (isNetworkAvailable(getBaseContext())) {
+                        prefs.edit().putBoolean("login", false).apply();
+                        bottomNavigationView.setVisibility(VISIBLE);
+                        if (isActivityActive() && savedInstanceState == null) {
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.fragmentContainerLista, new ListaAnimesFragment())
+                                    .commit();
+                        }
+                    } else {
+                        bottomNavigationView.setVisibility(INVISIBLE);
+                        if (isActivityActive() && savedInstanceState == null) {
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.fragmentContainerLista, new NoConnectionFragment())
+                                    .commit();
+                        }
+                    }
+                } else {
+                    if (isNetworkAvailable(getBaseContext())) {
+                        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
+                        prefs.edit().clear().apply();
+                        boolean error = getIntent().getBooleanExtra("error", false);
+                        if (error) {
+                            Toast.makeText(this, getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
+                        }
 
-                    bottomNavigationView.setVisibility(INVISIBLE);
-                    if (isActivityActive()) {
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragmentContainerLista, new NoConnectionFragment())
-                                .commit();
+                        Locale defaultLocale;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            defaultLocale = Resources.getSystem().getConfiguration().getLocales().get(0);
+                        } else {
+                            defaultLocale = Resources.getSystem().getConfiguration().locale;
+                        }
+
+                        bottomNavigationView.setVisibility(INVISIBLE);
+
+                        Locale.setDefault(defaultLocale);
+                        Configuration config = getResources().getConfiguration();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            config.setLocales(new LocaleList(defaultLocale));
+                        } else {
+                            config.setLocale(defaultLocale);
+                        }
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                            createConfigurationContext(config);
+                        } else {
+                            getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+                        }
+
+                        prefs.edit().putBoolean("login", true).apply();
+
+                        Intent intent = new Intent(this, ListaAnimesView.class);
+                        intent.putExtra("reinicio", true);
+                        intent.putExtra("goToLogin", true);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        ActivityOptions options = ActivityOptions
+                                .makeCustomAnimation(this, 0, 0);
+                        startActivity(intent, options.toBundle());
+                        finish();
+                    } else {
+                        if (prefs.contains("idioma")) {
+                            String idioma = prefs.getString("idioma", "es");
+                            cambiarIdioma(idioma);
+                        } else {
+                            Locale defaultLocale;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                defaultLocale = Resources.getSystem().getConfiguration().getLocales().get(0);
+                            } else {
+                                defaultLocale = Resources.getSystem().getConfiguration().locale;
+                            }
+
+                            Locale.setDefault(defaultLocale);
+                            Configuration config = getResources().getConfiguration();
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                config.setLocales(new LocaleList(defaultLocale));
+                            } else {
+                                config.setLocale(defaultLocale);
+                            }
+
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                                createConfigurationContext(config);
+                            } else {
+                                getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+                            }
+                        }
+
+                        bottomNavigationView.setVisibility(INVISIBLE);
+                        if (isActivityActive()) {
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.fragmentContainerLista, new NoConnectionFragment())
+                                    .commit();
+                        }
                     }
                 }
             }
+
+            bottomNavigationView.setOnItemSelectedListener(item -> {
+                int itemId = item.getItemId();
+
+                if (itemId == R.id.nav_catalog) {
+                    return true;
+                } else if (itemId == R.id.nav_favorites) {
+                    Intent intent = new Intent(this, ListaAnimesFavoritosView.class);
+                    ActivityOptions options = ActivityOptions
+                            .makeCustomAnimation(this, 0, 0);
+                    startActivity(intent, options.toBundle());
+                    return true;
+                } else if (itemId == R.id.nav_random) {
+                    Intent intent = new Intent(this, AnimeRandomView.class);
+                    ActivityOptions options = ActivityOptions
+                            .makeCustomAnimation(this, 0, 0);
+                    startActivity(intent, options.toBundle());
+                    return true;
+                } else if (itemId == R.id.nav_settings) {
+                    Intent intent = new Intent(this, PerfilView.class);
+                    ActivityOptions options = ActivityOptions
+                            .makeCustomAnimation(this, 0, 0);
+                    startActivity(intent, options.toBundle());
+                    return true;
+                }
+
+                return false;
+            });
         }
-
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-
-            if (itemId == R.id.nav_catalog) {
-                return true;
-            } else if (itemId == R.id.nav_favorites) {
-                Intent intent = new Intent(this, ListaAnimesFavoritosView.class);
-                ActivityOptions options = ActivityOptions
-                        .makeCustomAnimation(this, 0, 0);
-                startActivity(intent, options.toBundle());
-                return true;
-            } else if (itemId == R.id.nav_random) {
-                Intent intent = new Intent(this, AnimeRandomView.class);
-                ActivityOptions options = ActivityOptions
-                        .makeCustomAnimation(this, 0, 0);
-                startActivity(intent, options.toBundle());
-                return true;
-            } else if (itemId == R.id.nav_profile) {
-                Intent intent = new Intent(this, PerfilView.class);
-                ActivityOptions options = ActivityOptions
-                        .makeCustomAnimation(this, 0, 0);
-                startActivity(intent, options.toBundle());
-                return true;
-            }
-
-            return false;
-        });
     }
 
     private void requestNotificationPermission() {
@@ -226,7 +275,7 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-        calendar.set(Calendar.HOUR_OF_DAY, 15);
+        calendar.set(Calendar.HOUR_OF_DAY, 18);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
@@ -266,6 +315,7 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
                     for (Favoritos f : favoritos) {
                         nombres.add(f.getAnime().getNombre());
                     }
+
                     cacheManager.guardarFavoritos(nombres);
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putBoolean("favoritosCargados", true);
@@ -304,7 +354,11 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
                 configuration.setLocale(locale);
             }
 
-            getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                createConfigurationContext(configuration);
+            } else {
+                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+            }
         }
     }
 
@@ -314,6 +368,15 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
 
         bottomNavigationView.setSelectedItemId(R.id.nav_catalog);
         nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
+
+        if (prefs.getBoolean("idiomaCambiado", false) && prefs.contains("idiomaCambiado")) {
+            prefs.edit().putBoolean("idiomaCambiado", false).apply();
+            new Handler(Looper.getMainLooper()).post(() -> {
+                prefs.edit().putBoolean("idiomaRecreate", true).apply();
+                recreate();
+            });
+        }
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -321,6 +384,25 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
         inflater.inflate(R.menu.bottom_nav_menu, menu);
         return true;
     }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        SharedPreferences prefs = newBase.getSharedPreferences("MisPreferencias", MODE_PRIVATE);
+        String idioma = prefs.getString("idioma", "es");
+        Locale locale = new Locale(idioma);
+        Locale.setDefault(locale);
+
+        Configuration config = newBase.getResources().getConfiguration();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            config.setLocales(new LocaleList(locale));
+        } else {
+            config.setLocale(locale);
+        }
+
+        Context context = newBase.createConfigurationContext(config);
+        super.attachBaseContext(context);
+    }
+
 
     public boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

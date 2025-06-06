@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -32,6 +34,14 @@ public class ListaAnimesFavoritosView extends AppCompatActivity implements Lista
         prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationViewFavoritos);
+        bottomNavigationView.setHapticFeedbackEnabled(false);
+        Menu menu = bottomNavigationView.getMenu();
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem menuItem = menu.getItem(i);
+            View itemView = bottomNavigationView.findViewById(menuItem.getItemId());
+            itemView.setOnLongClickListener(v -> true);
+            itemView.setHapticFeedbackEnabled(false);
+        }
 
         if (savedInstanceState == null) {
             nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
@@ -67,7 +77,7 @@ public class ListaAnimesFavoritosView extends AppCompatActivity implements Lista
                 startActivity(intent, options.toBundle());
                 finish();
                 return true;
-            } else if (itemId == R.id.nav_profile) {
+            } else if (itemId == R.id.nav_settings) {
                 Intent intent = new Intent(this, PerfilView.class);
                 ActivityOptions options = ActivityOptions
                         .makeCustomAnimation(this, 0, 0);

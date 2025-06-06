@@ -13,7 +13,7 @@
         android:icon="@drawable/ic_random"
         android:title="@string/random" />
     <item
-        android:id="@+id/nav_profile"
-        android:icon="@drawable/ic_profile"
-        android:title="@string/profile" />
+        android:id="@+id/nav_settings"
+        android:icon="@drawable/ic_config"
+        android:title="@string/settings" />
 </menu>

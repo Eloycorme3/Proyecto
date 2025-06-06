@@ -57,7 +57,14 @@ public class ListaAnimesFavoritosFragment extends Fragment {
 
         mostrarProgress(true);
 
-        cargarAnimesFavoritos();
+        view.post(() -> {
+            String textoBusqueda = searchEditText.getText().toString();
+            if (!textoBusqueda.isEmpty()) {
+                buscarAnimesFavoritos(textoBusqueda);
+            } else {
+                cargarAnimesFavoritos();
+            }
+        });
 
         adapter = new FavoritoAdapter(this.getContext(), listaAnimesFavoritos);
         listView.setAdapter(adapter);
@@ -106,6 +113,7 @@ public class ListaAnimesFavoritosFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
         nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
         listView.setVisibility(GONE);
     }

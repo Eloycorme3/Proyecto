@@ -103,9 +103,7 @@ public class LoginFragment extends Fragment {
 
         btnOpciones = view.findViewById(R.id.optionsButton);
 
-        btnOpciones.setOnClickListener(v -> {
-            mostrarDialogoConfiguracion();
-        });
+        btnOpciones.setOnClickListener(v -> mostrarDialogoConfiguracion());
 
         btnLogin.setOnClickListener(v -> {
             String username = editTextUsername.getText().toString();

@@ -4,7 +4,6 @@ import static android.content.Context.MODE_PRIVATE;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -118,10 +117,10 @@ public class AnimeDetailFragment extends Fragment {
         btnFloatingFav = view.findViewById(R.id.btnFloatingFav);
         loading = view.findViewById(R.id.progressBarLoadingAnimeDetail);
 
-        mostrarProgress(false);
-
         CollapsingToolbarLayout collapsingToolbar = view.findViewById(R.id.collapsingToolbar);
         collapsingToolbar.setTitle("");
+
+        mostrarProgress(false);
 
         if (anime != null) {
             textNombre.setText(anime.getNombre());
@@ -225,6 +224,7 @@ public class AnimeDetailFragment extends Fragment {
                 requireActivity().getOnBackPressedDispatcher().onBackPressed();
             }
         });
+
     }
 
     private void mostrarProgress(boolean mostrar) {

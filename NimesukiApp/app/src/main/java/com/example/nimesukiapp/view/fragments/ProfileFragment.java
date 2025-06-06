@@ -4,6 +4,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
 
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 
 import android.os.LocaleList;
@@ -37,7 +39,6 @@ import com.example.nimesukiapp.view.activities.ListaAnimesView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -50,11 +51,14 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class ProfileFragment extends Fragment {
+    private int scrollY = 0;
+    private NestedScrollView nestedScrollView;
     private TextInputEditText editTextNombre, editTextActualPass, editTextNuevaPass;
     private MaterialButton btnCambiarNombre, btnCambiarPassword, btnCerrarSesion, btnEliminarCuenta;
     private SwitchMaterial switchTema;
     private ImageButton btnToggleVisibilityActualPass, btnToggleVisibilityNuevaPass, btnToggleEnabledText;
     private Spinner spinnerIdioma;
+    private String idiomaInicial = "";
     private boolean isPasswordVisibleActual = false, isPasswordVisibleNueva = false, isEnabled = false;
     private String nombreUsuarioLogueado = null;
     private SharedPreferences prefs;
@@ -118,7 +122,7 @@ public class ProfileFragment extends Fragment {
 
         switchTema.setChecked(temaOscuro);
 
-        String idiomaGuardado = prefs.getString("idioma", "es");
+        idiomaInicial = prefs.getString("idioma", "es");
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 requireContext(),
@@ -128,7 +132,7 @@ public class ProfileFragment extends Fragment {
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinnerIdioma.setAdapter(adapter);
 
-        if (idiomaGuardado.equals("es")) {
+        if (idiomaInicial.equals("es")) {
             spinnerIdioma.setSelection(0);
         } else {
             spinnerIdioma.setSelection(1);
@@ -327,7 +331,12 @@ public class ProfileFragment extends Fragment {
 
                 if (!idioma.equals(idiomaActual)) {
                     prefs.edit().putString("idioma", idioma).apply();
-                    cambiarIdioma(idioma);
+                    if (!idiomaInicial.equals(idioma)) {
+                        prefs.edit().putBoolean("idiomaCambiado", true).apply();
+                    } else {
+                        prefs.edit().putBoolean("idiomaCambiado", false).apply();
+                    }
+                    requireActivity().recreate();
                 }
             }
 
@@ -348,9 +357,9 @@ public class ProfileFragment extends Fragment {
                                 Intent intent = new Intent(requireActivity(), ListaAnimesView.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 intent.putExtra("reinicio", true);
-                                startActivity(intent);
-
-                                requireActivity().overridePendingTransition(0, 0);
+                                ActivityOptions options = ActivityOptions.
+                                        makeCustomAnimation(requireContext(), 0, 0);
+                                startActivity(intent, options.toBundle());
 
                                 requireActivity().finish();
                                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
@@ -370,67 +379,75 @@ public class ProfileFragment extends Fragment {
                         .setPositiveButton(getString(R.string.accept), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                requireActivity().runOnUiThread(() -> {
-                                    ServicioREST servicioREST = new ServicioREST(requireContext());
-                                    String usuarioJson = prefs.getString("usuario_completo", null);
-                                    if (usuarioJson != null) {
-                                        Gson gson = new Gson();
-                                        Usuario u = gson.fromJson(usuarioJson, Usuario.class);
-                                        servicioREST.eliminarUsuario(u.getIdUsuario(), new Callback() {
-                                            @Override
-                                            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                                                requireActivity().runOnUiThread(() ->
-                                                        Toast.makeText(requireContext(), R.string.delete_account_error, Toast.LENGTH_SHORT).show()
-                                                );
-                                            }
+                                ServicioREST servicioREST = new ServicioREST(requireContext());
+                                String usuarioJson = prefs.getString("usuario_completo", null);
 
-                                            @Override
-                                            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                                                requireActivity().runOnUiThread(() ->
-                                                        Toast.makeText(requireContext(), R.string.delete_account_successfully, Toast.LENGTH_LONG).show()
-                                                );
-                                            }
-                                        });
-                                    } else {
-                                        servicioREST.obtenerUsuarioPorNombre(nombreUsuarioLogueado, new ServicioREST.OnUsuarioObtenidoListener() {
-                                            @Override
-                                            public void onSuccess(Usuario usuario) {
-                                                servicioREST.eliminarUsuario(usuario.getIdUsuario(), new Callback() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                                                        requireActivity().runOnUiThread(() ->
-                                                                Toast.makeText(requireContext(), R.string.delete_account_error, Toast.LENGTH_SHORT).show()
-                                                        );
-                                                    }
+                                if (usuarioJson != null) {
+                                    Gson gson = new Gson();
+                                    Usuario u = gson.fromJson(usuarioJson, Usuario.class);
+                                    servicioREST.eliminarUsuario(u.getIdUsuario(), new Callback() {
+                                        @Override
+                                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                                            requireActivity().runOnUiThread(() ->
+                                                    Toast.makeText(requireContext(), R.string.delete_account_error, Toast.LENGTH_SHORT).show()
+                                            );
+                                        }
 
-                                                    @Override
-                                                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                                                        requireActivity().runOnUiThread(() ->
-                                                                Toast.makeText(requireContext(), R.string.delete_account_successfully, Toast.LENGTH_LONG).show()
-                                                        );
-                                                    }
-                                                });
-                                            }
+                                        @Override
+                                        public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                                            requireActivity().runOnUiThread(() -> {
+                                                Toast.makeText(requireContext(), R.string.delete_account_successfully, Toast.LENGTH_LONG).show();
 
-                                            @Override
-                                            public void onError(Exception e) {
-                                                requireActivity().runOnUiThread(() ->
-                                                        Toast.makeText(requireContext(), R.string.get_user_error, Toast.LENGTH_LONG).show()
-                                                );
-                                            }
-                                        });
-                                    }
-                                });
+                                                Intent intent = new Intent(requireActivity(), ListaAnimesView.class);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                intent.putExtra("reinicio", true);
+                                                ActivityOptions options = ActivityOptions.
+                                                        makeCustomAnimation(requireContext(), 0, 0);
+                                                startActivity(intent, options.toBundle());
 
-                                Intent intent = new Intent(requireActivity(), ListaAnimesView.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                intent.putExtra("reinicio", true);
-                                startActivity(intent);
+                                                requireActivity().finish();
+                                                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
+                                            });
+                                        }
+                                    });
+                                } else {
+                                    servicioREST.obtenerUsuarioPorNombre(nombreUsuarioLogueado, new ServicioREST.OnUsuarioObtenidoListener() {
+                                        @Override
+                                        public void onSuccess(Usuario usuario) {
+                                            servicioREST.eliminarUsuario(usuario.getIdUsuario(), new Callback() {
+                                                @Override
+                                                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                                                    requireActivity().runOnUiThread(() ->
+                                                            Toast.makeText(requireContext(), R.string.delete_account_error, Toast.LENGTH_SHORT).show()
+                                                    );
+                                                }
 
-                                requireActivity().overridePendingTransition(0, 0);
+                                                @Override
+                                                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                                                    requireActivity().runOnUiThread(() -> {
+                                                        Toast.makeText(requireContext(), R.string.delete_account_successfully, Toast.LENGTH_LONG).show();
 
-                                requireActivity().finish();
-                                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
+                                                        Intent intent = new Intent(requireActivity(), ListaAnimesView.class);
+                                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                        intent.putExtra("reinicio", true);
+                                                        ActivityOptions options = ActivityOptions.makeCustomAnimation(requireContext(), 0, 0);
+                                                        startActivity(intent, options.toBundle());
+
+                                                        requireActivity().finish();
+                                                        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
+                                                    });
+                                                }
+                                            });
+                                        }
+
+                                        @Override
+                                        public void onError(Exception e) {
+                                            requireActivity().runOnUiThread(() ->
+                                                    Toast.makeText(requireContext(), R.string.get_user_error, Toast.LENGTH_LONG).show()
+                                            );
+                                        }
+                                    });
+                                }
                             }
                         })
                         .setNegativeButton(getString(R.string.cancel), null)
@@ -439,6 +456,26 @@ public class ProfileFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        nestedScrollView = view.findViewById(R.id.nestedScrollView);
+
+        if (savedInstanceState != null) {
+            scrollY = savedInstanceState.getInt("scroll_position", 0);
+            nestedScrollView.post(() -> nestedScrollView.scrollTo(0, scrollY));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        NestedScrollView scrollView = getView().findViewById(R.id.nestedScrollView);
+        outState.putInt("scroll_position", scrollView.getScrollY());
     }
 
     private void cambiarIdioma(String idioma) {
@@ -453,13 +490,37 @@ public class ProfileFragment extends Fragment {
             configuration.setLocale(locale);
         }
 
-        getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            requireContext().createConfigurationContext(configuration);
+        } else {
+            requireContext().getResources().updateConfiguration(configuration, requireContext().getResources().getDisplayMetrics());
+        }
 
         requireActivity().recreate();
+    }
+
+    private void cambiarIdiomaSinRecrear(String idioma) {
+        Locale locale = new Locale(idioma);
+        Locale.setDefault(locale);
+
+        Configuration configuration = getResources().getConfiguration();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            configuration.setLocales(new LocaleList(locale));
+        } else {
+            configuration.setLocale(locale);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            requireContext().createConfigurationContext(configuration);
+        } else {
+            requireContext().getResources().updateConfiguration(configuration, requireContext().getResources().getDisplayMetrics());
+        }
     }
 
     private void setNightMode(boolean isNightMode) {
         int nightMode = isNightMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;
         AppCompatDelegate.setDefaultNightMode(nightMode);
     }
+
 }

@@ -31,7 +31,7 @@ public class HibernateUtil {
         configuration.addAnnotatedClass(modelo.vo.Favoritos.class);
 
         configuration.setProperty("hibernate.connection.url",
-                "jdbc:mysql://" + ip + ":3306/nimesuki?zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=UTC&connectTimeout=1000&socketTimeout=1000");
+                "jdbc:mysql://" + ip + ":3306/nimesuki?zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&connectTimeout=1000&socketTimeout=1000");
         configuration.setProperty("hibernate.connection.username", user);
         configuration.setProperty("hibernate.connection.password", pass);
 

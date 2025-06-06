@@ -25,7 +25,6 @@ import android.text.style.ClickableSpan;
 import android.text.style.StyleSpan;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -41,7 +40,6 @@ import com.example.nimesukiapp.R;
 import com.example.nimesukiapp.mock.ServicioREST;
 import com.example.nimesukiapp.model.FavoritosManager;
 import com.example.nimesukiapp.model.vo.Favoritos;
-import com.example.nimesukiapp.view.activities.AnimeRandomView;
 import com.example.nimesukiapp.view.adapters.PickerAdapter;
 import com.example.nimesukiapp.view.adapters.PickerLayoutManager;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -248,6 +246,12 @@ public class AnimeRandomFavoritoFragment extends Fragment {
         });
 
         changeEnabled(false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 
     private void setHorizontalPicker(int min, int max, int startValue) {

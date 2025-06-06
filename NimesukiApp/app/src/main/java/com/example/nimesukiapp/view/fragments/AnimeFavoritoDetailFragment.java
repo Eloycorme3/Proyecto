@@ -155,7 +155,10 @@ public class AnimeFavoritoDetailFragment extends Fragment {
                     .into(imageViewAnimeFav);
 
             adapter = new PickerAdapter(requireContext());
-            iconGuardarCambios = toolbar.getMenu().findItem(R.id.action_save);
+            toolbar.post(() -> {
+                iconGuardarCambios = toolbar.getMenu().findItem(R.id.action_save);
+                changeEnabled(false);
+            });
 
             rvHorizontalPicker.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
@@ -293,8 +296,6 @@ public class AnimeFavoritoDetailFragment extends Fragment {
                 requireActivity().getOnBackPressedDispatcher().onBackPressed();
             }
         });
-
-        changeEnabled(false);
     }
 
     private void setHorizontalPicker(int min, int max, int startValue) {

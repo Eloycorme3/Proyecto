@@ -4,13 +4,8 @@ import static android.content.Context.MODE_PRIVATE;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -41,6 +36,7 @@ public class ListaAnimesFragment extends Fragment {
     private TextInputEditText searchEditText;
     private LinearLayout emptyView;
     private ProgressBar loading;
+
     private ArrayList<Anime> listaAnimes = new ArrayList<>();
     private OnAnimeSelectedListener listener;
     private AnimeAdapter adapter;
@@ -53,31 +49,28 @@ public class ListaAnimesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_catalog, container, false);
         prefs = requireContext().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
-        listView = view.findViewById(R.id.listviewFavoritos);
+
+        listView = view.findViewById(R.id.listviewCatalog);
         searchEditText = view.findViewById(R.id.searchAnimes);
         loading = view.findViewById(R.id.progressBarLoading);
 
-        if (prefs.getBoolean("detalle", false)) {
+        if (prefs.getBoolean("detalle", false) || prefs.getBoolean("detalleFavoritos", false)) {
             prefs.edit().putBoolean("detalle", false).apply();
+            prefs.edit().putBoolean("detalleFavoritos", false).apply();
         } else {
-            if (prefs.getBoolean("detalleFavoritos", false)) {
-                mostrarProgress(true);
-
-                cargarAnimes();
-                prefs.edit().putBoolean("detalleFavoritos", false);
+            if (!prefs.contains("reinicio")) {
+                if (!prefs.getBoolean("login", false)) {
+                    if (!prefs.getBoolean("idiomaRecreate", false)) {
+                        mostrarProgress(true);
+                        cargarAnimes();
+                    } else {
+                        prefs.edit().putBoolean("idiomaRecreate", false).apply();
+                    }
+                }
             } else {
-                if (!prefs.contains("reinicio")) {
-                    if (!prefs.getBoolean("login", false)) {
-                        mostrarProgress(true);
-
-                        cargarAnimes();
-                    }
-                } else {
-                    if (!prefs.getBoolean("reinicio", false)) {
-                        mostrarProgress(true);
-
-                        cargarAnimes();
-                    }
+                if (!prefs.getBoolean("reinicio", false)) {
+                    mostrarProgress(true);
+                    cargarAnimes();
                 }
             }
         }
@@ -95,8 +88,11 @@ public class ListaAnimesFragment extends Fragment {
             }
         });
 
-        searchEditText.setOnEditorActionListener((v, actionId, event) -> {
+        searchEditText.setOnEditorActionListener((v, actionId, event) ->
+
+        {
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
+                mostrarProgress(true);
                 String textoBusqueda = searchEditText.getText().toString();
                 if (textoBusqueda.isEmpty()) {
                     cargarAnimes();
@@ -123,7 +119,6 @@ public class ListaAnimesFragment extends Fragment {
         } else {
             listener = null;
         }
-
     }
 
     @Override
@@ -135,26 +130,17 @@ public class ListaAnimesFragment extends Fragment {
         } else {
             if (searchEditText.getText() != null) {
                 if (!searchEditText.getText().toString().isEmpty()) {
-                    if (prefs.getBoolean("cambio", false)) {
+                    if (!prefs.contains("idiomaCambiado")) {
                         mostrarProgress(true);
-                        prefs.edit().putBoolean("cambio", false).apply();
+                        buscarAnimes(searchEditText.getText().toString());
+                    } else {
+                        if (!prefs.getBoolean("idiomaCambiado", false)) {
+                            mostrarProgress(true);
+                            buscarAnimes(searchEditText.getText().toString());
+                        }
                     }
-                    if (prefs.getBoolean("detalleFavoritos", false)) {
-                        mostrarProgress(true);
-                        prefs.edit().putBoolean("detalleFavoritos", false).apply();
-                    }
-
-                    buscarAnimes(searchEditText.getText().toString());
                 } else {
-                    if (prefs.getBoolean("cambio", false)) {
-                        mostrarProgress(true);
-                        prefs.edit().putBoolean("cambio", false).apply();
-                    }
-                    if (prefs.getBoolean("detalleFavoritos", false)) {
-                        mostrarProgress(true);
-                        prefs.edit().putBoolean("detalleFavoritos", false).apply();
-                    }
-
+                    mostrarProgress(true);
                     cargarAnimes();
                 }
             }
@@ -224,7 +210,6 @@ public class ListaAnimesFragment extends Fragment {
                             } else {
                                 emptyView.setVisibility(GONE);
                             }
-                            mostrarProgress(true);
                             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                                 mostrarProgress(false);
                                 adapter.notifyDataSetChanged();

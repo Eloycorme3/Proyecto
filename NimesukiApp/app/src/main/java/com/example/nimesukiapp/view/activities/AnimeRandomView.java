@@ -12,9 +12,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nimesukiapp.R;
@@ -31,6 +34,7 @@ public class AnimeRandomView extends AppCompatActivity {
     private String nombreUsuarioLogueado = null;
     private BottomNavigationView bottomNavigationView;
     private AnimeRandomFragment animeRandomFragment;
+    private boolean bloquearVolver = false;
     private SharedPreferences prefs;
     private ProgressBar loading;
 
@@ -43,12 +47,30 @@ public class AnimeRandomView extends AppCompatActivity {
         loading = findViewById(R.id.progressBarLoadingRandom);
         mostrarProgress(true);
 
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (!bloquearVolver) {
+                    setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+                }
+            }
+        });
+
         bottomNavigationView = findViewById(R.id.bottomNavigationViewRandom);
+        Menu menu = bottomNavigationView.getMenu();
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem menuItem = menu.getItem(i);
+            View itemView = bottomNavigationView.findViewById(menuItem.getItemId());
+            itemView.setOnLongClickListener(v -> true);
+            itemView.setHapticFeedbackEnabled(false);
+        }
 
         nombreUsuarioLogueado = prefs.getString("nombreUsuario", null);
 
         if (nombreUsuarioLogueado != null) {
             mostrarProgress(true);
+            bloquearVolver = true;
             obtenerYMostrarAnimeRandom();
             bottomNavigationView.setVisibility(VISIBLE);
         } else {
@@ -76,9 +98,10 @@ public class AnimeRandomView extends AppCompatActivity {
                 return true;
             } else if (itemId == R.id.nav_random) {
                 mostrarProgress(true);
+                bloquearVolver = true;
                 obtenerYMostrarAnimeRandom();
                 return true;
-            } else if (itemId == R.id.nav_profile) {
+            } else if (itemId == R.id.nav_settings) {
                 Intent intent = new Intent(this, PerfilView.class);
                 ActivityOptions options = ActivityOptions
                         .makeCustomAnimation(this, 0, 0);
@@ -128,6 +151,7 @@ public class AnimeRandomView extends AppCompatActivity {
                                 .commit();
                         mostrarProgress(false);
                         enableBottomBar(true);
+                        bloquearVolver = false;
                     }, 1000);
 
                 });
