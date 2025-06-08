@@ -169,7 +169,7 @@ public class LoginFragment extends Fragment {
                         @Override
                         public void onFailure(@NonNull Call call, @NonNull IOException e) {
                             requireActivity().runOnUiThread(() ->
-                                    Toast.makeText(requireContext(), getString(R.string.network_error), Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(), getString(R.string.register_error), Toast.LENGTH_SHORT).show()
                             );
                         }
 
@@ -239,7 +239,7 @@ public class LoginFragment extends Fragment {
 
         editNombre.setText(prefs.getString("nombreBD", "root"));
         editContrasena.setText(prefs.getString("contrasenhaBD", "root"));
-        editIp.setText(prefs.getString("ip", "127.0.0.1"));
+        editIp.setText(prefs.getString("ip", "192.168.56.100"));
 
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle(getString(R.string.configuration))

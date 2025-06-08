@@ -181,7 +181,7 @@ public class ConfigDialog extends javax.swing.JDialog {
             props.setProperty("ip", ip);
             props.setProperty("user", user);
             props.setProperty("password", pass);
-            try (FileOutputStream fos = new FileOutputStream("./src/main/resources/config.properties")) {
+            try (FileOutputStream fos = new FileOutputStream("config.properties")) {
                 props.store(fos, "Configuración conexión");
             }
 

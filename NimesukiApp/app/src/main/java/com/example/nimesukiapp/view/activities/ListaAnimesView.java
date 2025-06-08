@@ -505,8 +505,6 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
             } else {
                 iniciarlizarCache();
             }
-
-            bottomNavigationView.setVisibility(VISIBLE);
         });
     }
 
@@ -521,7 +519,6 @@ public class ListaAnimesView extends AppCompatActivity implements NoConnectionFr
                     .makeCustomAnimation(this, 0, 0);
             intent.putExtra("reinicio", false);
             startActivity(intent, options.toBundle());
-            bottomNavigationView.setVisibility(VISIBLE);
         });
     }
 

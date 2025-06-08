@@ -15,7 +15,7 @@ public class DynamicDataSourceFactory {
 
     public static DataSource create(String host, String username, String password) {
         HikariDataSource ds = new HikariDataSource();
-        ds.setJdbcUrl("jdbc:mysql://" + host + ":3306/nimesuki?serverTimezone=UTC");
+        ds.setJdbcUrl("jdbc:mysql://" + host + ":3306/nimesuki?zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&connectTimeout=1000&socketTimeout=1000");
         ds.setUsername(username);
         ds.setPassword(password);
         ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
