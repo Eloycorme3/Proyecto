@@ -4,13 +4,19 @@
  */
 package vista;
 
+import static com.sun.management.VMOption.Origin.CONFIG_FILE;
+import config.ConfigManager;
 import controlador.controladorPrincipal;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import reports.ReportService;
@@ -22,16 +28,18 @@ import reports.SavePdfChooser;
  */
 public class ReportAdmin extends javax.swing.JFrame {
 
+    private static final String CONFIG_FILE = "report.properties";
     private static final String REPORT_PATH_1 = "/reports/nimesuki_report_1.jrxml";
     private static final String REPORT_PATH_2 = "/reports/nimesuki_report_2.jrxml";
-    private final ReportService reportService;
+    private ReportService reportService;
+    private Properties prop = new Properties();
 
     /**
      * Creates new form ReportView
      */
     public ReportAdmin() {
         initComponents();
-        Properties prop = new Properties();
+
         try {
             prop.load(ReportAdmin.class.getClassLoader().getResourceAsStream("report.properties"));
         } catch (IOException ex) {
@@ -74,6 +82,11 @@ public class ReportAdmin extends javax.swing.JFrame {
         menuItemVolver = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
 
         panel.setLayout(new java.awt.GridBagLayout());
 
@@ -242,6 +255,39 @@ public class ReportAdmin extends javax.swing.JFrame {
             Logger.getLogger(ReportAdmin.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnGenerarReport2ActionPerformed
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        // TODO add your handling code here:
+        try {
+            cargarOCrearPropiedades();
+        } catch (IOException ex) {
+            Logger.getLogger(ReportAdmin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        reportService = new ReportService(
+                prop.getProperty("dburl"),
+                prop.getProperty("dbuser"),
+                prop.getProperty("dbpassword")
+        );
+
+    }//GEN-LAST:event_formComponentShown
+
+    private void cargarOCrearPropiedades() throws IOException {
+        File file = new File(CONFIG_FILE);
+        String[] datos = ConfigManager.cargarDatos();
+
+        prop.setProperty("dburl", "jdbc:mysql://" + datos[0] + ":3306/nimesuki?zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&connectTimeout=1000&socketTimeout=1000");
+        prop.setProperty("dbuser", datos[1]);
+        prop.setProperty("dbpassword", datos[2]);
+
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            prop.store(fos, "Configuración de conexión a la base de datos");
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "No se pudo crear o sobrescribir el archivo de configuración.", "Error", JOptionPane.ERROR_MESSAGE);
+            this.dispose();
+        }
+    }
 
     public JSpinner getSpAnhoFin() {
         return spAnhoFin;

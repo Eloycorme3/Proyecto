@@ -47,6 +47,7 @@ vista\GestorAdministrador$14.class
 vista\GestorAdministrador$24.class
 vista\Consultas$3.class
 modelo\dao\AnimeDAO.class
+vista\ReportAdmin$4.class
 vista\Consultas$6.class
 vista\ConfigDialog$2.class
 vista\Login$7.class
@@ -63,7 +64,10 @@ vista\Consultas.class
 vista\GestorAdministrador$5.class
 vista\ReportAdmin$1.class
 vista\GestorAdministrador$15.class
+modelo\vo\Anime_.class
+modelo\vo\Favoritos_.class
 vista\Login$1.class
+modelo\vo\Usuario_.class
 modelo\vo\Anime.class
 vista\GestorAdministrador$20.class
 modelo\vo\FavoritosPK.class
@@ -80,4 +84,5 @@ vista\GestorAdministrador$1.class
 vista\GestorUsuario$4.class
 vista\Login$4.class
 vista\Consultas$4.class
+modelo\vo\FavoritosPK_.class
 vista\GestorUsuario.class

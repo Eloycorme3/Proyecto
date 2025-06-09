@@ -4,11 +4,12 @@
  */
 package config;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import static org.apache.logging.log4j.util.LoaderUtil.getClassLoader;
 
 /**
  *
@@ -31,11 +32,13 @@ public class ConfigManager {
 
     public static String[] cargarDatos() throws IOException {
         Properties props = new Properties();
+        File file = new File(CONFIG_FILE);
 
-        try (InputStream input = getClassLoader().getResourceAsStream("config.properties")) {
-            if (input == null) {
-                guardarDatos("127.0.0.1", "root", "root");
-            }
+        if (!file.exists()) {
+            guardarDatos("192.168.56.100", "root", "root");
+        }
+
+        try (InputStream input = new FileInputStream(file)) {
             props.load(input);
         }
 
