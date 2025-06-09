@@ -5,13 +5,13 @@ meta {
 }
 
 post {
-  url: http://localhost:8088/usuarios?ip=localhost&user=root&pass=root
+  url: http://localhost:8088/usuarios?ip=192.168.56.100&user=root&pass=root
   body: json
   auth: inherit
 }
 
 params:query {
-  ip: localhost
+  ip: 192.168.56.100
   user: root
   pass: root
 }
